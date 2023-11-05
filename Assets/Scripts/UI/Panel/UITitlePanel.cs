@@ -24,6 +24,8 @@ public class UITitlePanel : MonoBehaviour
 
     private bool _isPressAnyKey;
 
+    private Coroutine _testCoroutine = null;
+
     private void Awake()
     {
         Util.AddButtonListener(_newGameButton, OnClickNewGameButton);
@@ -89,6 +91,24 @@ public class UITitlePanel : MonoBehaviour
 
     private void CreateNewGame()
     {
-        Debug.Log("새 게임!");
+        // Debug.Log("새 게임!");
+
+        if (_testCoroutine != null)
+        {
+            StopCoroutine(_testCoroutine);
+            _testCoroutine = null;
+        }
+
+        _testCoroutine = StartCoroutine(nameof(Cor_Test));
+    }
+
+    private IEnumerator Cor_Test()
+    {
+        while (true)
+        {
+            Debug.Log("TEST");
+
+            yield return new WaitForSeconds(1f);
+        }
     }
 }

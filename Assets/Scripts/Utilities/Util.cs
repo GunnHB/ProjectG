@@ -15,22 +15,52 @@ public static class Util
     /// 기본 버튼 리스너
     /// </summary>
     /// <param name="button"></param>
-    /// <param name="action"></param>
-    public static void AddButtonListener(Button button, UnityAction action)
+    /// <param name="callback"></param>
+    public static void AddButtonListener(Button button, UnityAction callback)
     {
         if (button == null)
             return;
 
-        button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(action);
+        // 공용 버튼인지 확인
+        if (!(button as CommonButton))
+        {
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(callback);
+        }
+        else
+        {
+            var commonButton = button as CommonButton;
+
+            // 이벤트 트리거 처리 필요한지
+            if (commonButton._needPress || commonButton._needEnterAndExit)
+            {
+                if (commonButton._needPress)
+                {
+                    AddButtonListener(button, EventTriggerType.PointerDown, callback);
+                    AddButtonListener(button, EventTriggerType.PointerUp, callback);
+                }
+
+                if (commonButton._needEnterAndExit)
+                {
+                    AddButtonListener(button, EventTriggerType.PointerEnter, callback);
+                    AddButtonListener(button, EventTriggerType.PointerExit, callback);
+                }
+            }
+            // 처리 필요 없으면 일반적인 리스너 달아주기
+            else
+            {
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(callback);
+            }
+        }
     }
 
     /// <summary>
     /// EventTrigger 기능을 수행하는 버튼 리스너
     /// </summary>
     /// <param name="button"></param>
-    /// <param name="action"></param>
-    public static void AddButtonListener(Button button, EventTriggerType triggerType, UnityAction<BaseEventData> action)
+    /// <param name="callback"></param>
+    public static void AddButtonListener(Button button, EventTriggerType triggerType, UnityAction callback)
     {
         if (button == null)
             return;
@@ -43,50 +73,22 @@ public static class Util
             trigger = button.GetComponent<EventTrigger>();
         }
 
+        (button as CommonButton).PressCallback = callback;
+
         EventTrigger.Entry entry = new();
         entry.eventID = triggerType;
-        entry.callback.AddListener(action);
+
+        // 케이스 추가되면 계속 처리해줘야하나...??
+        if (triggerType == EventTriggerType.PointerDown)
+            entry.callback.AddListener(eventData => (button as CommonButton).OnPointerDown((PointerEventData)eventData));
+        else if (triggerType == EventTriggerType.PointerUp)
+            entry.callback.AddListener(eventData => (button as CommonButton).OnPointerUp((PointerEventData)eventData));
+        else if (triggerType == EventTriggerType.PointerEnter)
+            entry.callback.AddListener(eventData => (button as CommonButton).OnPointerEnter((PointerEventData)eventData));
+        else if (triggerType == EventTriggerType.PointerUp)
+            entry.callback.AddListener(eventData => (button as CommonButton).OnPointerExit((PointerEventData)eventData));
+
         trigger.triggers.Add(entry);
-    }
-
-    /// <summary>
-    /// 버튼에 PointerDown, PointerUp 기능 추가해주기
-    /// </summary>
-    /// <param name="button"></param>
-    /// <param name="triggerType"></param>
-    /// <param name="action"></param>
-    public static void AddUpAndDownEvent(Button button, EventTriggerType triggerType, UnityAction<BaseEventData> action)
-    {
-
-    }
-
-    /// <summary>
-    /// 버튼에 PointerDrag, PointerDrop 기능 추가하기
-    /// </summary>
-    /// <param name="button"></param>
-    /// <param name="triggerType"></param>
-    /// <param name="action"></param>
-    public static void AddDragAndDropEvent(Button button, EventTriggerType triggerType, UnityAction<BaseEventData> action)
-    {
-
-    }
-
-    /// <summary>
-    /// 버튼에 
-    /// </summary>
-    public static void AddPointerUpButtonListener()
-    {
-
-    }
-
-    public static void AddPointerDownListener()
-    {
-
-    }
-
-    public static void AddPointerDragListener()
-    {
-
     }
 
     public static List<GameObject> GetAllObject(string path)

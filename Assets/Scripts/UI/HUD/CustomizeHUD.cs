@@ -59,25 +59,25 @@ public class CustomizeHUD : UIHUDBase
 
     private void SetLeftButton()
     {
-        if (_characterObj != null)
-            _originRotate = _characterObj.transform.rotation;
+        // if (_characterObj != null)
+        //     _originRotate = _characterObj.transform.rotation;
 
-        Util.AddButtonListener(_leftRotateButton, EventTriggerType.PointerDown, (data) =>
-        {
-            _reverse = true;
-            PointerDownRotateButton(data);
-        });
+        // Util.AddButtonListener(_leftRotateButton, EventTriggerType.PointerDown, (data) =>
+        // {
+        //     _reverse = true;
+        //     PointerDownRotateButton(data);
+        // });
 
-        Util.AddButtonListener(_rightRotateButton, EventTriggerType.PointerDown, (data) =>
-        {
-            _reverse = false;
-            PointerDownRotateButton(data);
-        });
+        // Util.AddButtonListener(_rightRotateButton, EventTriggerType.PointerDown, (data) =>
+        // {
+        //     _reverse = false;
+        //     PointerDownRotateButton(data);
+        // });
 
-        Util.AddButtonListener(_leftRotateButton, EventTriggerType.PointerUp, PointerUpRotateButton);
-        Util.AddButtonListener(_rightRotateButton, EventTriggerType.PointerUp, PointerUpRotateButton);
+        // Util.AddButtonListener(_leftRotateButton, EventTriggerType.PointerUp, PointerUpRotateButton);
+        // Util.AddButtonListener(_rightRotateButton, EventTriggerType.PointerUp, PointerUpRotateButton);
 
-        Util.AddButtonListener(_resetRotateButton, OnClickResetRotateButton);
+        // Util.AddButtonListener(_resetRotateButton, OnClickResetRotateButton);
     }
 
     private void SetRightButton()
