@@ -10,6 +10,14 @@ using Sirenix.OdinInspector;
 
 public partial class PlayerController : MonoBehaviour
 {
+    public enum PlayerState
+    {
+        None,
+        Idle,
+        Move,
+        Attack,
+    }
+
     // 애니 트랜지션 파라미터
     private const string IsWalk = "IsWalk";
     private const string IsSprint = "IsSprint";
@@ -53,6 +61,9 @@ public partial class PlayerController : MonoBehaviour
     // 스태미나 충전에 걸리는 시간
     private float _currentStaminaChargeTime = 0f;
 
+    // 플레이어 상태 변수
+    private PlayerState _playerState = PlayerState.None;
+
     private void Start()
     {
         _applySpeed = _walkSpeed;
@@ -72,6 +83,7 @@ public partial class PlayerController : MonoBehaviour
     // Actual move
     private void MovePlayer()
     {
+        // 대기 상태일 때 이동이 가능
         _isWalk = _direction.magnitude >= .1f;
 
         if (_isWalk)
@@ -82,6 +94,8 @@ public partial class PlayerController : MonoBehaviour
 
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             _controller.Move(moveDirection.normalized * _applySpeed * Time.deltaTime);
+
+            _playerState = PlayerState.Move;
         }
 
         _applySpeed = _isSprint ? _sprintSpeed : _walkSpeed;
@@ -91,6 +105,8 @@ public partial class PlayerController : MonoBehaviour
 
         // 스태미나 세팅
         SetPlayerStamina(_isWalk, ref _isSprint);
+
+        _playerState = PlayerState.Idle;
     }
 
     // Walk

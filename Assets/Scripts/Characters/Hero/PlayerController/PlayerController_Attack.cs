@@ -3,36 +3,40 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 
 using Sirenix.OdinInspector;
+using System.Collections;
 
 public partial class PlayerController : MonoBehaviour
 {
-    private int _maxComboCount = 5;
-    private int _currentComboCount = 0;
+    private bool _isAttackStart = false;            // 공격 시작
 
-    private float _validComboTime = .5f;
-    private float _currentComboTimer = 0f;
-
-    private float _maxChargeCount = 3f;
-    private float _currentChargeCount = 0f;
-
-    private bool _isAttack = false;
-    private int _comboCount = 0;
+    private Coroutine _chargeCoroutine = null;
 
     public void OnClickMouseLeft(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
+            // 공격 상태로 변경
+            _playerState = PlayerState.Attack;
+
             // 차징 공격
             if (context.interaction is HoldInteraction)
             {
-                ;
+                Debug.Log("여긴 차징");
+
+                _isAttackStart = true;
             }
             // 일반 공격
             else if (context.interaction is PressInteraction)
             {
-                if (_comboCount > 3)
-                    _comboCount = 0;
+                Debug.Log("여긴 일반");
+
+                _isAttackStart = true;
             }
+        }
+        else
+        {
+            _isAttackStart = false;
+            _playerState = PlayerState.Idle;    // 일단 대기 상태로 돌림
         }
     }
 }

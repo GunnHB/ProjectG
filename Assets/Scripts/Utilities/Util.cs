@@ -56,7 +56,7 @@ public static class Util
     }
 
     /// <summary>
-    /// EventTrigger 기능을 수행하는 버튼 리스너
+    /// EventTrigger 기능
     /// </summary>
     /// <param name="button"></param>
     /// <param name="callback"></param>
@@ -73,7 +73,7 @@ public static class Util
             trigger = button.GetComponent<EventTrigger>();
         }
 
-        (button as CommonButton).PressCallback = callback;
+        (button as CommonButton).buttonCallback += callback;
 
         EventTrigger.Entry entry = new();
         entry.eventID = triggerType;

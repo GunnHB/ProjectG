@@ -16,8 +16,7 @@ public class CommonButton : Button, IPointerDownHandler, IPointerUpHandler, IPoi
     public bool IsPress => _isPress;
     public bool IsEnter => _isEnter;
 
-    public UnityAction PressCallback = null;
-    public UnityAction EnterCallback = null;
+    public UnityAction buttonCallback = null;
 
     // Press
     public override void OnPointerDown(PointerEventData eventData)
@@ -29,7 +28,7 @@ public class CommonButton : Button, IPointerDownHandler, IPointerUpHandler, IPoi
 
         base.OnPointerDown(eventData);
 
-        PressCallback?.Invoke();
+        buttonCallback?.Invoke();
     }
 
     public override void OnPointerUp(PointerEventData eventData)
@@ -40,8 +39,6 @@ public class CommonButton : Button, IPointerDownHandler, IPointerUpHandler, IPoi
         _isPress = false;
 
         base.OnPointerUp(eventData);
-
-        PressCallback = null;
     }
 
     // Enter and exit
@@ -54,7 +51,7 @@ public class CommonButton : Button, IPointerDownHandler, IPointerUpHandler, IPoi
 
         base.OnPointerEnter(eventData);
 
-        EnterCallback?.Invoke();
+        buttonCallback?.Invoke();
     }
 
     public override void OnPointerExit(PointerEventData eventData)
@@ -65,7 +62,5 @@ public class CommonButton : Button, IPointerDownHandler, IPointerUpHandler, IPoi
         _isEnter = false;
 
         base.OnPointerExit(eventData);
-
-        EnterCallback = null;
     }
 }

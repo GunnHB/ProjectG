@@ -9,6 +9,7 @@ using TMPro;
 using Sirenix.OdinInspector;
 using UnityEngine.EventSystems;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 public class CustomizeHUD : UIHUDBase
 {
@@ -48,6 +49,8 @@ public class CustomizeHUD : UIHUDBase
     private bool _isPress = false;              // 버튼 눌리는 중인지
     private float _resetSpeed = 10f;            // 회전 리셋 속도 (빠르게 원위치)
 
+    private Button _curRotateButton = null;     // 현재 눌리고 있는 회전 버튼
+
     protected override void Start()
     {
         base.Start();
@@ -59,25 +62,26 @@ public class CustomizeHUD : UIHUDBase
 
     private void SetLeftButton()
     {
-        // if (_characterObj != null)
-        //     _originRotate = _characterObj.transform.rotation;
+        if (_characterObj != null)
+            _originRotate = _characterObj.transform.rotation;
 
-        // Util.AddButtonListener(_leftRotateButton, EventTriggerType.PointerDown, (data) =>
-        // {
-        //     _reverse = true;
-        //     PointerDownRotateButton(data);
-        // });
+        Util.AddButtonListener(_leftRotateButton, () =>
+        {
+            _curRotateButton = _leftRotateButton;
+            _reverse = true;
 
-        // Util.AddButtonListener(_rightRotateButton, EventTriggerType.PointerDown, (data) =>
-        // {
-        //     _reverse = false;
-        //     PointerDownRotateButton(data);
-        // });
+            OnClickRotateButton();
+        });
 
-        // Util.AddButtonListener(_leftRotateButton, EventTriggerType.PointerUp, PointerUpRotateButton);
-        // Util.AddButtonListener(_rightRotateButton, EventTriggerType.PointerUp, PointerUpRotateButton);
+        Util.AddButtonListener(_rightRotateButton, () =>
+        {
+            _curRotateButton = _rightRotateButton;
+            _reverse = false;
 
-        // Util.AddButtonListener(_resetRotateButton, OnClickResetRotateButton);
+            OnClickRotateButton();
+        });
+
+        Util.AddButtonListener(_resetRotateButton, OnClickResetRotateButton);
     }
 
     private void SetRightButton()
@@ -104,10 +108,8 @@ public class CustomizeHUD : UIHUDBase
         _skinMeshList[_skinIndex].gameObject.SetActive(true);
     }
 
-    private void PointerDownRotateButton(BaseEventData data)
+    private void OnClickRotateButton()
     {
-        _isPress = true;
-
         if (_rotateCoroutine != null)
         {
             StopCoroutine(_rotateCoroutine);
@@ -115,18 +117,6 @@ public class CustomizeHUD : UIHUDBase
         }
 
         _rotateCoroutine = StartCoroutine(nameof(Cor_Rotate));
-    }
-
-    private void PointerUpRotateButton(BaseEventData data)
-    {
-        _reverse = true;
-        _isPress = false;
-
-        if (_rotateCoroutine != null)
-        {
-            StopCoroutine(_rotateCoroutine);
-            _rotateCoroutine = null;
-        }
     }
 
     private void OnClickResetRotateButton()
@@ -151,8 +141,12 @@ public class CustomizeHUD : UIHUDBase
     private IEnumerator Cor_Rotate()
     {
         int multiValue = _reverse ? 1 : -1;
+        var button = _curRotateButton as CommonButton;
 
-        while (_isPress)
+        if (button == null)
+            yield break;
+
+        while (button.IsPress)
         {
             _characterObj.transform.Rotate(Vector3.up * _rotateSpeed * multiValue * Time.deltaTime);
             yield return null;
