@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.EventSystems;
 using Unity.VisualScripting;
+using UnityEditor;
 
 public static class Util
 {
@@ -95,6 +96,49 @@ public static class Util
     {
         return Resources.LoadAll<GameObject>(path).ToList();
     }
+
+    public static List<T> GetComponents<T>(Transform parent, string objName) where T : Transform
+    {
+        return new List<T>();
+    }
+
+    public static List<T> GetComponentsInChildren<T>(Transform parent, string objName, bool stringContain = false) where T : Component
+    {
+        var list = new List<T>();
+        var allObjArray = parent.GetComponentsInChildren<T>();
+
+        for (int index = 0; index < allObjArray.Length; index++)
+        {
+            var item = allObjArray[index];
+
+            if (stringContain)
+            {
+                if (item.ToString().Contains(objName))
+                    list.Add(item);
+                else
+                    continue;
+            }
+            else
+            {
+                if (item.ToString() == objName)
+                    list.Add(item);
+                else
+                    continue;
+            }
+        }
+
+        return list;
+    }
+
+    public static T GetComponent<T>(Transform parent, string objName) where T : Transform
+    {
+        return null;
+    }
+
+    public static T GetComponentInChildren<T>(Transform parent, string objName) where T : Transform
+    {
+        return null;
+    }
 }
 
 public static class SheetUtil
@@ -113,5 +157,16 @@ public static class SheetUtil
     public static string GetAddress(string address, string range, string sheetId)
     {
         return $"{address}/export?format=tsv&range={range}&gid={sheetId}";
+    }
+}
+
+public static class MeshUtil
+{
+    private const string fbxPath = "Assets/Resources/PackageResource/ModularRPGHeroesPolyArt/Mesh";
+    private const string fbxFileName = "CharacterBaseMesh";
+
+    public static void GetMesh()
+    {
+        ModelImporter model = AssetImporter.GetAtPath(fbxPath) as ModelImporter;
     }
 }

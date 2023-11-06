@@ -2,14 +2,15 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PolyArtMaskTint
   m_Shader: {fileID: 4800000, guid: f6f5585657a47374181de5ea8c44320e, type: 3}
-  m_ShaderKeywords: 
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -31,6 +32,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _Metallic: 0.4
     - _Smoothness: 0
@@ -39,3 +41,4 @@ Material:
     - _Color01: {r: 0.2260336, g: 0.5955882, b: 0.013137988, a: 0}
     - _Color02: {r: 0.12673008, g: 0.42647058, b: 0.031358134, a: 0}
     - _Color03: {r: 0.03589963, g: 0.42647058, b: 0.021950686, a: 0}
+  m_BuildTextureStacks: []

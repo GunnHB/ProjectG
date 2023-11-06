@@ -83,7 +83,6 @@ MonoBehaviour:
   _input: {fileID: 4678139611879309378}
   _camera: {fileID: 0}
   _animator: {fileID: 4735695398995707655}
-  _weaponType: 0
   _targetTransform: {fileID: 4678139611629403395}
   _boxSize: {x: 0.75, y: 0.05, z: 0.75}
   _maxDistance: 1
@@ -214,9 +213,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4678139611879309389}
     m_Modifications:
+    - target: {fileID: 1065849934989600, guid: 68603973298db084481ac0bd34a13703, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1236609739485652, guid: 68603973298db084481ac0bd34a13703, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1241130320586298, guid: 68603973298db084481ac0bd34a13703, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1256276751936574, guid: 68603973298db084481ac0bd34a13703, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1264904918333942, guid: 68603973298db084481ac0bd34a13703, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265623380367216, guid: 68603973298db084481ac0bd34a13703, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427951051868536, guid: 68603973298db084481ac0bd34a13703, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1584900365478008, guid: 68603973298db084481ac0bd34a13703, type: 3}
       propertyPath: m_Name
       value: NoWeapon01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1678743111057636, guid: 68603973298db084481ac0bd34a13703, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4454524126410616, guid: 68603973298db084481ac0bd34a13703, type: 3}
       propertyPath: m_RootOrder
