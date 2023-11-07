@@ -132,7 +132,7 @@ public static class Util
 
     public static T GetComponent<T>(Transform parent, string objName) where T : Transform
     {
-        return null;
+        return parent.Find(objName) as T;
     }
 
     public static T GetComponentInChildren<T>(Transform parent, string objName) where T : Transform
