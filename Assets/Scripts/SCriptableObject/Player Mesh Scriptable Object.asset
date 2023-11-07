@@ -21,14 +21,66 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  _hairMeshArray: []
-  _halfHairMeshArray: []
-  _helmetMeshArray: []
-  _crownMeshArray: []
+  _hairMeshArray:
+  - {fileID: 4300078, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300082, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300086, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300090, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300094, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  _halfHairMeshArray:
+  - {fileID: 4300080, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300084, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300088, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300092, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300096, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  _helmetMeshArray:
+  - {fileID: 4300140, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300142, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300144, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300146, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300148, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300150, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300152, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  _crownMeshArray:
+  - {fileID: 4300154, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300156, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300158, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300160, guid: dc603c42b6599174e901596a1f756de4, type: 3}
   _hatMeshArray: []
-  _skinMeshArray: []
-  _clothesMeshArray: []
-  _beltMeshArray: []
-  _glovesMeshArray: []
-  _pauldronMeshArray: []
-  _bootMeshArray: []
+  _skinMeshArray:
+  - {fileID: 4300056, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300060, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300062, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  _clothesMeshArray:
+  - {fileID: 4300064, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300066, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300068, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300070, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300072, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300074, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300076, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  _beltMeshArray:
+  - {fileID: 4300162, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300164, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300166, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  _glovesMeshArray:
+  - {fileID: 4300098, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300100, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300102, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300104, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300106, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300108, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  _pauldronMeshArray:
+  - {fileID: 4300122, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300124, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300126, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300128, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300130, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300132, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  _bootMeshArray:
+  - {fileID: 4300110, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300112, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300114, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300116, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300118, guid: dc603c42b6599174e901596a1f756de4, type: 3}
+  - {fileID: 4300120, guid: dc603c42b6599174e901596a1f756de4, type: 3}
