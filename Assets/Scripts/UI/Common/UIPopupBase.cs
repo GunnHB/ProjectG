@@ -4,5 +4,10 @@ using UnityEngine;
 
 public class UIPopupBase : UIBase
 {
+    protected override void Awake()
+    {
+        base.Awake();
 
+        _uiType = UIBaseType.Panel;
+    }
 }

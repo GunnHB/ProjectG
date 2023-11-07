@@ -6,22 +6,22 @@ using UnityEngine.Events;
 
 public class UIManager : SingletonObject<UIManager>
 {
-    private Canvas _popupCanvas;
+    private Canvas _prefabCanvas;
     private Canvas _hudCanvas;
 
     public Canvas PrefabCanvas
     {
         get
         {
-            if (_popupCanvas == null)
+            if (_prefabCanvas == null)
             {
                 var canvasObject = GameObject.Find("PrefabCanvas");
 
                 if (canvasObject != null)
-                    _popupCanvas = canvasObject.GetComponent<Canvas>();
+                    _prefabCanvas = canvasObject.GetComponent<Canvas>();
             }
 
-            return _popupCanvas;
+            return _prefabCanvas;
         }
     }
     public Canvas HudCanvas
@@ -71,19 +71,23 @@ public class UIManager : SingletonObject<UIManager>
         return instanceObj;
     }
 
-    public void OpenCommonDialogue(string title, string msg, UnityAction confirmAction, UnityAction cancelAction)
+    public void OpenCommonDialogue(string title, string msg,
+                                   string confirmString = "Confirm", UnityAction confirmAction = null,
+                                   string cancelString = "Cancel", UnityAction cancelAction = null)
     {
         UIDialogueBase messageBox = OpenUI<UIDialogueBase>("Base/UIDialogueBase");
 
         if (messageBox == null)
             return;
 
-        messageBox.InitUIDialogue(title, msg, confirmAction, cancelAction == null ? () => { CloseUI<UIDialogueBase>(); } : cancelAction);
+        messageBox.InitUIDialogue(title, msg,
+                                  confirmString, confirmAction,
+                                  cancelString, cancelAction);
     }
 
     public void CloseUI<T>() where T : UIBase
     {
-        GameObject prefab = _popupCanvas.GetComponentInChildren<T>().gameObject;
+        GameObject prefab = _prefabCanvas.GetComponentInChildren<T>().gameObject;
 
         if (prefab != null)
             Destroy(prefab);

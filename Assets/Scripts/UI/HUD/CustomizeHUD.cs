@@ -47,6 +47,13 @@ public class CustomizeHUD : UIHUDBase
     [TabGroup("RightPanel"), SerializeField] private Button _skinRightButton;
     [TabGroup("RightPanel"), SerializeField] private TextMeshProUGUI _skinInfoText;
 
+    [Title("[Name input field]")]
+    [TabGroup("RightPanel"), SerializeField] private TMP_InputField _nameInputField;
+
+    [Title("[Button]")]
+    [TabGroup("RightPanel"), SerializeField] private Button _backButton;
+    [TabGroup("RightPanel"), SerializeField] private Button _confirmButton;
+
     private Transform _playerTransform;                             // 회전용
     private Transform _playerMeshTransform;                         // 메시 세팅용
 
@@ -57,7 +64,7 @@ public class CustomizeHUD : UIHUDBase
     // 캐릭터 회전 관련 변수
     private Quaternion _originRotate;                               // 기본 로테이션
     private Coroutine _rotateCoroutine;                             // 회전 코루틴
-    private bool _reverse = false;                                  // 위에서 봤을 때 시계 방향이 true // 기본적으로 true
+    private bool _reverse = false;                                  // 시계 방향이 true
 
     private Button _curRotateButton = null;                         // 현재 눌리고 있는 회전 버튼
 
@@ -66,9 +73,9 @@ public class CustomizeHUD : UIHUDBase
     // 메시 소켓 딕셔너리
     private Dictionary<MeshCategory, SkinnedMeshRenderer> _socketDictionary = new();
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
 
         GetPlayerTransform();
 
@@ -166,6 +173,10 @@ public class CustomizeHUD : UIHUDBase
         Util.AddButtonListener(_skinLeftButton, () => OnClickSkinButton(false));
         Util.AddButtonListener(_skinRightButton, () => OnClickSkinButton(true));
         SetText(_skinInfoText, "Skin", _skinIndex);
+
+        // Button
+        Util.AddButtonListener(_backButton, OnClickBackButton);
+        Util.AddButtonListener(_confirmButton, OnClickConfirmButton);
     }
 
     private void OnClickRotateButton()
@@ -238,5 +249,44 @@ public class CustomizeHUD : UIHUDBase
     private void SetText(TextMeshProUGUI text, string defaultText, int index)
     {
         text.text = $"{defaultText}_{index + 1}";
+    }
+
+    private void OnClickBackButton()
+    {
+        string title = "알림";
+        string message = "타이틀 화면으로 이동하시겠습니까??";
+        string confirm = "확인";
+        string cancel = "취소";
+
+        // 씬 이동하거나 같은 씬에서 해당 허드만 종료 시키는 기능 추가하면 될 듯...?
+        UIManager.Instance.OpenCommonDialogue(title, message,
+                                              confirm, null,
+                                              cancel, null);
+    }
+
+    private void OnClickConfirmButton()
+    {
+        // 나중에 토스트 추가하자
+        if (_nameInputField.text == string.Empty)
+        {
+            Debug.Log("닉네임을 입력해주세요.");
+            return;
+        }
+
+        if (Util.IsAllInteger(_nameInputField.text))
+            Debug.Log("문자나 문자+숫자 조합으로 이름을 정해주세요.");
+        else
+        {
+            string title = "알림";
+            string message = $"[<color=#FFCC70>{_nameInputField.text}</color>]\n\n해당 이름으로 시작하시겠습니까?";
+
+            UIManager.Instance.OpenCommonDialogue(title, message, confirmAction: CreateNewCharacter, cancelAction: null);
+        }
+    }
+
+    // 캐릭터 생성 버튼 콜백
+    private void CreateNewCharacter()
+    {
+        // JsonManager.Instance.CreateJsonFile("PlayerCustomData", "TestPlayer", "");
     }
 }

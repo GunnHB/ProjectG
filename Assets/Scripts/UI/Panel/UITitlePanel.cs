@@ -1,4 +1,3 @@
-
 using System.Collections;
 
 using UnityEngine;
@@ -7,8 +6,6 @@ using UnityEngine.UI;
 using TMPro;
 
 using Sirenix.OdinInspector;
-
-using DG.Tweening;
 
 public class UITitlePanel : MonoBehaviour
 {
@@ -47,7 +44,7 @@ public class UITitlePanel : MonoBehaviour
             if (Input.anyKey)
             {
                 // 활성화되면 잠시 대기
-                yield return new WaitForSeconds(2f);
+                yield return new WaitForSeconds(1f);
                 _isPressAnyKey = true;
             }
 
@@ -70,7 +67,7 @@ public class UITitlePanel : MonoBehaviour
         string titleString = "NOTICE";
         string msgString = "Create new game?";
 
-        UIManager.Instance.OpenCommonDialogue(titleString, msgString, CreateNewGame, null);
+        UIManager.Instance.OpenCommonDialogue(title: titleString, msg: msgString, confirmAction: CreateNewGame, cancelAction: null);
     }
 
     private void OnClickLoadGameButton()
@@ -91,24 +88,6 @@ public class UITitlePanel : MonoBehaviour
 
     private void CreateNewGame()
     {
-        // Debug.Log("새 게임!");
 
-        if (_testCoroutine != null)
-        {
-            StopCoroutine(_testCoroutine);
-            _testCoroutine = null;
-        }
-
-        _testCoroutine = StartCoroutine(nameof(Cor_Test));
-    }
-
-    private IEnumerator Cor_Test()
-    {
-        while (true)
-        {
-            Debug.Log("TEST");
-
-            yield return new WaitForSeconds(1f);
-        }
     }
 }

@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class JsonManager : SingletonObject<JsonManager>
 {
+    private const string BASE_PATH = "Assets/Json/";
+
     protected override void Awake()
     {
         base.Awake();
@@ -24,7 +26,7 @@ public class JsonManager : SingletonObject<JsonManager>
 
     public void CreateJsonFile(string createPath, string fileName, string jsonData)
     {
-        FileStream fileStream = new FileStream($"{createPath}/{fileName}.json", FileMode.Create);
+        FileStream fileStream = new FileStream($"{BASE_PATH}/{createPath}/{fileName}.json", FileMode.Create);
         byte[] data = Encoding.UTF8.GetBytes(jsonData);
         fileStream.Write(data, 0, data.Length);
         fileStream.Close();

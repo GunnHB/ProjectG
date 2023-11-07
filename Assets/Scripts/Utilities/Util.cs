@@ -139,34 +139,9 @@ public static class Util
     {
         return null;
     }
-}
 
-public static class SheetUtil
-{
-    // Item
-    private const string TABLE_ITEM_ADDRESS = "https://docs.google.com/spreadsheets/d/1v8CHl9OFoVmz8MncWfcvlIJCKLN6JpX4OjpkXnHJsVg";
-    private const string TABLE_ITEM_RANGE = "A3:E";
-    private const string TABLE_ITEM_SHEETID = "0";
-
-    // Weapon
-
-    // Armor
-
-    // Food
-
-    public static string GetAddress(string address, string range, string sheetId)
+    public static bool IsAllInteger(string text)
     {
-        return $"{address}/export?format=tsv&range={range}&gid={sheetId}";
-    }
-}
-
-public static class MeshUtil
-{
-    private const string fbxPath = "Assets/Resources/PackageResource/ModularRPGHeroesPolyArt/Mesh";
-    private const string fbxFileName = "CharacterBaseMesh";
-
-    public static void GetMesh()
-    {
-        ModelImporter model = AssetImporter.GetAtPath(fbxPath) as ModelImporter;
+        return text.All(char.IsDigit);
     }
 }
