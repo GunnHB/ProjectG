@@ -421,7 +421,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: POLYGON DUNGEON
+  m_text: PROJECT G
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b794f496a4868d84db041e3b365a5df9, type: 2}
   m_sharedMaterial: {fileID: 7954121464765522805, guid: b794f496a4868d84db041e3b365a5df9, type: 2}

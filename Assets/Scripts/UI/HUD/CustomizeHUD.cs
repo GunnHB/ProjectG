@@ -10,14 +10,24 @@ using Sirenix.OdinInspector;
 using System;
 using Unity.VisualScripting;
 using System.Linq;
+using UnityEngine.InputSystem;
 
 public class CustomizeHUD : UIHUDBase
 {
+    // 변경할 메시의 카테고리
     public enum MeshCategory
     {
         None,
         Hair,
         Skin,
+    }
+
+    // 해당 허드가 열린 상황
+    public enum CustomMode
+    {
+        None,
+        Create,
+        Change,
     }
 
     private const string SOCKET_HAIR = "Socket_Hair";
@@ -34,6 +44,8 @@ public class CustomizeHUD : UIHUDBase
     [Title("[Options]")]
     [TabGroup("LeftPanel"), SerializeField, Range(.1f, 1f)]
     private float _rotateSpeed = .7f;
+    [TabGroup("LeftPanel"), SerializeField]
+    private GameObject _playerPrefab;
     [TabGroup("LeftPanel"), SerializeField]
     private PlayerMeshScriptableObject _meshScriptableObject;
 
@@ -73,6 +85,10 @@ public class CustomizeHUD : UIHUDBase
     // 메시 소켓 딕셔너리
     private Dictionary<MeshCategory, SkinnedMeshRenderer> _socketDictionary = new();
 
+    // 현재 커스텀 허드의 상태
+    private CustomMode _currentCustomMode = CustomMode.None;
+    public CustomMode CurrentCustomMode => _currentCustomMode;
+
     protected override void Awake()
     {
         base.Awake();
@@ -87,10 +103,24 @@ public class CustomizeHUD : UIHUDBase
 
     private void GetPlayerTransform()
     {
-        _playerTransform = GameObject.Find("Player").transform;
+        var initPosition = new Vector3(0, -1000, 0);
+        var initRotation = Quaternion.Euler(new Vector3(0, 180, 0));
 
-        if (_playerTransform != null)
-            _playerMeshTransform = Util.GetComponent<Transform>(_playerTransform, "NoWeapon01");
+        _playerTransform = Instantiate(_playerPrefab.transform, this.transform);
+
+        if (_playerTransform == null)
+            return;
+
+        if (_playerTransform.TryGetComponent(out PlayerController controller))
+            controller.enabled = false;
+
+        if (_playerTransform.TryGetComponent(out PlayerInput input))
+            input.enabled = false;
+
+        _playerMeshTransform = Util.GetComponent<Transform>(_playerTransform, "NoWeapon01");
+
+        _playerTransform.localPosition = initPosition;
+        _playerTransform.rotation = initRotation;
     }
 
     private void InitMeshDictionary()

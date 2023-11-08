@@ -21,8 +21,6 @@ public class UITitlePanel : MonoBehaviour
 
     private bool _isPressAnyKey;
 
-    private Coroutine _testCoroutine = null;
-
     private void Awake()
     {
         Util.AddButtonListener(_newGameButton, OnClickNewGameButton);
@@ -67,7 +65,7 @@ public class UITitlePanel : MonoBehaviour
         string titleString = "NOTICE";
         string msgString = "Create new game?";
 
-        UIManager.Instance.OpenCommonDialogue(title: titleString, msg: msgString, confirmAction: CreateNewGame, cancelAction: null);
+        UIManager.Instance.OpenCommonDialogue(title: titleString, msg: msgString, confirmAction: OpenCustomizeHud, cancelAction: null);
     }
 
     private void OnClickLoadGameButton()
@@ -86,7 +84,25 @@ public class UITitlePanel : MonoBehaviour
         Application.Quit();
     }
 
-    private void CreateNewGame()
+    private void OpenCustomizeHud()
+    {
+        // 타이틀 패널은 숨김
+        this.gameObject.SetActive(false);
+
+        var openedUI = UIManager.Instance.FindOpendUI<CustomizeHUD>(UIManager.Instance.HudCanvas);
+
+        if (openedUI != null)
+            openedUI.gameObject.SetActive(true);
+        else
+            UIManager.Instance.OpenUI<CustomizeHUD>("HUD/CustomizeHUD");
+    }
+
+    private void OpenLoadGamePanel()
+    {
+
+    }
+
+    private void OpenSettingPopup()
     {
 
     }

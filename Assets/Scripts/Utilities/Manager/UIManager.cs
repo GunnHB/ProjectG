@@ -71,6 +71,25 @@ public class UIManager : SingletonObject<UIManager>
         return instanceObj;
     }
 
+    // 해당하는 ui 있으면 반환 (가장 상단에 있는걸로)
+    public T FindOpendUI<T>(Canvas canvas) where T : UIBase
+    {
+        T findValue = null;
+
+        for (int index = 0; index < canvas.transform.childCount; index++)
+        {
+            var item = canvas.transform.GetChild(index);
+
+            if (item.GetType() == typeof(T))
+            {
+                findValue = item as T;
+                break;
+            }
+        }
+
+        return findValue;
+    }
+
     public void OpenCommonDialogue(string title, string msg,
                                    string confirmString = "Confirm", UnityAction confirmAction = null,
                                    string cancelString = "Cancel", UnityAction cancelAction = null)
