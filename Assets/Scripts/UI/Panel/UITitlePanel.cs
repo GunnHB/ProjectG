@@ -20,6 +20,8 @@ public class UITitlePanel : UIPanelBase
 
     private bool _isPressAnyKey;
 
+    private Coroutine _anyKeyCoroutine;
+
     protected override void Awake()
     {
         base.Awake();
@@ -29,23 +31,33 @@ public class UITitlePanel : UIPanelBase
         Util.AddButtonListener(_exitGameButton, OnClickExitGameButton);
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         Init();
     }
 
     public void Init()
     {
-        StopAllCoroutines();
-        StartCoroutine(nameof(PressAnyKeyCoroutine));
+        _isPressAnyKey = false;
+
+        _buttonGroupObj.SetActive(false);
+        _pressAnyKeyText.gameObject.SetActive(true);
+
+        if (_anyKeyCoroutine != null)
+        {
+            StopCoroutine(_anyKeyCoroutine);
+            _anyKeyCoroutine = null;
+        }
+
+        _anyKeyCoroutine = StartCoroutine(nameof(Cor_PressAnyKey));
 
         GameManager.Instance.ChangeCurrentMode(GameManager.GameMode.Title);
     }
 
-    private IEnumerator PressAnyKeyCoroutine()
+    private IEnumerator Cor_PressAnyKey()
     {
-        _buttonGroupObj.SetActive(false);
-
         while (!_isPressAnyKey)
         {
             if (Input.anyKey)

@@ -98,9 +98,9 @@ public class UIManager : SingletonObject<UIManager>
         {
             var item = canvas.transform.GetChild(index);
 
-            if (item.GetType() == typeof(T))
+            if (item.TryGetComponent(out T compo))
             {
-                findValue = item as T;
+                findValue = compo;
                 break;
             }
         }

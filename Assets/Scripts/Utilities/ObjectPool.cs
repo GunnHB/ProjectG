@@ -6,7 +6,7 @@ using UnityEngine;
 public class ObjectPool
 {
     public GameObject _poolPrefab;
-    public int _amount;
+    public int _amount = 1;
     public GameObject _parentObj;
 
     private Queue<GameObject> _poolQueue = new Queue<GameObject>();
@@ -35,7 +35,6 @@ public class ObjectPool
         return tempObj;
     }
 
-    // 필요 시 overload
     public GameObject GetObject(Vector3 position, Quaternion quaternion)
     {
         if (_poolQueue.Count > 0)
@@ -62,7 +61,19 @@ public class ObjectPool
         }
     }
 
-    // 필요 시 overload
+    public GameObject GetObject()
+    {
+        if (_poolQueue.Count > 0)
+        {
+            GameObject temp = _poolQueue.Dequeue();
+            temp.SetActive(true);
+
+            return temp;
+        }
+        else
+            return CreateNewObject();
+    }
+
     public void ReturnObject(GameObject obj)
     {
         _poolQueue.Enqueue(obj);
@@ -71,5 +82,15 @@ public class ObjectPool
             obj.transform.SetParent(_parentObj.transform);
 
         obj.SetActive(false);
+    }
+
+    public void ReturnAllObject()
+    {
+        for (int index = 0; index < _parentObj.transform.childCount; index++)
+        {
+            var item = _parentObj.transform.GetChild(index);
+
+            ReturnObject(item.gameObject);
+        }
     }
 }

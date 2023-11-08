@@ -14,4 +14,7 @@ public static class GameValue
     public static float DECREASE_STAMINA_VALUE = 1f;
     public static float INCREASE_STAMINA_VALUE = 2f;
     public static float CHARGE_STAMINA_TIME = 5f;
+
+    // 저장 공간
+    public static int SAVE_SLOT_COUNT = 3;
 }

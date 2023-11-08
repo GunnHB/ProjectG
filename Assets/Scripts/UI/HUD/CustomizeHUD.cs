@@ -127,10 +127,22 @@ public class CustomizeHUD : UIHUDBase
         _playerTransform.rotation = initRotation;
     }
 
+    private void ResetPlayerTransform()
+    {
+        _playerTransform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+        _originRotate = _playerTransform.rotation;
+
+        _hairIndex = 0;
+        _skinIndex = 0;
+    }
+
     private void InitMeshDictionary()
     {
         if (_playerMeshTransform == null || _meshScriptableObject == null)
             return;
+
+        _meshDictionary.Clear();
+        _socketDictionary.Clear();
 
         GetSkinnedMeshRenderer(MeshCategory.Hair, SOCKET_HAIR);
         GetSkinnedMeshRenderer(MeshCategory.Skin, SOCKET_SKIN);
@@ -294,13 +306,13 @@ public class CustomizeHUD : UIHUDBase
         if (GameManager.Instance.CurrentMode == GameManager.GameMode.Title)
         {
             string title = "알림";
-            string message = "타이틀 화면으로 이동하시겠습니까?";
+            string message = "캐릭터 선택 화면으로 이동하시겠습니까?";
             string confirm = "확인";
             string cancel = "취소";
 
             // 씬 이동하거나 같은 씬에서 해당 허드만 종료 시키는 기능 추가하면 될 듯...?
             UIManager.Instance.OpenCommonDialogue(title, message,
-                                                  confirm, null,
+                                                  confirm, BackToSelectScharacter,
                                                   cancel, null);
         }
     }
@@ -332,5 +344,19 @@ public class CustomizeHUD : UIHUDBase
     private void CreateNewCharacter()
     {
         // JsonManager.Instance.CreateJsonFile("PlayerCustomData", "TestPlayer", "");
+    }
+
+    private void BackToSelectScharacter()
+    {
+        this.gameObject.SetActive(false);
+
+        var openedUI = UIManager.Instance.FindOpendUI<SelectCharacterHUD>(UIManager.Instance.HudCanvas);
+
+        if (openedUI != null)
+            openedUI.gameObject.SetActive(true);
+        else
+            openedUI = UIManager.Instance.OpenUI<SelectCharacterHUD>("HUD/SelectCharacterHUD");
+
+        openedUI.Init();
     }
 }
