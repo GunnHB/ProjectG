@@ -10,4 +10,9 @@ public class UIHUDBase : UIBase
 
         _uiType = UIBaseType.HUD;
     }
+
+    protected virtual void Start()
+    {
+        this.gameObject.transform.SetParent(UIManager.Instance.HudCanvas.transform);
+    }
 }

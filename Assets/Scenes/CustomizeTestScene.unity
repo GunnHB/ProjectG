@@ -236,10 +236,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 54606179}
     m_Modifications:
+    - target: {fileID: 1661546447448672003, guid: 7247226a1075c3644a1c9f159e0c0b70, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1661546447448672003, guid: 7247226a1075c3644a1c9f159e0c0b70, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 3a9ea8e24edbc224c96cb1dae5d4600c, type: 2}
+    - target: {fileID: 1661546447448672003, guid: 7247226a1075c3644a1c9f159e0c0b70, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -1559113528225956930, guid: 3a9ea8e24edbc224c96cb1dae5d4600c, type: 2}
+    - target: {fileID: 2015647387400528509, guid: 7247226a1075c3644a1c9f159e0c0b70, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 2015647387400528509, guid: 7247226a1075c3644a1c9f159e0c0b70, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 2586953143439046353, guid: 7247226a1075c3644a1c9f159e0c0b70, type: 3}
       propertyPath: m_text
       value: "\u200B"
       objectReference: {fileID: 0}
+    - target: {fileID: 2586953143439046353, guid: 7247226a1075c3644a1c9f159e0c0b70, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 2586953143439046353, guid: 7247226a1075c3644a1c9f159e0c0b70, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3710607781329632475, guid: 7247226a1075c3644a1c9f159e0c0b70, type: 3}
       propertyPath: _mainMesh
       value: 
@@ -332,6 +360,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6135065421221470346, guid: 7247226a1075c3644a1c9f159e0c0b70, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 27e5041e67dd8c64b87e6b302d1df7d9, type: 2}
+    - target: {fileID: 6135065421221470346, guid: 7247226a1075c3644a1c9f159e0c0b70, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -4201028385061579405, guid: 27e5041e67dd8c64b87e6b302d1df7d9, type: 2}
+    - target: {fileID: 6893786538163659409, guid: 7247226a1075c3644a1c9f159e0c0b70, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 27e5041e67dd8c64b87e6b302d1df7d9, type: 2}
+    - target: {fileID: 6893786538163659409, guid: 7247226a1075c3644a1c9f159e0c0b70, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -4201028385061579405, guid: 27e5041e67dd8c64b87e6b302d1df7d9, type: 2}
     - target: {fileID: 8760168437136298545, guid: 7247226a1075c3644a1c9f159e0c0b70, type: 3}
       propertyPath: m_Name
       value: CustomizeHUD

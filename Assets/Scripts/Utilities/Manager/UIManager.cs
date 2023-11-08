@@ -6,22 +6,22 @@ using UnityEngine.Events;
 
 public class UIManager : SingletonObject<UIManager>
 {
-    private Canvas _prefabCanvas;
+    private Canvas _popupCanvas;
     private Canvas _hudCanvas;
 
-    public Canvas PrefabCanvas
+    public Canvas PopupCanvas
     {
         get
         {
-            if (_prefabCanvas == null)
+            if (_popupCanvas == null)
             {
-                var canvasObject = GameObject.Find("PrefabCanvas");
+                var canvasObject = GameObject.Find("PopupCanvas");
 
                 if (canvasObject != null)
-                    _prefabCanvas = canvasObject.GetComponent<Canvas>();
+                    _popupCanvas = canvasObject.GetComponent<Canvas>();
             }
 
-            return _prefabCanvas;
+            return _popupCanvas;
         }
     }
     public Canvas HudCanvas
@@ -61,7 +61,7 @@ public class UIManager : SingletonObject<UIManager>
             return null;
         }
 
-        T instanceObj = Instantiate(prefab, PrefabCanvas.transform);
+        T instanceObj = Instantiate(prefab, PopupCanvas.transform);
 
         if (instanceObj == null)
             return null;
@@ -87,7 +87,7 @@ public class UIManager : SingletonObject<UIManager>
 
     public void CloseUI<T>() where T : UIBase
     {
-        GameObject prefab = _prefabCanvas.GetComponentInChildren<T>().gameObject;
+        GameObject prefab = _popupCanvas.GetComponentInChildren<T>().gameObject;
 
         if (prefab != null)
             Destroy(prefab);
