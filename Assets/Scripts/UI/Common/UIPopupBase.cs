@@ -10,4 +10,9 @@ public class UIPopupBase : UIBase
 
         _uiType = UIBaseType.Panel;
     }
+
+    protected virtual void Start()
+    {
+        this.gameObject.transform.SetParent(UIManager.Instance.PopupCanvas.transform);
+    }
 }

@@ -10,7 +10,7 @@ public class EnemyManager : SingletonObject<EnemyManager>
     {
         base.Awake();
 
-        Init();
+        // Init();
     }
 
     private void Init()

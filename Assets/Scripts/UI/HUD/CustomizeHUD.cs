@@ -60,6 +60,7 @@ public class CustomizeHUD : UIHUDBase
     [TabGroup("RightPanel"), SerializeField] private TextMeshProUGUI _skinInfoText;
 
     [Title("[Name input field]")]
+    [TabGroup("RightPanel"), SerializeField] private GameObject _nameInputFieldParent;
     [TabGroup("RightPanel"), SerializeField] private TMP_InputField _nameInputField;
 
     [Title("[Button]")]
@@ -92,13 +93,16 @@ public class CustomizeHUD : UIHUDBase
     protected override void Awake()
     {
         base.Awake();
+    }
 
+    public void Init()
+    {
         GetPlayerTransform();
 
         InitMeshDictionary();
 
-        SetLeftButton();
-        SetRightButton();
+        SetLeftPanel();
+        SetRightPanel();
     }
 
     private void GetPlayerTransform()
@@ -125,11 +129,7 @@ public class CustomizeHUD : UIHUDBase
 
     private void InitMeshDictionary()
     {
-        if (_playerMeshTransform == null)
-            return;
-
-        // Add dictionary
-        if (_meshScriptableObject == null)
+        if (_playerMeshTransform == null || _meshScriptableObject == null)
             return;
 
         GetSkinnedMeshRenderer(MeshCategory.Hair, SOCKET_HAIR);
@@ -166,7 +166,7 @@ public class CustomizeHUD : UIHUDBase
             _meshDictionary.Add(cate, meshArray);
     }
 
-    private void SetLeftButton()
+    private void SetLeftPanel()
     {
         if (_playerTransform != null)
             _originRotate = _playerTransform.rotation;
@@ -190,9 +190,9 @@ public class CustomizeHUD : UIHUDBase
         Util.AddButtonListener(_resetRotateButton, OnClickResetRotateButton);
     }
 
-    private void SetRightButton()
+    private void SetRightPanel()
     {
-        // 기존에 있는 skinnedmeshrenderer 의 mesh 가 교체되는 구조
+        // skinnedmeshrenderer 의 mesh 가 교체되는 구조
 
         // Hair
         Util.AddButtonListener(_hairLeftButton, () => OnClickHairButton(false));
@@ -203,6 +203,9 @@ public class CustomizeHUD : UIHUDBase
         Util.AddButtonListener(_skinLeftButton, () => OnClickSkinButton(false));
         Util.AddButtonListener(_skinRightButton, () => OnClickSkinButton(true));
         SetText(_skinInfoText, "Skin", _skinIndex);
+
+        // nickname 캐릭터 생성이 아닐 땐 보일 필요 없음
+        ActiveInputField();
 
         // Button
         Util.AddButtonListener(_backButton, OnClickBackButton);
@@ -281,36 +284,47 @@ public class CustomizeHUD : UIHUDBase
         text.text = $"{defaultText}_{index + 1}";
     }
 
+    private void ActiveInputField()
+    {
+        _nameInputFieldParent.SetActive(GameManager.Instance.CurrentMode == GameManager.GameMode.Title);
+    }
+
     private void OnClickBackButton()
     {
-        string title = "알림";
-        string message = "타이틀 화면으로 이동하시겠습니까??";
-        string confirm = "확인";
-        string cancel = "취소";
+        if (GameManager.Instance.CurrentMode == GameManager.GameMode.Title)
+        {
+            string title = "알림";
+            string message = "타이틀 화면으로 이동하시겠습니까?";
+            string confirm = "확인";
+            string cancel = "취소";
 
-        // 씬 이동하거나 같은 씬에서 해당 허드만 종료 시키는 기능 추가하면 될 듯...?
-        UIManager.Instance.OpenCommonDialogue(title, message,
-                                              confirm, null,
-                                              cancel, null);
+            // 씬 이동하거나 같은 씬에서 해당 허드만 종료 시키는 기능 추가하면 될 듯...?
+            UIManager.Instance.OpenCommonDialogue(title, message,
+                                                  confirm, null,
+                                                  cancel, null);
+        }
     }
 
     private void OnClickConfirmButton()
     {
-        // 나중에 토스트 추가하자
-        if (_nameInputField.text == string.Empty)
+        if (GameManager.Instance.CurrentMode == GameManager.GameMode.Title)
         {
-            Debug.Log("닉네임을 입력해주세요.");
-            return;
-        }
+            // 나중에 토스트 추가하자
+            if (_nameInputField.text == string.Empty)
+            {
+                Debug.Log("닉네임을 입력해주세요.");
+                return;
+            }
 
-        if (Util.IsAllInteger(_nameInputField.text))
-            Debug.Log("문자나 문자+숫자 조합으로 이름을 정해주세요.");
-        else
-        {
-            string title = "알림";
-            string message = $"[<color=#FFCC70>{_nameInputField.text}</color>]\n\n해당 이름으로 시작하시겠습니까?";
+            if (Util.IsAllInteger(_nameInputField.text))
+                Debug.Log("문자나 문자+숫자 조합으로 이름을 정해주세요.");
+            else
+            {
+                string title = "알림";
+                string message = $"[<color=#FFCC70>{_nameInputField.text}</color>]\n\n해당 이름으로 시작하시겠습니까?";
 
-            UIManager.Instance.OpenCommonDialogue(title, message, confirmAction: CreateNewCharacter, cancelAction: null);
+                UIManager.Instance.OpenCommonDialogue(title, message, confirmAction: CreateNewCharacter, cancelAction: null);
+            }
         }
     }
 

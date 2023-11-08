@@ -3,38 +3,33 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public enum SceneType
+public class GameManager : SingletonObject<GameManager>
 {
-    Title,
-    InGame,
-}
-
-public class GameManager : MonoBehaviour
-{
-    private void Awake()
+    public enum GameMode
     {
-        InitSingletonObjects();
+        None,
+        Title,
+        InGame,
     }
 
-    private void InitSingletonObjects()
+    private GameMode _currentMode = GameMode.None;
+    public GameMode CurrentMode => _currentMode;
+
+    private int _selectedSlotIndex;
+    public int SelectedSlotIndex => _selectedSlotIndex;
+
+    protected override void Awake()
     {
-        InitSingletonObject<ResourceManager>();
-        InitSingletonObject<SceneManager>();
-        InitSingletonObject<JsonManager>();
-        InitSingletonObject<UIManager>();
-        InitSingletonObject<EnemyManager>();
+        base.Awake();
     }
 
-    /// <summary>
-    /// 매니저를 생성하기 위한 매서드
-    /// (SingletonObject 상속받은 스크립트)
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    private void InitSingletonObject<T>()
+    public void ChangeCurrentMode(GameMode changeMode)
     {
-        GameObject prefab = new GameObject(typeof(T).Name);
+        _currentMode = changeMode;
+    }
 
-        if (prefab != null)
-            prefab.AddComponent(typeof(T));
+    public void SetSelectedSlotIndex(int index)
+    {
+        _selectedSlotIndex = index;
     }
 }

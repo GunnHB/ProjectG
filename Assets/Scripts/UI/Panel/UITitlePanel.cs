@@ -7,36 +7,45 @@ using TMPro;
 
 using Sirenix.OdinInspector;
 
-public class UITitlePanel : MonoBehaviour
+public class UITitlePanel : UIPanelBase
 {
     [Title("Title")]
     [SerializeField] private TextMeshProUGUI _pressAnyKeyText;
 
     [Title("Buttons")]
     [SerializeField] private GameObject _buttonGroupObj;
-    [SerializeField] private Button _newGameButton;
-    [SerializeField] private Button _loadGameButton;
+    [SerializeField] private Button _startGameButton;
     [SerializeField] private Button _settingsButton;
     [SerializeField] private Button _exitGameButton;
 
     private bool _isPressAnyKey;
 
-    private void Awake()
+    protected override void Awake()
     {
-        Util.AddButtonListener(_newGameButton, OnClickNewGameButton);
-        Util.AddButtonListener(_loadGameButton, OnClickLoadGameButton);
+        base.Awake();
+
+        Util.AddButtonListener(_startGameButton, OnClickStartGameButton);
         Util.AddButtonListener(_settingsButton, OnClickSettingsButton);
         Util.AddButtonListener(_exitGameButton, OnClickExitGameButton);
     }
 
     private void Start()
     {
+        Init();
+    }
+
+    public void Init()
+    {
         StopAllCoroutines();
         StartCoroutine(nameof(PressAnyKeyCoroutine));
+
+        GameManager.Instance.ChangeCurrentMode(GameManager.GameMode.Title);
     }
 
     private IEnumerator PressAnyKeyCoroutine()
     {
+        _buttonGroupObj.SetActive(false);
+
         while (!_isPressAnyKey)
         {
             if (Input.anyKey)
@@ -59,18 +68,19 @@ public class UITitlePanel : MonoBehaviour
         }
     }
 
-    private void OnClickNewGameButton()
+    private void OnClickStartGameButton()
     {
-        // 새 게임 생성
-        string titleString = "NOTICE";
-        string msgString = "Create new game?";
+        // 타이틀 패널은 숨김
+        this.gameObject.SetActive(false);
 
-        UIManager.Instance.OpenCommonDialogue(title: titleString, msg: msgString, confirmAction: OpenCustomizeHud, cancelAction: null);
-    }
+        var openedUI = UIManager.Instance.FindOpendUI<SelectCharacterHUD>(UIManager.Instance.HudCanvas);
 
-    private void OnClickLoadGameButton()
-    {
-        // 게임 불러오기
+        if (openedUI != null)
+            openedUI.gameObject.SetActive(true);
+        else
+            openedUI = UIManager.Instance.OpenUI<SelectCharacterHUD>("HUD/SelectCharacterHUD");
+
+        openedUI.Init();
     }
 
     private void OnClickSettingsButton()
@@ -82,24 +92,6 @@ public class UITitlePanel : MonoBehaviour
     {
         // 게임 종료
         Application.Quit();
-    }
-
-    private void OpenCustomizeHud()
-    {
-        // 타이틀 패널은 숨김
-        this.gameObject.SetActive(false);
-
-        var openedUI = UIManager.Instance.FindOpendUI<CustomizeHUD>(UIManager.Instance.HudCanvas);
-
-        if (openedUI != null)
-            openedUI.gameObject.SetActive(true);
-        else
-            UIManager.Instance.OpenUI<CustomizeHUD>("HUD/CustomizeHUD");
-    }
-
-    private void OpenLoadGamePanel()
-    {
-
     }
 
     private void OpenSettingPopup()

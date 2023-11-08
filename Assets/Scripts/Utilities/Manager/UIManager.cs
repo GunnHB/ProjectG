@@ -8,6 +8,7 @@ public class UIManager : SingletonObject<UIManager>
 {
     private Canvas _popupCanvas;
     private Canvas _hudCanvas;
+    private Canvas _panelCanvas;
 
     public Canvas PopupCanvas
     {
@@ -39,6 +40,23 @@ public class UIManager : SingletonObject<UIManager>
             return _hudCanvas;
         }
     }
+
+    public Canvas PanelCanvas
+    {
+        get
+        {
+            if (_panelCanvas == null)
+            {
+                var canvasObject = GameObject.Find("PanelCanvas");
+
+                if (canvasObject != null)
+                    _panelCanvas = canvasObject.GetComponent<Canvas>();
+            }
+
+            return _panelCanvas;
+        }
+    }
+
 
     protected override void Awake()
     {

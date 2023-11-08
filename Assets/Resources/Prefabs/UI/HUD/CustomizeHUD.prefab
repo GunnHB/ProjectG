@@ -1129,7 +1129,7 @@ GameObject:
   - component: {fileID: 93541022565866296}
   - component: {fileID: 7418990120302545801}
   m_Layer: 5
-  m_Name: Camera
+  m_Name: RednerTexttureCam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1164,7 +1164,7 @@ Camera:
   m_GameObject: {fileID: 4563441317958978775}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -3072,6 +3072,7 @@ MonoBehaviour:
   _skinLeftButton: {fileID: 2075691214906808451}
   _skinRightButton: {fileID: 6955595671760203242}
   _skinInfoText: {fileID: 7631225297603676842}
+  _nameInputFieldParent: {fileID: 7663599179323212648}
   _nameInputField: {fileID: 3280154493050609457}
   _backButton: {fileID: 9198575091943655308}
   _confirmButton: {fileID: 8425145523231281869}
