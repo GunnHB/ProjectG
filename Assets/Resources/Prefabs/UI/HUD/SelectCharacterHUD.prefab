@@ -735,6 +735,6 @@ MonoBehaviour:
   _backgroundClose: 0
   _slotPool:
     _poolPrefab: {fileID: 2823302150972305618, guid: 956948ce2ef1f614fba0cc5c5b966d83, type: 3}
-    _amount: 1
+    _amount: 0
     _parentObj: {fileID: 7981047266351515890}
   _backButton: {fileID: 3948302406652887496}
