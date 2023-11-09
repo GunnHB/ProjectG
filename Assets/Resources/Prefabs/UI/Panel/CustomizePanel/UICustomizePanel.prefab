@@ -2979,7 +2979,7 @@ GameObject:
   - component: {fileID: 8021700925191863996}
   - component: {fileID: 3710607781329632475}
   m_Layer: 5
-  m_Name: CustomizeHUD
+  m_Name: UICustomizePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

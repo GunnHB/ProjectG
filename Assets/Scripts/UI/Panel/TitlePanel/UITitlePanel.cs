@@ -85,12 +85,12 @@ public class UITitlePanel : UIPanelBase
         // 타이틀 패널은 숨김
         this.gameObject.SetActive(false);
 
-        var openedUI = UIManager.Instance.FindOpendUI<SelectCharacterHUD>(UIManager.Instance.HudCanvas);
+        var openedUI = UIManager.Instance.FindOpendUI<UISelectCharacterPanel>(UIManager.Instance.PanelCanvas);
 
         if (openedUI != null)
             openedUI.gameObject.SetActive(true);
         else
-            openedUI = UIManager.Instance.OpenUI<SelectCharacterHUD>("HUD/SelectCharacterHUD");
+            openedUI = UIManager.Instance.OpenUI<UISelectCharacterPanel>("SelectCharacterPanel/UISelectCharacterPanel");
 
         openedUI.Init();
     }

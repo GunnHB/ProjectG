@@ -12,7 +12,7 @@ using Unity.VisualScripting;
 using System.Linq;
 using UnityEngine.InputSystem;
 
-public class CustomizeHUD : UIHUDBase
+public class UICustomizePanel : UIPanelBase
 {
     // 변경할 메시의 카테고리
     public enum MeshCategory
@@ -351,12 +351,12 @@ public class CustomizeHUD : UIHUDBase
     {
         this.gameObject.SetActive(false);
 
-        var openedUI = UIManager.Instance.FindOpendUI<SelectCharacterHUD>(UIManager.Instance.HudCanvas);
+        var openedUI = UIManager.Instance.FindOpendUI<UISelectCharacterPanel>(UIManager.Instance.HudCanvas);
 
         if (openedUI != null)
             openedUI.gameObject.SetActive(true);
         else
-            openedUI = UIManager.Instance.OpenUI<SelectCharacterHUD>("HUD/SelectCharacterHUD");
+            openedUI = UIManager.Instance.OpenUI<UISelectCharacterPanel>("SelectCharacterPanel/UISelectCharacterPanel");
 
         openedUI.Init();
     }

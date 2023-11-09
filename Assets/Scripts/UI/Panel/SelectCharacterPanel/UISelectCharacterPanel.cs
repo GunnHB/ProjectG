@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public class SelectCharacterHUD : UIHUDBase
+public class UISelectCharacterPanel : UIPanelBase
 {
     [Title("[ObjectPool]")]
     [SerializeField] private ObjectPool _slotPool;
@@ -50,12 +50,12 @@ public class SelectCharacterHUD : UIHUDBase
     {
         this.gameObject.SetActive(false);
 
-        var openUI = UIManager.Instance.FindOpendUI<CustomizeHUD>(UIManager.Instance.HudCanvas);
+        var openUI = UIManager.Instance.FindOpendUI<UICustomizePanel>(UIManager.Instance.HudCanvas);
 
         if (openUI != null)
             openUI.gameObject.SetActive(true);
         else
-            openUI = UIManager.Instance.OpenUI<CustomizeHUD>("HUD/CustomizeHUD");
+            openUI = UIManager.Instance.OpenUI<UICustomizePanel>("CustomizePanel/UICustomizePanel");
 
         openUI.Init();
     }
@@ -69,7 +69,7 @@ public class SelectCharacterHUD : UIHUDBase
         if (openUI != null)
             openUI.gameObject.SetActive(true);
         else
-            openUI = UIManager.Instance.OpenUI<UITitlePanel>("Panel/UITitlePanel");
+            openUI = UIManager.Instance.OpenUI<UITitlePanel>("TitlePanel/UITitlePanel");
 
         openUI.Init();
     }

@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class UIManager : SingletonObject<UIManager>
 {
+    private const string POPUP = "Popup/";
+    private const string PANEL = "Panel/";
+    private const string HUD = "HUD/";
+
     private Canvas _popupCanvas;
     private Canvas _hudCanvas;
     private Canvas _panelCanvas;
@@ -65,13 +69,22 @@ public class UIManager : SingletonObject<UIManager>
 
     /// <summary>
     /// 경로 값으로 프리팹 호출
-    /// (Prefab/UI/ 이후의 값 입력)
+    /// (Prefabs/UI/{builder}/ 가 기본)
     /// </summary>
-    /// <param name="path"></param>
-    /// <typeparam name="UIBase"></typeparam>
     public T OpenUI<T>(string path) where T : UIBase
     {
-        T prefab = Resources.Load<T>($"Prefabs/UI/{path}");
+        StringBuilder builder = new StringBuilder();
+
+        if (typeof(T).BaseType.Equals(typeof(UIPanelBase)))
+            builder.Append(PANEL);
+        else if (typeof(T).BaseType.Equals(typeof(UIHUDBase)))
+            builder.Append(HUD);
+        else if (typeof(T).BaseType.Equals(typeof(UIPopupBase)))
+            builder.Append(POPUP);
+
+        builder.Append(path);
+
+        T prefab = Resources.Load<T>($"Prefabs/UI/{builder}");
 
         if (prefab == null)
         {

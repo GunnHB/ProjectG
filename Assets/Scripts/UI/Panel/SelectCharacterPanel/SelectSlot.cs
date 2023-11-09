@@ -114,6 +114,7 @@ public class SelectSlot : MonoBehaviour
     private void StartPlay()
     {
         // 게임 씬으로 전환
+
     }
 
     private void ResetData()
