@@ -42,7 +42,7 @@ public class SelectCharacterHUD : UIHUDBase
             item.SetActive(true);
 
             if (item.TryGetComponent(out SelectSlot slot))
-                slot.InitSlot((SelectSlot.SeparateType)index, isEmpty, ClosePanel);
+                slot.InitSlot((SelectSlot.SeparateType)index, ClosePanel);
         }
     }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
+using UnityEditor;
 using UnityEngine;
 
 // 저장 / 불러오기 관련
@@ -33,13 +34,22 @@ public class JsonManager : SingletonObject<JsonManager>
     {
         base.Awake();
 
-        SetData(SLOT_DATA, SLOT_DATA_FILE_NAME, out _baseSlotData);
+        LoadData(SLOT_DATA, SLOT_DATA_FILE_NAME, out _baseSlotData);
 
-        SetData(PLAYER_DATA, PLAYER_BASE_DATA_FILE_NAME, out _baseData);
-        SetData(PLAYER_DATA, PLAYER_MESH_DATA_FILE_NAME, out _meshData);
+        LoadData(PLAYER_DATA, PLAYER_BASE_DATA_FILE_NAME, out _baseData);
+        LoadData(PLAYER_DATA, PLAYER_MESH_DATA_FILE_NAME, out _meshData);
     }
 
-    private void SetData<T>(string path, string fileName, out T field) where T : new()
+    public void SaveData<T>(string path, string fileName, T data)
+    {
+        var jsonData = ObjectToJson(data);
+        File.WriteAllText($"{BASE_PATH}/{path}/{fileName}.json", jsonData);
+
+        // 에셋 리프레시
+        AssetDatabase.Refresh();
+    }
+
+    public void LoadData<T>(string path, string fileName, out T field) where T : new()
     {
         try
         {
@@ -68,6 +78,9 @@ public class JsonManager : SingletonObject<JsonManager>
 
             field = LoadJsonFile<T>(path, fileName);
         }
+
+        // 에셋 리프레시
+        AssetDatabase.Refresh();
     }
 
     public string ObjectToJson(object obj)

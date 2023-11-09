@@ -343,7 +343,8 @@ public class CustomizeHUD : UIHUDBase
     // 캐릭터 생성 버튼 콜백
     private void CreateNewCharacter()
     {
-        // JsonManager.Instance.CreateJsonFile("PlayerCustomData", "TestPlayer", "");
+        JsonManager.Instance.BaseSlotData._isEmpty[GameManager.Instance.SelectedSlotIndex] = false;
+        JsonManager.Instance.SaveData(JsonManager.SLOT_DATA, JsonManager.SLOT_DATA_FILE_NAME, JsonManager.Instance.BaseSlotData);
     }
 
     private void BackToSelectScharacter()
