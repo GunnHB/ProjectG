@@ -31,10 +31,8 @@ public class UITitlePanel : UIPanelBase
         Util.AddButtonListener(_exitGameButton, OnClickExitGameButton);
     }
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
-
         Init();
     }
 
@@ -81,6 +79,11 @@ public class UITitlePanel : UIPanelBase
     }
 
     private void OnClickStartGameButton()
+    {
+        LoadSceneManager.Instance.FadeInOut(OpenSelectCharacterPanel);
+    }
+
+    private void OpenSelectCharacterPanel()
     {
         // 타이틀 패널은 숨김
         this.gameObject.SetActive(false);

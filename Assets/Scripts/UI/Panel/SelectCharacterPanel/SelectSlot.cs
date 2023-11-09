@@ -114,7 +114,7 @@ public class SelectSlot : MonoBehaviour
     private void StartPlay()
     {
         // 게임 씬으로 전환
-
+        LoadSceneManager.Instance.FadeInOut(null, LoadSceneManager.SceneType.InGame);
     }
 
     private void ResetData()

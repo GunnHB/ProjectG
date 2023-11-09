@@ -13,6 +13,7 @@ public class UIManager : SingletonObject<UIManager>
     private Canvas _popupCanvas;
     private Canvas _hudCanvas;
     private Canvas _panelCanvas;
+    private Canvas _dialogueCanvas;
 
     public Canvas PopupCanvas
     {
@@ -61,6 +62,22 @@ public class UIManager : SingletonObject<UIManager>
         }
     }
 
+    public Canvas DialogueCanvas
+    {
+        get
+        {
+            if (_dialogueCanvas == null)
+            {
+                var canvasObject = GameObject.Find("PanelCanvas");
+
+                if (canvasObject != null)
+                    _dialogueCanvas = canvasObject.GetComponent<Canvas>();
+            }
+
+            return _dialogueCanvas;
+        }
+    }
+
 
     protected override void Awake()
     {
@@ -74,13 +91,23 @@ public class UIManager : SingletonObject<UIManager>
     public T OpenUI<T>(string path) where T : UIBase
     {
         StringBuilder builder = new StringBuilder();
+        Transform parent = null;
 
         if (typeof(T).BaseType.Equals(typeof(UIPanelBase)))
+        {
             builder.Append(PANEL);
+            parent = PanelCanvas.transform;
+        }
         else if (typeof(T).BaseType.Equals(typeof(UIHUDBase)))
+        {
             builder.Append(HUD);
+            parent = HudCanvas.transform;
+        }
         else if (typeof(T).BaseType.Equals(typeof(UIPopupBase)))
+        {
             builder.Append(POPUP);
+            parent = PopupCanvas.transform;
+        }
 
         builder.Append(path);
 
@@ -92,7 +119,7 @@ public class UIManager : SingletonObject<UIManager>
             return null;
         }
 
-        T instanceObj = Instantiate(prefab, PopupCanvas.transform);
+        T instanceObj = Instantiate(prefab, parent);
 
         if (instanceObj == null)
             return null;

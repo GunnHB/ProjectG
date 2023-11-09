@@ -16,6 +16,7 @@ public class SingletonCreator : MonoBehaviour
         InitSingletonObject<JsonManager>();
         InitSingletonObject<UIManager>();
         InitSingletonObject<EnemyManager>();
+        InitSingletonObject<LoadSceneManager>();
     }
 
     /// <summary>

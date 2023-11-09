@@ -42,15 +42,20 @@ public class UISelectCharacterPanel : UIPanelBase
             item.SetActive(true);
 
             if (item.TryGetComponent(out SelectSlot slot))
-                slot.InitSlot((SelectSlot.SeparateType)index, ClosePanel);
+                slot.InitSlot((SelectSlot.SeparateType)index, CreateAction);
         }
     }
 
-    private void ClosePanel()
+    private void CreateAction()
+    {
+        LoadSceneManager.Instance.FadeInOut(CloseAction);
+    }
+
+    private void CloseAction()
     {
         this.gameObject.SetActive(false);
 
-        var openUI = UIManager.Instance.FindOpendUI<UICustomizePanel>(UIManager.Instance.HudCanvas);
+        var openUI = UIManager.Instance.FindOpendUI<UICustomizePanel>(UIManager.Instance.PanelCanvas);
 
         if (openUI != null)
             openUI.gameObject.SetActive(true);
@@ -61,6 +66,11 @@ public class UISelectCharacterPanel : UIPanelBase
     }
 
     private void OnClickBackButton()
+    {
+        LoadSceneManager.Instance.FadeInOut(BackButtonAction);
+    }
+
+    private void BackButtonAction()
     {
         this.gameObject.SetActive(false);
 

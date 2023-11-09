@@ -345,13 +345,20 @@ public class UICustomizePanel : UIPanelBase
     {
         JsonManager.Instance.BaseSlotData._isEmpty[GameManager.Instance.SelectedSlotIndex] = false;
         JsonManager.Instance.SaveData(JsonManager.SLOT_DATA, JsonManager.SLOT_DATA_FILE_NAME, JsonManager.Instance.BaseSlotData);
+
+        LoadSceneManager.Instance.FadeInOut(null, LoadSceneManager.SceneType.InGame);
     }
 
     private void BackToSelectScharacter()
     {
+        LoadSceneManager.Instance.FadeInOut(BackButtonAction);
+    }
+
+    private void BackButtonAction()
+    {
         this.gameObject.SetActive(false);
 
-        var openedUI = UIManager.Instance.FindOpendUI<UISelectCharacterPanel>(UIManager.Instance.HudCanvas);
+        var openedUI = UIManager.Instance.FindOpendUI<UISelectCharacterPanel>(UIManager.Instance.PanelCanvas);
 
         if (openedUI != null)
             openedUI.gameObject.SetActive(true);
