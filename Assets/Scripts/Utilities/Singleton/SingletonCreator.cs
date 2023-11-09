@@ -13,11 +13,9 @@ public class SingletonCreator : MonoBehaviour
     {
         InitSingletonObject<GameManager>();
         InitSingletonObject<ResourceManager>();
-        InitSingletonObject<SceneManager>();
         InitSingletonObject<JsonManager>();
         InitSingletonObject<UIManager>();
         InitSingletonObject<EnemyManager>();
-        InitSingletonObject<FadeManager>();
     }
 
     /// <summary>
