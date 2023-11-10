@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
+using Sirenix.OdinInspector;
+
 public class LoadSceneManager : SingletonObject<LoadSceneManager>
 {
     public const string START_SCENE = "StartScene";
@@ -27,6 +29,8 @@ public class LoadSceneManager : SingletonObject<LoadSceneManager>
 
     private bool _playFadeIn = false;
     private bool _invokedCallback = false;
+
+    private float _fadingRate = .05f;
 
     protected override void Awake()
     {
@@ -81,18 +85,7 @@ public class LoadSceneManager : SingletonObject<LoadSceneManager>
         _sceneType = type;
 
         _fadeInCoroutine = StartCoroutine(nameof(Cor_FadeIn));
-
-        // // SceneType 이 none 이 아니라면 씬 전환 실행
-        // if (type != SceneType.None)
-        //     LoadScene(type);
-
-        // callback?.Invoke();
-
-        // ResetCoroutineData();
         _fadeOutCoroutine = StartCoroutine(nameof(Cor_FadeOut));
-
-        // 페이드 종료 후 ui 클릭 허용
-        _scenePanel.FadeImage.raycastTarget = false;
     }
 
     private void ResetCoroutineData()
@@ -119,10 +112,10 @@ public class LoadSceneManager : SingletonObject<LoadSceneManager>
 
         while (alpha < 1f)
         {
-            alpha += .1f;
+            alpha += _fadingRate;
             _scenePanel.SetImageAlpha(alpha);
 
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(_fadingRate);
         }
 
         _playFadeIn = false;
@@ -146,10 +139,10 @@ public class LoadSceneManager : SingletonObject<LoadSceneManager>
                 _scenePanel.transform.SetAsLastSibling();
             }
 
-            alpha -= .1f;
+            alpha -= _fadingRate;
             _scenePanel.SetImageAlpha(alpha);
 
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(_fadingRate);
         }
 
         ResetData();
@@ -161,36 +154,8 @@ public class LoadSceneManager : SingletonObject<LoadSceneManager>
         _invokedCallback = false;
         _callback = null;
         _sceneType = SceneType.None;
+
+        // 페이드 종료 후 ui 클릭 허용
+        _scenePanel.FadeImage.raycastTarget = false;
     }
-
-    // private IEnumerator Cor_Fade(bool fadeIn)
-    // {
-    //     _scenePanel.transform.SetAsLastSibling();
-
-    //     float imageAlpha = fadeIn ? 0f : 1f;
-    //     float goalValue = fadeIn ? 1f : 0f;
-
-    //     _scenePanel.SetImageAlpha(imageAlpha);
-
-    //     if (fadeIn)
-    //     {
-    //         while (goalValue > imageAlpha)
-    //         {
-    //             imageAlpha += .1f;
-    //             _scenePanel.SetImageAlpha(imageAlpha);
-
-    //             yield return new WaitForSeconds(.1f);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         while (goalValue < imageAlpha)
-    //         {
-    //             imageAlpha -= .1f;
-    //             _scenePanel.SetImageAlpha(imageAlpha);
-
-    //             yield return new WaitForSeconds(.1f);
-    //         }
-    //     }
-    // }
 }
