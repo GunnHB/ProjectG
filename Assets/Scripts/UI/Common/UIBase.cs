@@ -76,7 +76,7 @@ public class UIBase : MonoBehaviour
                 return;
 
             closeButton.transition = Selectable.Transition.None;
-            Util.AddButtonListener(closeButton, () => UIManager.Instance.CloseUI<UIBase>());
+            Util.AddButtonListener(closeButton, Close);
         }
     }
 
@@ -87,6 +87,6 @@ public class UIBase : MonoBehaviour
 
     public virtual void Close()
     {
-        UIManager.Instance.CloseUI<UIBase>();
+        UIManager.Instance.CloseUI(this.transform);
     }
 }

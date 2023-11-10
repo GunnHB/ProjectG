@@ -83,7 +83,7 @@ public class SelectSlot : MonoBehaviour
         string confirmString = "삭제";
         string cancelString = "취소";
 
-        UIManager.Instance.OpenCommonDialogue(titleString, msgString,
+        UIManager.Instance.OpenSimpleDialogue(titleString, msgString,
                                               confirmString, DeleteData,
                                               cancelString, null);
     }
@@ -106,7 +106,7 @@ public class SelectSlot : MonoBehaviour
         string confirmString = "시작";
         string cancelString = "취소";
 
-        UIManager.Instance.OpenCommonDialogue(titleString, msgString,
+        UIManager.Instance.OpenSimpleDialogue(titleString, msgString,
                                               confirmString, StartPlay,
                                               cancelString, null);
     }

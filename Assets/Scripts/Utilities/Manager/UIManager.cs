@@ -4,81 +4,8 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class UIManager : SingletonObject<UIManager>
+public partial class UIManager : SingletonObject<UIManager>
 {
-    private const string POPUP = "Popup/";
-    private const string PANEL = "Panel/";
-    private const string HUD = "HUD/";
-
-    private Canvas _popupCanvas;
-    private Canvas _hudCanvas;
-    private Canvas _panelCanvas;
-    private Canvas _dialogueCanvas;
-
-    public Canvas PopupCanvas
-    {
-        get
-        {
-            if (_popupCanvas == null)
-            {
-                var canvasObject = GameObject.Find("PopupCanvas");
-
-                if (canvasObject != null)
-                    _popupCanvas = canvasObject.GetComponent<Canvas>();
-            }
-
-            return _popupCanvas;
-        }
-    }
-    public Canvas HudCanvas
-    {
-        get
-        {
-            if (_hudCanvas == null)
-            {
-                var canvasObject = GameObject.Find("HUDCanvas");
-
-                if (canvasObject != null)
-                    _hudCanvas = canvasObject.GetComponent<Canvas>();
-            }
-
-            return _hudCanvas;
-        }
-    }
-
-    public Canvas PanelCanvas
-    {
-        get
-        {
-            if (_panelCanvas == null)
-            {
-                var canvasObject = GameObject.Find("PanelCanvas");
-
-                if (canvasObject != null)
-                    _panelCanvas = canvasObject.GetComponent<Canvas>();
-            }
-
-            return _panelCanvas;
-        }
-    }
-
-    public Canvas DialogueCanvas
-    {
-        get
-        {
-            if (_dialogueCanvas == null)
-            {
-                var canvasObject = GameObject.Find("PanelCanvas");
-
-                if (canvasObject != null)
-                    _dialogueCanvas = canvasObject.GetComponent<Canvas>();
-            }
-
-            return _dialogueCanvas;
-        }
-    }
-
-
     protected override void Awake()
     {
         base.Awake();
@@ -91,24 +18,10 @@ public class UIManager : SingletonObject<UIManager>
     public T OpenUI<T>(string path) where T : UIBase
     {
         StringBuilder builder = new StringBuilder();
-        Transform parent = null;
 
-        if (typeof(T).BaseType.Equals(typeof(UIPanelBase)))
-        {
-            builder.Append(PANEL);
-            parent = PanelCanvas.transform;
-        }
-        else if (typeof(T).BaseType.Equals(typeof(UIHUDBase)))
-        {
-            builder.Append(HUD);
-            parent = HudCanvas.transform;
-        }
-        else if (typeof(T).BaseType.Equals(typeof(UIPopupBase)))
-        {
-            builder.Append(POPUP);
-            parent = PopupCanvas.transform;
-        }
+        Transform parent = GetParentCanvasTransform<T>();        // 부모 캔버스 프랜스폼
 
+        builder.Append(GetParentCanvasPath<T>());
         builder.Append(path);
 
         T prefab = Resources.Load<T>($"Prefabs/UI/{builder}");
@@ -148,11 +61,31 @@ public class UIManager : SingletonObject<UIManager>
         return findValue;
     }
 
-    public void OpenCommonDialogue(string title, string msg,
+    public T FindOpendUI<T>() where T : UIBase
+    {
+        T findUI = null;
+        Transform parentCanvas = GetParentCanvasTransform<T>();
+
+        for (int index = 0; index < parentCanvas.childCount; index++)
+        {
+            var item = parentCanvas.GetChild(index);
+
+            if (item.TryGetComponent(out T compo))
+            {
+                findUI = compo;
+                break;
+            }
+        }
+
+        return findUI;
+    }
+
+    // 나중에 로컬라이즈용 테이블 만들어지면 수정하자
+    public void OpenSimpleDialogue(string title, string msg,
                                    string confirmString = "Confirm", UnityAction confirmAction = null,
                                    string cancelString = "Cancel", UnityAction cancelAction = null)
     {
-        UIDialogueBase messageBox = OpenUI<UIDialogueBase>("Base/UIDialogueBase");
+        var messageBox = OpenUI<UISimpleDialogue>("SimpleDialogue/UISimpleDialogue");
 
         if (messageBox == null)
             return;
@@ -162,16 +95,40 @@ public class UIManager : SingletonObject<UIManager>
                                   cancelString, cancelAction);
     }
 
-    public void CloseUI<T>() where T : UIBase
+    private Transform GetParentCanvasTransform<T>()
     {
-        GameObject prefab = _popupCanvas.GetComponentInChildren<T>().gameObject;
+        if (typeof(T).BaseType.Equals(typeof(UIPanelBase)))
+            return PanelCanvas.transform;
+        else if (typeof(T).BaseType.Equals(typeof(UIHUDBase)))
+            return HudCanvas.transform;
+        else if (typeof(T).BaseType.Equals(typeof(UIPopupBase)))
+            return PopupCanvas.transform;
+        else if (typeof(T).BaseType.Equals(typeof(UIDialogueBase)))
+            return DialogueCanvas.transform;
+
+        return null;
+    }
+
+    private string GetParentCanvasPath<T>()
+    {
+        if (typeof(T).BaseType.Equals(typeof(UIPanelBase)))
+            return PANEL;
+        else if (typeof(T).BaseType.Equals(typeof(UIHUDBase)))
+            return HUD;
+        else if (typeof(T).BaseType.Equals(typeof(UIPopupBase)))
+            return POPUP;
+        else if (typeof(T).BaseType.Equals(typeof(UIDialogueBase)))
+            return DIALOGUE;
+
+        return string.Empty;
+    }
+
+    public void CloseUI(Transform uiTransform)
+    {
+        // GameObject prefab = GetParentCanvasTransform<T>().GetComponentInChildren<T>().gameObject;
+        GameObject prefab = uiTransform.gameObject;
 
         if (prefab != null)
             Destroy(prefab);
-    }
-
-    public void CloseDialogue()
-    {
-        CloseUI<UIDialogueBase>();
     }
 }

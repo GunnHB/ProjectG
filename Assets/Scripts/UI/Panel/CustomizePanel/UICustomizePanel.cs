@@ -311,7 +311,7 @@ public class UICustomizePanel : UIPanelBase
             string cancel = "취소";
 
             // 씬 이동하거나 같은 씬에서 해당 허드만 종료 시키는 기능 추가하면 될 듯...?
-            UIManager.Instance.OpenCommonDialogue(title, message,
+            UIManager.Instance.OpenSimpleDialogue(title, message,
                                                   confirm, BackToSelectScharacter,
                                                   cancel, null);
         }
@@ -335,7 +335,7 @@ public class UICustomizePanel : UIPanelBase
                 string title = "알림";
                 string message = $"[<color=#FFCC70>{_nameInputField.text}</color>]\n\n해당 이름으로 시작하시겠습니까?";
 
-                UIManager.Instance.OpenCommonDialogue(title, message, confirmAction: CreateNewCharacter, cancelAction: null);
+                UIManager.Instance.OpenSimpleDialogue(title, message, confirmAction: CreateNewCharacter, cancelAction: null);
             }
         }
     }

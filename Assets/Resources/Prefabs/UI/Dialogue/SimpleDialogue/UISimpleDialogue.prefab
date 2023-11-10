@@ -383,10 +383,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1764929278805592781}
-  - component: {fileID: 2796398884276078126}
   - component: {fileID: 7021236229755025682}
+  - component: {fileID: 119153928975971095}
   m_Layer: 5
-  m_Name: UIDialogueBase
+  m_Name: UISimpleDialogue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -413,7 +413,15 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2796398884276078126
+--- !u!222 &7021236229755025682
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2519259340674228089}
+  m_CullTransparentMesh: 1
+--- !u!114 &119153928975971095
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -422,7 +430,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2519259340674228089}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0de493cce605e24991d1bb705948539, type: 3}
+  m_Script: {fileID: 11500000, guid: c361a175868e6e041b73150aa53a0321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _backgroundDim: 1
@@ -433,14 +441,6 @@ MonoBehaviour:
   _cancelButtonText: {fileID: 1724189019498558064}
   _confirmButton: {fileID: 5780639999866202290}
   _cancelButton: {fileID: 8294902668668936743}
---- !u!222 &7021236229755025682
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2519259340674228089}
-  m_CullTransparentMesh: 1
 --- !u!1 &3297554281914699161
 GameObject:
   m_ObjectHideFlags: 0
