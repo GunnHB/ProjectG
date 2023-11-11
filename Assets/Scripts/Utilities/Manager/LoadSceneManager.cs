@@ -123,6 +123,7 @@ public class LoadSceneManager : SingletonObject<LoadSceneManager>
 
     private IEnumerator Cor_FadeOut()
     {
+        // 페이드 인 끝날 때까지 대기
         yield return new WaitUntil(() => !_playFadeIn);
         float alpha = 1f;
 
@@ -137,6 +138,12 @@ public class LoadSceneManager : SingletonObject<LoadSceneManager>
 
                 _invokedCallback = true;
                 _scenePanel.transform.SetAsLastSibling();
+            }
+
+            if (_scenePanel == null)
+            {
+                ResetData();
+                yield break;
             }
 
             alpha -= _fadingRate;

@@ -6142,6 +6142,7 @@ MonoBehaviour:
   _input: {fileID: 3192817222028608333}
   _camera: {fileID: 0}
   _animator: {fileID: 3250381461640217608}
+  _animCtrlScriptableObject: {fileID: 11400000, guid: e992315b367f65243a253aa5d0bea663, type: 2}
   _targetTransform: {fileID: 3192817221778374156}
   _boxSize: {x: 0.75, y: 0.05, z: 0.75}
   _maxDistance: 1

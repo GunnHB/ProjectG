@@ -64,6 +64,9 @@ public partial class PlayerController : MonoBehaviour
     // 플레이어 상태 변수
     private PlayerState _playerState = PlayerState.None;
 
+    // Properties
+    public Animator PlayerAnimator => _animator;
+
     private void Start()
     {
         _applySpeed = _walkSpeed;

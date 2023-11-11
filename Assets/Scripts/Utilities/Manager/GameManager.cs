@@ -18,6 +18,17 @@ public class GameManager : SingletonObject<GameManager>
     private int _selectedSlotIndex;
     public int SelectedSlotIndex => _selectedSlotIndex;
 
+    private PlayerController _pController;
+    public PlayerController PController
+    {
+        get
+        {
+            _pController = GameObject.Find("Player").GetComponent<PlayerController>();
+
+            return _pController;
+        }
+    }
+
     protected override void Awake()
     {
         base.Awake();

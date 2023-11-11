@@ -7,9 +7,14 @@ using System.Collections;
 
 public partial class PlayerController : MonoBehaviour
 {
+    [Title("[AnimCtrlScriptableObject]")]
+    [SerializeField] private PlayerAnimCtrlScriptableObject _animCtrlScriptableObject;
+
     private bool _isAttackStart = false;            // 공격 시작
 
     private Coroutine _chargeCoroutine = null;
+
+    public PlayerAnimCtrlScriptableObject AnimCtrlScriptableObj => _animCtrlScriptableObject;
 
     public void OnClickMouseLeft(InputAction.CallbackContext context)
     {

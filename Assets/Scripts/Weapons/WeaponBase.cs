@@ -7,22 +7,22 @@ using UnityEngine;
 /// </summary>
 public class WeaponBase : MonoBehaviour
 {
+    // 추가되는 타입은 끝에 넣으시오
     public enum WeaponType
     {
-        None,
         NoWeapon,
         SwordShield,
+        SingleTwoHandSword,
         Bow,
-        SingleTwoHandSword
     }
 
-    public WeaponType _weaponType;
+    // public WeaponType _weaponType;
 
-    public string _weaponName;
+    // public string _weaponName;
 
-    public float _damage;
-    public float _durability;
+    // public float _damage;
+    // public float _durability;
 
-    public Animation _weaponAnimation;
-    public AudioClip _weaponAudio;
+    // public Animation _weaponAnimation;
+    // public AudioClip _weaponAudio;
 }
