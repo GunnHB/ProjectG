@@ -23,7 +23,8 @@ public class GameManager : SingletonObject<GameManager>
     {
         get
         {
-            _pController = GameObject.Find("Player").GetComponent<PlayerController>();
+            if (_currentMode == GameMode.InGame)
+                _pController = GameObject.Find("Player").GetComponent<PlayerController>();
 
             return _pController;
         }

@@ -1583,6 +1583,26 @@ PrefabInstance:
       propertyPath: _camera
       value: 
       objectReference: {fileID: 86688761}
+    - target: {fileID: 3192817222028608323, guid: 71e61aa9ec1e4f54fad47f0f2af3f975, type: 3}
+      propertyPath: _inputAction.m_Id
+      value: e6daaf94-9be8-4211-86b3-f92d021c9b74
+      objectReference: {fileID: 0}
+    - target: {fileID: 3192817222028608323, guid: 71e61aa9ec1e4f54fad47f0f2af3f975, type: 3}
+      propertyPath: _inputAction.m_Name
+      value: Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 3192817222028608323, guid: 71e61aa9ec1e4f54fad47f0f2af3f975, type: 3}
+      propertyPath: _inputAction.m_SingletonActionBindings.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3192817222028608323, guid: 71e61aa9ec1e4f54fad47f0f2af3f975, type: 3}
+      propertyPath: _inputAction.m_SingletonActionBindings.Array.data[0].m_Id
+      value: d0beaf0b-cf24-4e84-867e-8e1caf5c129e
+      objectReference: {fileID: 0}
+    - target: {fileID: 3192817222028608323, guid: 71e61aa9ec1e4f54fad47f0f2af3f975, type: 3}
+      propertyPath: _inputAction.m_SingletonActionBindings.Array.data[0].m_Action
+      value: Input
+      objectReference: {fileID: 0}
     - target: {fileID: 3192817222028608333, guid: 71e61aa9ec1e4f54fad47f0f2af3f975, type: 3}
       propertyPath: m_Camera
       value: 
@@ -1590,7 +1610,7 @@ PrefabInstance:
     - target: {fileID: 3250381461640217608, guid: 71e61aa9ec1e4f54fad47f0f2af3f975, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: d2915d9f218195b4dbd872f55fd78e4b, type: 2}
+      objectReference: {fileID: 9100000, guid: 2f23a128bb235574aa5a62a944f90a21, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 71e61aa9ec1e4f54fad47f0f2af3f975, type: 3}
 --- !u!1 &1676528226

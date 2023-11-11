@@ -19,12 +19,12 @@ public partial class PlayerController : MonoBehaviour
     }
 
     // 애니 트랜지션 파라미터
-    private const string IsWalk = "IsWalk";
-    private const string IsSprint = "IsSprint";
-    private const string IsJumnp = "IsJump";
-    private const string Attack = "Attack";
-    private const string EquipChange = "EquipChange";
-    private const string ComboCount = "ComboCount";
+    private const string ANIM_ISWALK = "IsWalk";
+    private const string ANIM_ISSPRINT = "IsSprint";
+    private const string ANIM_ISJUMP = "IsJump";
+    private const string ANIM_ATTACK = "Attack";
+    private const string ANIM_EQUIPCHANGE = "EquipChange";
+    private const string ANIM_COMBOCOUNT = "ComboCount";
 
     [Title("[Components]")]
     [SerializeField] private CharacterController _controller;
@@ -51,6 +51,7 @@ public partial class PlayerController : MonoBehaviour
     private bool _isWalk = false;
     private bool _isSprint = false;
     private bool _isJump = false;
+    private bool _isAttack = false;
 
     // 플레이어 스탯 데이터
     // 스테미나는 정확하게 값을 매기도록 float 처리 (나중에 수정필요하면 수정하자)
@@ -64,8 +65,11 @@ public partial class PlayerController : MonoBehaviour
     // 플레이어 상태 변수
     private PlayerState _playerState = PlayerState.None;
 
+    private InputAction _moveAciton;
+
     // Properties
     public Animator PlayerAnimator => _animator;
+    public PlayerState PState => _playerState;
 
     private void Start()
     {
@@ -80,37 +84,42 @@ public partial class PlayerController : MonoBehaviour
     private void Update()
     {
         ApplyGravity();
-        MovePlayer();
+        // MovePlayer();
     }
 
-    // Actual move
-    private void MovePlayer()
+    private void SetMoveAction()
     {
-        // 대기 상태일 때 이동이 가능
-        _isWalk = _direction.magnitude >= .1f;
 
-        if (_isWalk)
-        {
-            float targetAngle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg + _camera.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, _turnSmoothTime);
-            this.transform.rotation = Quaternion.Euler(0f, angle, 0f);
-
-            Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            _controller.Move(moveDirection.normalized * _applySpeed * Time.deltaTime);
-
-            _playerState = PlayerState.Move;
-        }
-
-        _applySpeed = _isSprint ? _sprintSpeed : _walkSpeed;
-
-        _animator.SetBool(IsWalk, _isWalk);
-        _animator.SetBool(IsSprint, _isSprint && _isWalk);
-
-        // 스태미나 세팅
-        SetPlayerStamina(_isWalk, ref _isSprint);
-
-        _playerState = PlayerState.Idle;
     }
+
+    // // Actual move
+    // private void MovePlayer()
+    // {
+    //     // 대기 상태일 때 이동이 가능
+    //     _isWalk = _direction.magnitude >= .1f;
+
+    //     if (_isWalk)
+    //     {
+    //         float targetAngle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg + _camera.eulerAngles.y;
+    //         float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, _turnSmoothTime);
+    //         this.transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+    //         Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+    //         _controller.Move(moveDirection.normalized * _applySpeed * Time.deltaTime);
+
+    //         _playerState = PlayerState.Move;
+    //     }
+    //     else
+    //         _playerState = PlayerState.Idle;
+
+    //     _applySpeed = _isSprint ? _sprintSpeed : _walkSpeed;
+
+    //     _animator.SetBool(ANIM_ISWALK, _isWalk);
+    //     _animator.SetBool(ANIM_ISSPRINT, _isSprint && _isWalk);
+
+    //     // 스태미나 세팅
+    //     SetPlayerStamina(_isWalk, ref _isSprint);
+    // }
 
     // Walk
     public void OnMoveInput(InputAction.CallbackContext context)
