@@ -65,15 +65,15 @@ public partial class PlayerController : MonoBehaviour
     // 플레이어 상태 변수
     private PlayerState _playerState = PlayerState.None;
 
-    private InputAction _moveAciton;
-
     // Properties
     public Animator PlayerAnimator => _animator;
     public PlayerState PState => _playerState;
 
-    private void Start()
+    private void Awake()
     {
         _applySpeed = _walkSpeed;
+        _camera = Camera.main.transform;
+        _input.camera = Camera.main;
 
         // 현재 데이터 처리는 간이로
         _playerHP = GameValue.INIT_HP;
@@ -84,42 +84,37 @@ public partial class PlayerController : MonoBehaviour
     private void Update()
     {
         ApplyGravity();
-        // MovePlayer();
+        MovePlayer();
     }
 
-    private void SetMoveAction()
+    // Actual move
+    private void MovePlayer()
     {
+        // 대기 상태일 때 이동이 가능
+        _isWalk = _direction.magnitude >= .1f;
 
+        if (_isWalk)
+        {
+            float targetAngle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg + _camera.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, _turnSmoothTime);
+            this.transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+            Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            _controller.Move(moveDirection.normalized * _applySpeed * Time.deltaTime);
+
+            _playerState = PlayerState.Move;
+        }
+        else
+            _playerState = PlayerState.Idle;
+
+        _applySpeed = _isSprint ? _sprintSpeed : _walkSpeed;
+
+        _animator.SetBool(ANIM_ISWALK, _isWalk);
+        _animator.SetBool(ANIM_ISSPRINT, _isSprint && _isWalk);
+
+        // 스태미나 세팅
+        SetPlayerStamina(_isWalk, ref _isSprint);
     }
-
-    // // Actual move
-    // private void MovePlayer()
-    // {
-    //     // 대기 상태일 때 이동이 가능
-    //     _isWalk = _direction.magnitude >= .1f;
-
-    //     if (_isWalk)
-    //     {
-    //         float targetAngle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg + _camera.eulerAngles.y;
-    //         float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, _turnSmoothTime);
-    //         this.transform.rotation = Quaternion.Euler(0f, angle, 0f);
-
-    //         Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-    //         _controller.Move(moveDirection.normalized * _applySpeed * Time.deltaTime);
-
-    //         _playerState = PlayerState.Move;
-    //     }
-    //     else
-    //         _playerState = PlayerState.Idle;
-
-    //     _applySpeed = _isSprint ? _sprintSpeed : _walkSpeed;
-
-    //     _animator.SetBool(ANIM_ISWALK, _isWalk);
-    //     _animator.SetBool(ANIM_ISSPRINT, _isSprint && _isWalk);
-
-    //     // 스태미나 세팅
-    //     SetPlayerStamina(_isWalk, ref _isSprint);
-    // }
 
     // Walk
     public void OnMoveInput(InputAction.CallbackContext context)
