@@ -7,13 +7,6 @@ using UnityEngine.UI;
 using Sirenix.OdinInspector;
 
 using TMPro;
-using UniRx.Triggers;
-
-public class ItemData
-{
-    public string _itemName;
-    public ItemType _itemType;
-}
 
 public class UIItemSlot : MonoBehaviour
 {
@@ -23,8 +16,6 @@ public class UIItemSlot : MonoBehaviour
     [SerializeField] private Image _selectFrame;
     [SerializeField] private CommonButton _slotButton;
     [SerializeField] private GameObject _equipObj;
-
-    private ItemData _itemData;
 
     private Color _hoverColor = new Color(1f, 1f, 1f, .5f);
     private Color _selectColor = new Color(1f, 1f, 1f, 1f);
