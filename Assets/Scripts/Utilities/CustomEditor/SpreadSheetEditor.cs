@@ -99,6 +99,7 @@ public class SpreadSheetEditor : OdinEditorWindow
                 if (string.IsNullOrEmpty(datas[index]))
                     continue;
 
+                // 타입에 맞게 분류
                 if (type == typeof(int))
                     fields[index].SetValue(data, int.Parse(datas[index]));
                 else if (type == typeof(long))
@@ -109,6 +110,7 @@ public class SpreadSheetEditor : OdinEditorWindow
                     fields[index].SetValue(data, bool.Parse(datas[index]));
                 else if (type == typeof(string))
                     fields[index].SetValue(data, datas[index]);
+                // 여기는 enum
                 else
                     fields[index].SetValue(data, Enum.Parse(type, datas[index]));
             }

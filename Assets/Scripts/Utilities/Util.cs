@@ -54,6 +54,96 @@ public static class Util
         }
     }
 
+    // 일반 클릭 콜백
+    public static void AddButtonListenerV2(Button button, UnityAction onClickCallback, bool removeAll = true)
+    {
+        if (button == null)
+            return;
+
+        if (removeAll)
+            button.onClick.RemoveAllListeners();
+
+        button.onClick.AddListener(onClickCallback);
+    }
+
+    // 버튼 press 여부 콜백
+    public static void AddPressButtonListener(Button button,
+                                              UnityAction downCallback, UnityAction upCallback = null, UnityAction clickCallback = null)
+    {
+        if (button == null)
+            return;
+
+        if (clickCallback != null)
+            AddButtonListenerV2(button, clickCallback);
+
+        AddButtonTrigger(button, EventTriggerType.PointerDown, downCallback);
+        AddButtonTrigger(button, EventTriggerType.PointerUp, upCallback);
+    }
+
+    // 버튼 Hover 여부 콜백
+    public static void AddHoverButtonListener(Button button,
+                                              UnityAction enterCallback, UnityAction exitCallback = null, UnityAction clickCallback = null)
+    {
+        if (button == null)
+            return;
+
+        if (clickCallback != null)
+            AddButtonListenerV2(button, clickCallback);
+
+        AddButtonTrigger(button, EventTriggerType.PointerEnter, enterCallback);
+        AddButtonTrigger(button, EventTriggerType.PointerExit, exitCallback);
+    }
+
+    // 특정 트리거 타입의 콜백을 모두 삭제
+    public static void RemoveTrigger(Button button, EventTriggerType triggerType)
+    {
+        if (button == null)
+            return;
+
+        if (button.TryGetComponent(out EventTrigger trigger))
+        {
+            var item = trigger.triggers.Find(ev => ev.eventID == triggerType);
+
+            if (item == null)
+                return;
+
+            item.callback.RemoveAllListeners();
+        }
+    }
+
+    // 버튼에 달려 있는 모든 트리거 타입의 콜백 삭제
+    public static void RemoveAllTriggers(Button button)
+    {
+        if (button == null)
+            return;
+
+        if (button.TryGetComponent(out EventTrigger trigger))
+        {
+            foreach (var item in trigger.triggers)
+                item.callback.RemoveAllListeners();
+        }
+    }
+
+    public static void AddButtonTrigger(Button button, EventTriggerType triggerType, UnityAction callback)
+    {
+        if (button == null)
+            return;
+
+        var trigger = button.GetComponent<EventTrigger>();
+
+        if (trigger == null)
+        {
+            button.AddComponent<EventTrigger>();
+            trigger = button.GetComponent<EventTrigger>();
+        }
+
+        EventTrigger.Entry entry = new EventTrigger.Entry();
+        entry.eventID = triggerType;
+        entry.callback.AddListener((eventData) => { callback?.Invoke(); });
+
+        trigger.triggers.Add(entry);
+    }
+
     /// <summary>
     /// EventTrigger 기능
     /// </summary>

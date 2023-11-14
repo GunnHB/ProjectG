@@ -18,6 +18,16 @@ public class CommonButton : Button, IPointerDownHandler, IPointerUpHandler, IPoi
 
     public UnityAction buttonCallback = null;
 
+    public void SetPress(bool isPress)
+    {
+        _isPress = isPress;
+    }
+
+    public void SetEnter(bool isEnter)
+    {
+        _isEnter = isEnter;
+    }
+
     // Press
     public override void OnPointerDown(PointerEventData eventData)
     {
