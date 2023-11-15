@@ -15,29 +15,36 @@ public class JsonManager : SingletonObject<JsonManager>
     public const string PLAYER_DATA = "PlayerData";
     public const string SLOT_DATA = "SlotData";
 
+    // PlayerData 하위
     public const string PLAYER_BASE_DATA_FILE_NAME = "PlayerBaseData";
     public const string PLAYER_MESH_DATA_FILE_NAME = "PlayerMeshData";
+    public const string PLAYER_INVENTORY_DATA_FILE_NAME = "PlayerInventoryData";
+
+    // SlotData 하위
     public const string SLOT_DATA_FILE_NAME = "SavedSlotData";
 
-    private SlotBaseData _baseSlotData;
+    private SlotBaseData _slotBaseData;
 
     private PlayerBaseData _baseData;
     private PlayerMeshData _meshData;
+    private PlayerInventoryData _inventoryData;
 
     // Properties
-    public SlotBaseData BaseSlotData => _baseSlotData;
+    public SlotBaseData SlotBaseData => _slotBaseData;
 
     public PlayerMeshData MeshData => _meshData;
     public PlayerBaseData BaseData => _baseData;
+    public PlayerInventoryData InventoryData => _inventoryData;
 
     protected override void Awake()
     {
         base.Awake();
 
-        LoadData(SLOT_DATA, SLOT_DATA_FILE_NAME, out _baseSlotData);
+        LoadData(SLOT_DATA, SLOT_DATA_FILE_NAME, out _slotBaseData);
 
         LoadData(PLAYER_DATA, PLAYER_BASE_DATA_FILE_NAME, out _baseData);
         LoadData(PLAYER_DATA, PLAYER_MESH_DATA_FILE_NAME, out _meshData);
+        LoadData(PLAYER_DATA, PLAYER_INVENTORY_DATA_FILE_NAME, out _inventoryData);
     }
 
     public void SaveData<T>(string path, string fileName, T data)

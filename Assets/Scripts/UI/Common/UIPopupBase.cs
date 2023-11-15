@@ -8,6 +8,6 @@ public class UIPopupBase : UIBase
     {
         base.Awake();
 
-        _uiType = UIBaseType.Panel;
+        _uiType = UIBaseType.Popup;
     }
 }

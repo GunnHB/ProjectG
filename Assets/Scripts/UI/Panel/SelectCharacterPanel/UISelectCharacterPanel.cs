@@ -33,10 +33,10 @@ public class UISelectCharacterPanel : UIPanelBase
         _slotPool.ReturnAllObject();
 
         // json 배열 길이만큼 슬롯 생성
-        for (int index = 0; index < JsonManager.Instance.BaseSlotData._isEmpty.Length; index++)
+        for (int index = 0; index < JsonManager.Instance.SlotBaseData._isEmpty.Length; index++)
         {
             var item = _slotPool.GetObject();
-            var isEmpty = JsonManager.Instance.BaseSlotData._isEmpty[index];
+            var isEmpty = JsonManager.Instance.SlotBaseData._isEmpty[index];
 
             item.name = $"SaveSlot_{index}";
             item.SetActive(true);

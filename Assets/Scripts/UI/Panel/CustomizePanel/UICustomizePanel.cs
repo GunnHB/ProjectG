@@ -343,8 +343,8 @@ public class UICustomizePanel : UIPanelBase
     // 캐릭터 생성 버튼 콜백
     private void CreateNewCharacter()
     {
-        JsonManager.Instance.BaseSlotData._isEmpty[GameManager.Instance.SelectedSlotIndex] = false;
-        JsonManager.Instance.SaveData(JsonManager.SLOT_DATA, JsonManager.SLOT_DATA_FILE_NAME, JsonManager.Instance.BaseSlotData);
+        JsonManager.Instance.SlotBaseData._isEmpty[GameManager.Instance.SelectedSlotIndex] = false;
+        JsonManager.Instance.SaveData(JsonManager.SLOT_DATA, JsonManager.SLOT_DATA_FILE_NAME, JsonManager.Instance.SlotBaseData);
 
         LoadSceneManager.Instance.FadeInOut(null, LoadSceneManager.SceneType.InGame);
     }

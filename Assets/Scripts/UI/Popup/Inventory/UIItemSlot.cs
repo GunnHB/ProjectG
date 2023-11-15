@@ -27,9 +27,10 @@ public class UIItemSlot : MonoBehaviour
         Util.AddHoverButtonListener(_slotButton, OnEnterSlot, OnExitSlot, OnClickSlot);
     }
 
-    public void InitSlot()
+    public void InitSlot(int itemId)
     {
-
+        // playerInventoryData.json 같은걸 하나 만들어서
+        // 거기서 값을 가져오는 방법으로 아이템 세팅해야될 듯..?
     }
 
     private void OnClickSlot()

@@ -91,8 +91,8 @@ public class SelectSlot : MonoBehaviour
     private void DeleteData()
     {
         // 빈 슬롯으로 돌림
-        JsonManager.Instance.BaseSlotData._isEmpty[(int)_currentType] = true;
-        JsonManager.Instance.SaveData(JsonManager.SLOT_DATA, JsonManager.SLOT_DATA_FILE_NAME, JsonManager.Instance.BaseSlotData);
+        JsonManager.Instance.SlotBaseData._isEmpty[(int)_currentType] = true;
+        JsonManager.Instance.SaveData(JsonManager.SLOT_DATA, JsonManager.SLOT_DATA_FILE_NAME, JsonManager.Instance.SlotBaseData);
 
         // 슬롯 리프레시
         RefreshSlot();
@@ -124,7 +124,7 @@ public class SelectSlot : MonoBehaviour
 
     private void RefreshSlot()
     {
-        _emptyState = JsonManager.Instance.BaseSlotData._isEmpty[(int)_currentType];
+        _emptyState = JsonManager.Instance.SlotBaseData._isEmpty[(int)_currentType];
 
         SetSlotState();
         SetPlayerNameText();
