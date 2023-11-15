@@ -76,8 +76,24 @@ public static class Util
         if (clickCallback != null)
             AddButtonListenerV2(button, clickCallback);
 
-        AddButtonTrigger(button, EventTriggerType.PointerDown, downCallback);
-        AddButtonTrigger(button, EventTriggerType.PointerUp, upCallback);
+        // 상태 변수 확인을 위해 파라미터의 콜백을 한번 가공
+        UnityAction downAction = () =>
+        {
+            if (!(button as CommonButton).IsPress)
+                (button as CommonButton).SetPress(true);
+        };
+
+        UnityAction upAction = () =>
+        {
+            if ((button as CommonButton).IsPress)
+                (button as CommonButton).SetPress(false);
+        };
+
+        downAction += downCallback;
+        upAction += upCallback;
+
+        AddButtonTrigger(button, EventTriggerType.PointerDown, downAction);
+        AddButtonTrigger(button, EventTriggerType.PointerUp, upAction);
     }
 
     // 버튼 Hover 여부 콜백
@@ -90,8 +106,24 @@ public static class Util
         if (clickCallback != null)
             AddButtonListenerV2(button, clickCallback);
 
-        AddButtonTrigger(button, EventTriggerType.PointerEnter, enterCallback);
-        AddButtonTrigger(button, EventTriggerType.PointerExit, exitCallback);
+        // 상태 변수 확인을 위해 파라미터의 콜백을 한번 가공
+        UnityAction enterAction = () =>
+        {
+            if (!(button as CommonButton).IsEnter)
+                (button as CommonButton).SetEnter(true);
+        };
+
+        UnityAction exitAction = () =>
+        {
+            if ((button as CommonButton).IsEnter)
+                (button as CommonButton).SetEnter(false);
+        };
+
+        enterAction += enterCallback;
+        exitAction += exitCallback;
+
+        AddButtonTrigger(button, EventTriggerType.PointerEnter, enterAction);
+        AddButtonTrigger(button, EventTriggerType.PointerExit, exitAction);
     }
 
     // 특정 트리거 타입의 콜백을 모두 삭제

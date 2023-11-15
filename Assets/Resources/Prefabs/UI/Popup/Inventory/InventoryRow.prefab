@@ -52,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemSlotPool:
     _poolPrefab: {fileID: 816363861269036635, guid: 0c4d9a3011de8e8499ad043d134033a2, type: 3}
-    _amount: 1
+    _amount: 0
     _parentObj: {fileID: 2611588266255579740}
 --- !u!1 &2611588266255579740
 GameObject:

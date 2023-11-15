@@ -11,9 +11,10 @@ public class ResourceManager : SingletonObject<ResourceManager>
         base.Awake();
     }
 
+    // 나중에 아틀라스로 관리하는 것도 추가합시다.
     public Sprite GetSprite(string path)
     {
-        Sprite sprite = Resources.Load<Sprite>(path);
+        Sprite sprite = Resources.Load<Sprite>($"UI/Sprites/{path}");
 
         if (sprite != null)
             return sprite;

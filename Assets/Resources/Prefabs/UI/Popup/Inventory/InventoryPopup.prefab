@@ -563,7 +563,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -200, y: -250}
+  m_AnchoredPosition: {x: -250, y: -250}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &4007044361528475410
@@ -584,7 +584,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 10
+  m_Spacing: 45
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -1171,7 +1171,7 @@ MonoBehaviour:
     _poolPrefab: {fileID: 648240336776642684, guid: f1ea6f195716cf5468e8f11c7758d110, type: 3}
     _amount: 0
     _parentObj: {fileID: 9043138002309308662}
-  _goldText: {fileID: 0}
+  _goldText: {fileID: 577244042016037154}
   _itemName: {fileID: 0}
   _itemDesc: {fileID: 0}
 --- !u!1 &9043138002309308662
