@@ -14,6 +14,7 @@ public class UIInventoryRow : MonoBehaviour
     public void Init(int rowIndex, int count)
     {
         _itemSlotPool.ReturnAllObject();
+        // 큐에 있는 슬롯의 데이터를 초기화해줘야 함!!!
 
         for (int index = 0; index < count; index++)
         {

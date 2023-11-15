@@ -35,8 +35,6 @@ public class UIItemSlot : MonoBehaviour
 
     private void OnClickSlot()
     {
-        Debug.Log("클릭했지롱");
-
         // 선택안된 슬롯일 경우만 실행
         if (!_isSelect)
         {
@@ -50,8 +48,6 @@ public class UIItemSlot : MonoBehaviour
     // 슬롯에 커서 올라갔을 때
     private void OnEnterSlot()
     {
-        Debug.Log("올라왔지롱");
-
         // 선택안된 슬롯일 경우만 실행
         if (!_isSelect)
         {
@@ -63,8 +59,6 @@ public class UIItemSlot : MonoBehaviour
     // 슬롯에서 커서 빠져 나왔을 때
     private void OnExitSlot()
     {
-        Debug.Log("나갔지롱");
-
         // 선택안된 슬롯이면 걍 끔
         if (!_isSelect)
             _selectFrame.gameObject.SetActive(false);

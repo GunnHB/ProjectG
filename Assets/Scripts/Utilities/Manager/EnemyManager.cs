@@ -29,7 +29,7 @@ public class EnemyManager : SingletonObject<EnemyManager>
         {
             var tempPool = new ObjectPool()
             {
-                _amount = 1,
+                // _amount = 1,
                 _poolPrefab = obj,
             };
 

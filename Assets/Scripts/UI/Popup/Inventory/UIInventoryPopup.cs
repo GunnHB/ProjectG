@@ -105,8 +105,8 @@ public class UIInventoryPopup : UIPopupBase
                 temp.name = $"InventoryRow_{index}";
                 temp.SetActive(true);
 
-                // 마지막 줄이라면 나머지 개수만큼만 초기화 해주면 됨
-                int initCount = (index + 1 == rowCount) ? remainCount : GameValue.INVENTORY_ROW_AMOUNT;
+                // 마지막 줄 && 나머지가 있으면 나머지 개수만큼만 초기화 해주면 됨
+                int initCount = (index + 1 == rowCount && remainCount != 0) ? remainCount : GameValue.INVENTORY_ROW_AMOUNT;
 
                 row.Init(index, initCount);
             }

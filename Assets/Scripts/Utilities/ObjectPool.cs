@@ -6,20 +6,20 @@ using UnityEngine;
 public class ObjectPool
 {
     public GameObject _poolPrefab;
-    public int _amount = 1;
     public GameObject _parentObj;
 
     private Queue<GameObject> _poolQueue = new Queue<GameObject>();
+    public Queue<GameObject> PoolQueue => _poolQueue;
 
     public void Initialize(GameObject parentObj = null)
     {
         if (parentObj != null)
             _parentObj = parentObj;
 
-        for (int index = 0; index < _amount; index++)
-        {
-            _poolQueue.Enqueue(CreateNewObject());
-        }
+        // for (int index = 0; index < _amount; index++)
+        // {
+        //     _poolQueue.Enqueue(CreateNewObject());
+        // }
     }
 
     public GameObject CreateNewObject()
