@@ -233,3 +233,11 @@ public static class Util
         return text.All(char.IsDigit);
     }
 }
+
+public static class StringUtil
+{
+    public static string AddComma(this int thisInt)
+    {
+        return string.Format("{0:#,###0}", thisInt);
+    }
+}

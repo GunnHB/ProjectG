@@ -7,15 +7,28 @@ using UnityEngine;
 public class PlayerInventoryData : MonoBehaviour
 {
     // 인벤토리는 가변형이라 리스트
-    private Dictionary<SlotIndex, List<Item.Data>> _playerInventory;
-    private Dictionary<SlotIndex, int> _playerGold;
+    public Dictionary<SlotIndex, List<Item.Data>> _playerInventory;
+    public Dictionary<SlotIndex, int> _playerGold;
+    public Dictionary<SlotIndex, Dictionary<InventoryCategory, int>> _invenCateSize;
 
     public PlayerInventoryData()
     {
+        var temp = new Dictionary<InventoryCategory, int>();
+
+        // 노가다 느낌......
+        temp.Add(InventoryCategory.CategoryWeapon, GameValue.INVENTORY_DEFAULT_CATE_WEAPON_SIZE);
+        temp.Add(InventoryCategory.CategoryArmor, GameValue.INVENTORY_DEFAULT_CATE_ARMOR_SIZE);
+        temp.Add(InventoryCategory.CategoryShield, GameValue.INVENTORY_DEFAULT_CATE_SHIELD_SIZE);
+        temp.Add(InventoryCategory.CategoryBow, GameValue.INVENTORY_DEFAULT_CATE_BOW_SIZE);
+        temp.Add(InventoryCategory.CategoryFood, GameValue.INVENTORY_DEFAULT_CATE_FOOD_SIZE);
+        temp.Add(InventoryCategory.CategoryDefault, GameValue.INVENTORY_DEFAULT_CATE_DEFAULT_SIZE);
+
         for (int index = 0; index < GameValue.SAVE_SLOT_COUNT; index++)
         {
             _playerInventory.Add((SlotIndex)index, new());
             _playerGold.Add((SlotIndex)index, 0);
+
+            _invenCateSize.Add((SlotIndex)index, temp);
         }
     }
 }

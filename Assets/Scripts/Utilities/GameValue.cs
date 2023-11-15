@@ -19,6 +19,17 @@ public static class GameValue
 
     // 저장 공간
     public static int SAVE_SLOT_COUNT = System.Enum.GetValues(typeof(SlotIndex)).Length;
+
+    // 초기 인벤토리 용량 (캐릭터 생성 시에만 사용합니다.)
+    public static int INVENTORY_DEFAULT_CATE_WEAPON_SIZE = 4;
+    public static int INVENTORY_DEFAULT_CATE_ARMOR_SIZE = 10;
+    public static int INVENTORY_DEFAULT_CATE_SHIELD_SIZE = 4;
+    public static int INVENTORY_DEFAULT_CATE_BOW_SIZE = 4;
+    public static int INVENTORY_DEFAULT_CATE_FOOD_SIZE = 30;
+    public static int INVENTORY_DEFAULT_CATE_DEFAULT_SIZE = 30;
+
+    // 인벤토리 한 행에 들어가는 슬롯 수
+    public static int INVENTORY_ROW_AMOUNT = 5;
 }
 
 public enum SlotIndex
@@ -60,5 +71,16 @@ public enum WeaponType
     TwoHand,    // 양손 무기
     Shield,     // 방패 (방패가 무기로 들어가도 되나..???)
     Bow,        // 활
+}
+
+[UGS(typeof(InventoryCategory))]
+public enum InventoryCategory
+{
+    CategoryWeapon,
+    CategoryArmor,
+    CategoryShield,
+    CategoryBow,
+    CategoryFood,
+    CategoryDefault,
 }
 #endregion

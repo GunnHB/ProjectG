@@ -20,25 +20,43 @@ public class UIInventoryPopup : UIPopupBase
     [TabGroup(RIGHT_PANEL), SerializeField] private TextMeshProUGUI _itemName;
     [TabGroup(RIGHT_PANEL), SerializeField] private TextMeshProUGUI _itemDesc;
 
+    // cache
+    private PlayerInventoryData _inventoryData;
+    private SlotIndex _playerSlotIndex;
+
     protected override void Awake()
     {
         base.Awake();
 
         _tabPool.Initialize();
         _inventoryRowPool.Initialize();
+
+        _inventoryData = JsonManager.Instance.InventoryData;
+        _playerSlotIndex = (SlotIndex)GameManager.Instance.SelectedSlotIndex;
+    }
+
+    private void Init()
+    {
+        _tabPool.ReturnAllObject();
+        _inventoryRowPool.ReturnAllObject();
+
+        SetGold();
+    }
+
+    private void SetGold()
+    {
+        _goldText.text = _inventoryData._playerGold[_playerSlotIndex].AddComma();
     }
 
     public override void Open()
     {
         base.Open();
 
-
+        Init();
     }
 
     public override void Close()
     {
         base.Close();
-
-
     }
 }

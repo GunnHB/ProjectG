@@ -49,6 +49,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Shortcut",
+                    "type": "Button",
+                    "id": "57253873-6c9f-498e-8c5d-f842abf4f451",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -212,7 +221,7 @@
                     "path": "<Keyboard>/leftShift",
                     "interactions": "Hold(duration=0.1),Press(behavior=1)",
                     "processors": "",
-                    "groups": "",
+                    "groups": "PC",
                     "action": "Sprint",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -223,7 +232,7 @@
                     "path": "<Mouse>/leftButton",
                     "interactions": "Hold,Press(behavior=1)",
                     "processors": "",
-                    "groups": "",
+                    "groups": "PC",
                     "action": "MouseLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -234,7 +243,7 @@
                     "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "PC",
                     "action": "MouseLook",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -245,8 +254,58 @@
                     "path": "<Keyboard>/space",
                     "interactions": "Press",
                     "processors": "",
-                    "groups": "",
+                    "groups": "PC",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "edd7b798-1069-4f0f-b10a-2cff870bcca9",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Shortcut",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1caa5803-aa61-4aae-b129-5617bfd8d2bd",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Shortcut",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "6925470e-b886-48d7-be29-564ed7bf42ba",
+            "actions": [
+                {
+                    "name": "Escape",
+                    "type": "Button",
+                    "id": "93ae2436-1c5f-4836-ba2d-4a85a1656ce8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a4086b64-8f2a-44a7-bc61-ec02f1bf6f43",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Escape",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

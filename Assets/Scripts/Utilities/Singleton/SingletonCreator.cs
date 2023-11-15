@@ -18,6 +18,7 @@ public class SingletonCreator : MonoBehaviour
         InitSingletonObject<EnemyManager>();
         InitSingletonObject<LoadSceneManager>();
         InitSingletonObject<WeaponManager>();
+        InitSingletonObject<ItemManager>();
     }
 
     /// <summary>
