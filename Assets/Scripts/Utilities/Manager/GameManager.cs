@@ -10,6 +10,7 @@ public class GameManager : SingletonObject<GameManager>
         None,
         Title,
         InGame,
+        Pause,
     }
 
     private GameMode _currentMode = GameMode.None;

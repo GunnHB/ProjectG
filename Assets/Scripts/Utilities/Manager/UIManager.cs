@@ -80,6 +80,19 @@ public partial class UIManager : SingletonObject<UIManager>
         return findUI;
     }
 
+    public Transform FindOpenedPopupUI()
+    {
+        var popupTransform = PopupCanvas.transform;
+
+        if (popupTransform.childCount == 0)
+        {
+            Debug.LogWarning("There is no child in popup canvas!!!");
+            return null;
+        }
+
+        return popupTransform.GetChild(popupTransform.childCount - 1);
+    }
+
     // 나중에 로컬라이즈용 테이블 만들어지면 수정하자
     public void OpenSimpleDialogue(string title, string msg,
                                    string confirmString = "Confirm", UnityAction confirmAction = null,

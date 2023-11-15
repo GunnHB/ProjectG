@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class PlayerInventoryData : MonoBehaviour
+public class PlayerInventoryData
 {
     // 인벤토리는 가변형이라 리스트
     public Dictionary<SlotIndex, List<Item.Data>> _playerInventory;
@@ -13,6 +13,10 @@ public class PlayerInventoryData : MonoBehaviour
 
     public PlayerInventoryData()
     {
+        _playerInventory = new();
+        _playerGold = new();
+        _invenCateSize = new();
+
         var temp = new Dictionary<InventoryCategory, int>();
 
         // 노가다 느낌......

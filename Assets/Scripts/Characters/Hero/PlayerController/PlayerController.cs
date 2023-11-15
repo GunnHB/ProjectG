@@ -79,12 +79,55 @@ public partial class PlayerController : MonoBehaviour
         _playerHP = GameValue.INIT_HP;
         _playerStamina = GameValue.INIT_STAMINA;
         _playerLevel = GameValue.INIT_LEVEL;
+
+        SetPlayerActions();
+    }
+
+    private void OnEnable()
+    {
+        RegistActions();
+    }
+
+    private void OnDisable()
+    {
+        UnRegistActions();
     }
 
     private void Update()
     {
         ApplyGravity();
         MovePlayer();
+    }
+
+    private void SetPlayerActions()
+    {
+        // PlayerActions
+        _playerAction = new();
+
+        _inventoryAction = _playerAction.Player.Shortcut_Inventory;
+        _mainMenuAction = _playerAction.Player.Shortcut_MainMenu;
+
+        _escapeAction = _playerAction.UI.Escape;
+    }
+
+    private void RegistActions()
+    {
+        _playerAction.Enable();
+
+        _inventoryAction.started += InventoryActionStarted;
+        _mainMenuAction.started += MainMenuActionStarted;
+
+        _escapeAction.started += EscapeActionStarted;
+    }
+
+    private void UnRegistActions()
+    {
+        _playerAction.Disable();
+
+        _inventoryAction.started -= InventoryActionStarted;
+        _mainMenuAction.started -= MainMenuActionStarted;
+
+        _escapeAction.started -= EscapeActionStarted;
     }
 
     // Actual move

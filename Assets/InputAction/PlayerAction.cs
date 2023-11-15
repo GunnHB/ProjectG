@@ -73,9 +73,18 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Shortcut"",
+                    ""name"": ""Shortcut_Inventory"",
                     ""type"": ""Button"",
                     ""id"": ""57253873-6c9f-498e-8c5d-f842abf4f451"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shortcut_MainMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""1e51df5a-7031-4edf-b284-64f7f7ec6cff"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -283,23 +292,23 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""edd7b798-1069-4f0f-b10a-2cff870bcca9"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PC"",
-                    ""action"": ""Shortcut"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""1caa5803-aa61-4aae-b129-5617bfd8d2bd"",
                     ""path"": ""<Keyboard>/i"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""PC"",
-                    ""action"": ""Shortcut"",
+                    ""action"": ""Shortcut_Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c359c2fe-4aa4-4396-922f-0b49915f75ad"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""Shortcut_MainMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -360,7 +369,8 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_MouseLeft = m_Player.FindAction("MouseLeft", throwIfNotFound: true);
         m_Player_MouseLook = m_Player.FindAction("MouseLook", throwIfNotFound: true);
-        m_Player_Shortcut = m_Player.FindAction("Shortcut", throwIfNotFound: true);
+        m_Player_Shortcut_Inventory = m_Player.FindAction("Shortcut_Inventory", throwIfNotFound: true);
+        m_Player_Shortcut_MainMenu = m_Player.FindAction("Shortcut_MainMenu", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Escape = m_UI.FindAction("Escape", throwIfNotFound: true);
@@ -428,7 +438,8 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_MouseLeft;
     private readonly InputAction m_Player_MouseLook;
-    private readonly InputAction m_Player_Shortcut;
+    private readonly InputAction m_Player_Shortcut_Inventory;
+    private readonly InputAction m_Player_Shortcut_MainMenu;
     public struct PlayerActions
     {
         private @PlayerAction m_Wrapper;
@@ -438,7 +449,8 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @MouseLeft => m_Wrapper.m_Player_MouseLeft;
         public InputAction @MouseLook => m_Wrapper.m_Player_MouseLook;
-        public InputAction @Shortcut => m_Wrapper.m_Player_Shortcut;
+        public InputAction @Shortcut_Inventory => m_Wrapper.m_Player_Shortcut_Inventory;
+        public InputAction @Shortcut_MainMenu => m_Wrapper.m_Player_Shortcut_MainMenu;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -463,9 +475,12 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @MouseLook.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseLook;
                 @MouseLook.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseLook;
                 @MouseLook.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseLook;
-                @Shortcut.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut;
-                @Shortcut.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut;
-                @Shortcut.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut;
+                @Shortcut_Inventory.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut_Inventory;
+                @Shortcut_Inventory.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut_Inventory;
+                @Shortcut_Inventory.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut_Inventory;
+                @Shortcut_MainMenu.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut_MainMenu;
+                @Shortcut_MainMenu.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut_MainMenu;
+                @Shortcut_MainMenu.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut_MainMenu;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -485,9 +500,12 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @MouseLook.started += instance.OnMouseLook;
                 @MouseLook.performed += instance.OnMouseLook;
                 @MouseLook.canceled += instance.OnMouseLook;
-                @Shortcut.started += instance.OnShortcut;
-                @Shortcut.performed += instance.OnShortcut;
-                @Shortcut.canceled += instance.OnShortcut;
+                @Shortcut_Inventory.started += instance.OnShortcut_Inventory;
+                @Shortcut_Inventory.performed += instance.OnShortcut_Inventory;
+                @Shortcut_Inventory.canceled += instance.OnShortcut_Inventory;
+                @Shortcut_MainMenu.started += instance.OnShortcut_MainMenu;
+                @Shortcut_MainMenu.performed += instance.OnShortcut_MainMenu;
+                @Shortcut_MainMenu.canceled += instance.OnShortcut_MainMenu;
             }
         }
     }
@@ -541,7 +559,8 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnMouseLeft(InputAction.CallbackContext context);
         void OnMouseLook(InputAction.CallbackContext context);
-        void OnShortcut(InputAction.CallbackContext context);
+        void OnShortcut_Inventory(InputAction.CallbackContext context);
+        void OnShortcut_MainMenu(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

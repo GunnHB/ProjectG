@@ -1,0 +1,38 @@
+{
+    "_playerInventory": {
+        "First": [],
+        "Second": [],
+        "Third": []
+    },
+    "_playerGold": {
+        "First": 0,
+        "Second": 0,
+        "Third": 0
+    },
+    "_invenCateSize": {
+        "First": {
+            "CategoryWeapon": 4,
+            "CategoryArmor": 10,
+            "CategoryShield": 4,
+            "CategoryBow": 4,
+            "CategoryFood": 30,
+            "CategoryDefault": 30
+        },
+        "Second": {
+            "CategoryWeapon": 4,
+            "CategoryArmor": 10,
+            "CategoryShield": 4,
+            "CategoryBow": 4,
+            "CategoryFood": 30,
+            "CategoryDefault": 30
+        },
+        "Third": {
+            "CategoryWeapon": 4,
+            "CategoryArmor": 10,
+            "CategoryShield": 4,
+            "CategoryBow": 4,
+            "CategoryFood": 30,
+            "CategoryDefault": 30
+        }
+    }
+}

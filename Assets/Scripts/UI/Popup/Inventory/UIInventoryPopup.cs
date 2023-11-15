@@ -35,7 +35,7 @@ public class UIInventoryPopup : UIPopupBase
         _playerSlotIndex = (SlotIndex)GameManager.Instance.SelectedSlotIndex;
     }
 
-    private void Init()
+    public void Init()
     {
         _tabPool.ReturnAllObject();
         _inventoryRowPool.ReturnAllObject();
@@ -51,8 +51,6 @@ public class UIInventoryPopup : UIPopupBase
     public override void Open()
     {
         base.Open();
-
-        Init();
     }
 
     public override void Close()

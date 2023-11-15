@@ -51,9 +51,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Shortcut",
+                    "name": "Shortcut_Inventory",
                     "type": "Button",
                     "id": "57253873-6c9f-498e-8c5d-f842abf4f451",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Shortcut_MainMenu",
+                    "type": "Button",
+                    "id": "1e51df5a-7031-4edf-b284-64f7f7ec6cff",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -261,23 +270,23 @@
                 },
                 {
                     "name": "",
-                    "id": "edd7b798-1069-4f0f-b10a-2cff870bcca9",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "Shortcut",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "1caa5803-aa61-4aae-b129-5617bfd8d2bd",
                     "path": "<Keyboard>/i",
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "Shortcut",
+                    "action": "Shortcut_Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c359c2fe-4aa4-4396-922f-0b49915f75ad",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Shortcut_MainMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
