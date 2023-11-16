@@ -67,8 +67,10 @@ public static class Util
     }
 
     // 버튼 press 여부 콜백
+    // ScrollRect 가 null 이 아니면 버튼 드래그 시 스크롤이 활성화 됨
     public static void AddPressButtonListener(Button button,
-                                              UnityAction downCallback, UnityAction upCallback = null, UnityAction clickCallback = null)
+                                              UnityAction downCallback, UnityAction upCallback = null, UnityAction clickCallback = null,
+                                              ScrollRect scrollRect = null)
     {
         if (button == null)
             return;
@@ -94,11 +96,21 @@ public static class Util
 
         AddButtonTrigger(button, EventTriggerType.PointerDown, downAction);
         AddButtonTrigger(button, EventTriggerType.PointerUp, upAction);
+
+        if (scrollRect != null)
+        {
+            AddButtonTrigger(button, EventTriggerType.BeginDrag, (eventData) => scrollRect.OnBeginDrag((PointerEventData)eventData));
+            AddButtonTrigger(button, EventTriggerType.Drag, (eventData) => scrollRect.OnDrag((PointerEventData)eventData));
+            AddButtonTrigger(button, EventTriggerType.EndDrag, (eventData) => scrollRect.OnEndDrag((PointerEventData)eventData));
+            AddButtonTrigger(button, EventTriggerType.Scroll, (eventData) => scrollRect.OnScroll((PointerEventData)eventData));
+        }
     }
 
     // 버튼 Hover 여부 콜백
-    public static void AddHoverButtonListener(Button button,
-                                              UnityAction enterCallback, UnityAction exitCallback = null, UnityAction clickCallback = null)
+    // ScrollRect 가 null 이 아니면 버튼 드래그 시 스크롤이 활성화 됨
+    public static void AddEnterButtonListener(Button button,
+                                              UnityAction enterCallback, UnityAction exitCallback = null, UnityAction clickCallback = null,
+                                              ScrollRect scrollRect = null)
     {
         if (button == null)
             return;
@@ -124,6 +136,14 @@ public static class Util
 
         AddButtonTrigger(button, EventTriggerType.PointerEnter, enterAction);
         AddButtonTrigger(button, EventTriggerType.PointerExit, exitAction);
+
+        if (scrollRect != null)
+        {
+            AddButtonTrigger(button, EventTriggerType.BeginDrag, (eventData) => scrollRect.OnBeginDrag((PointerEventData)eventData));
+            AddButtonTrigger(button, EventTriggerType.Drag, (eventData) => scrollRect.OnDrag((PointerEventData)eventData));
+            AddButtonTrigger(button, EventTriggerType.EndDrag, (eventData) => scrollRect.OnEndDrag((PointerEventData)eventData));
+            AddButtonTrigger(button, EventTriggerType.Scroll, (eventData) => scrollRect.OnScroll((PointerEventData)eventData));
+        }
     }
 
     // 특정 트리거 타입의 콜백을 모두 삭제
@@ -172,6 +192,26 @@ public static class Util
         EventTrigger.Entry entry = new EventTrigger.Entry();
         entry.eventID = triggerType;
         entry.callback.AddListener((eventData) => { callback?.Invoke(); });
+
+        trigger.triggers.Add(entry);
+    }
+
+    public static void AddButtonTrigger(Button button, EventTriggerType triggerType, UnityAction<BaseEventData> callback)
+    {
+        if (button == null)
+            return;
+
+        var trigger = button.GetComponent<EventTrigger>();
+
+        if (trigger == null)
+        {
+            button.AddComponent<EventTrigger>();
+            trigger = button.GetComponent<EventTrigger>();
+        }
+
+        EventTrigger.Entry entry = new EventTrigger.Entry();
+        entry.eventID = triggerType;
+        entry.callback.AddListener(callback);
 
         trigger.triggers.Add(entry);
     }

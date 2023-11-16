@@ -1169,6 +1169,7 @@ MonoBehaviour:
   _inventoryRowPool:
     _poolPrefab: {fileID: 648240336776642684, guid: f1ea6f195716cf5468e8f11c7758d110, type: 3}
     _parentObj: {fileID: 9043138002309308662}
+  _invenScrollRect: {fileID: 959511183745142692}
   _goldText: {fileID: 577244042016037154}
   _itemName: {fileID: 0}
   _itemDesc: {fileID: 0}

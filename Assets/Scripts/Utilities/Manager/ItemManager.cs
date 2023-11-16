@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 // 아이템 / 인벤토리 관리는 여기서 합니다.
 public class ItemManager : SingletonObject<ItemManager>
@@ -19,6 +21,29 @@ public class ItemManager : SingletonObject<ItemManager>
 
     private UIItemSlot _currItemSlot;
     public UIItemSlot CurrItemSlot => _currItemSlot;
+
+    // 캐싱
+    private UIInventoryPopup _inventoryPopup;
+    public UIInventoryPopup InventoryPopup => _inventoryPopup;
+
+    // 인벤토리는 요걸로 엽시다.
+    public void OpenInventory()
+    {
+        var popup = UIManager.Instance.FindOpendUI<UIInventoryPopup>();
+
+        if (popup != null)
+        {
+            _inventoryPopup = popup;
+            Debug.Log("이미 이쓰요");
+
+            return;
+        }
+
+        _inventoryPopup = UIManager.Instance.OpenUI<UIInventoryPopup>("Inventory/InventoryPopup");
+
+        if (_inventoryPopup)
+            _inventoryPopup.Init();
+    }
 
     public void ChangeSelectItemSlot(UIItemSlot newSlot)
     {

@@ -24,10 +24,7 @@ public partial class PlayerController : MonoBehaviour
         GameManager.Instance.ChangeCurrentMode(GameManager.GameMode.Pause);
 
         Debug.Log("인벤토리 열기");
-        var invenPopup = UIManager.Instance.OpenUI<UIInventoryPopup>("Inventory/InventoryPopup");
-
-        if (invenPopup != null)
-            invenPopup.Init();
+        ItemManager.Instance.OpenInventory();
     }
 
     private void MainMenuActionStarted(InputAction.CallbackContext context)
@@ -40,7 +37,6 @@ public partial class PlayerController : MonoBehaviour
         GameManager.Instance.ChangeCurrentMode(GameManager.GameMode.Pause);
 
         Debug.Log("메인 메뉴 열기");
-
     }
 
     private void EscapeActionStarted(InputAction.CallbackContext context)

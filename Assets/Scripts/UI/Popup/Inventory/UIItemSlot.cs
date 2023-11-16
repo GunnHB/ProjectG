@@ -30,7 +30,8 @@ public class UIItemSlot : MonoBehaviour
 
     private void Awake()
     {
-        Util.AddHoverButtonListener(_slotButton, OnEnterSlot, OnExitSlot, OnClickSlot);
+        Util.AddEnterButtonListener(_slotButton, OnEnterSlot, OnExitSlot, OnClickSlot,
+                                    ItemManager.Instance.InventoryPopup.InvenScrollRect);
     }
 
     public void InitSlot(Item.Data itemData = null)

@@ -31,7 +31,7 @@ public class UIInventoryTab : MonoBehaviour
         _select = false;
         _tabName.gameObject.SetActive(false);
 
-        Util.AddHoverButtonListener(_tabButton, OnEnterTabButton, OnExitTabButton, OnClickTabButton);
+        Util.AddEnterButtonListener(_tabButton, OnEnterTabButton, OnExitTabButton, OnClickTabButton);
     }
 
     // 먼저 선택되어야 할 카테고리가 있다면 값을 할당 

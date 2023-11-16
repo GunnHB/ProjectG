@@ -9,16 +9,18 @@ using UnityEngine;
 
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class UIInventoryPopup : UIPopupBase
 {
     private const string UP_PANEL = "UpPanel";
     private const string RIGHT_PANEL = "RightPanel";
-    private const string LEFT_PANEL = "Left_Panel";
+    private const string LEFT_PANEL = "LeftPanel";
 
     [Title("[Pool]")]
     [TabGroup(LEFT_PANEL), SerializeField] private ObjectPool _tabPool;
     [TabGroup(LEFT_PANEL), SerializeField] private ObjectPool _inventoryRowPool;
+    [TabGroup(LEFT_PANEL), SerializeField] private ScrollRect _invenScrollRect;
 
     [Title("[Componenets]")]
     [TabGroup(UP_PANEL), SerializeField] private TextMeshProUGUI _goldText;
@@ -29,6 +31,8 @@ public class UIInventoryPopup : UIPopupBase
     // cache
     private PlayerInventoryData _inventoryData;
     private SlotIndex _playerSlotIndex;
+
+    public ScrollRect InvenScrollRect => _invenScrollRect;
 
     protected override void Awake()
     {
