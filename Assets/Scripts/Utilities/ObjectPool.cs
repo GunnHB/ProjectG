@@ -15,16 +15,10 @@ public class ObjectPool
     {
         if (parentObj != null)
             _parentObj = parentObj;
-
-        // for (int index = 0; index < _amount; index++)
-        // {
-        //     _poolQueue.Enqueue(CreateNewObject());
-        // }
     }
 
     public GameObject CreateNewObject()
     {
-        // GameObject tempObj = Instantiate(_poolPrefab);
         GameObject tempObj = GameObject.Instantiate(_poolPrefab);
 
         tempObj.SetActive(false);

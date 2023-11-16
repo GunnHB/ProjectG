@@ -976,7 +976,7 @@ MonoBehaviour:
   m_Content: {fileID: 2221993579596714796}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
@@ -1165,11 +1165,9 @@ MonoBehaviour:
   _backgroundClose: 0
   _tabPool:
     _poolPrefab: {fileID: 1446293076358435325, guid: 573aabc462ae63249b9702c1903b9faf, type: 3}
-    _amount: 0
     _parentObj: {fileID: 4562783054585272255}
   _inventoryRowPool:
     _poolPrefab: {fileID: 648240336776642684, guid: f1ea6f195716cf5468e8f11c7758d110, type: 3}
-    _amount: 0
     _parentObj: {fileID: 9043138002309308662}
   _goldText: {fileID: 577244042016037154}
   _itemName: {fileID: 0}
@@ -1184,6 +1182,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2221993579596714796}
   - component: {fileID: 8218612709735506882}
+  - component: {fileID: 6900277773536170054}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -1209,7 +1208,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 600}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &8218612709735506882
 MonoBehaviour:
@@ -1237,3 +1236,17 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &6900277773536170054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9043138002309308662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2

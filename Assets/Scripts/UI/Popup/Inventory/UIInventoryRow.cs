@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class UIInventoryRow : MonoBehaviour
 {
@@ -11,10 +12,11 @@ public class UIInventoryRow : MonoBehaviour
         _itemSlotPool.Initialize();
     }
 
-    public void Init(int rowIndex, int count)
+    // 각 슬롯에 콜백 함수를 추가해줌
+    public void Init(int rowIndex, int count, UnityAction slotCallback)
     {
         _itemSlotPool.ReturnAllObject();
-        // 큐에 있는 슬롯의 데이터를 초기화해줘야 함!!!
+        ItemManager.Instance.ClearCurrItemSlot();                   // 선택된 슬롯을 비워준다.
 
         for (int index = 0; index < count; index++)
         {
@@ -23,7 +25,10 @@ public class UIInventoryRow : MonoBehaviour
             if (temp.TryGetComponent(out UIItemSlot itemSlot))
             {
                 temp.name = $"Row_{rowIndex}_item_{index}";
-                temp.gameObject.SetActive(true);
+                itemSlot.gameObject.SetActive(true);
+
+                itemSlot.InitSlot();
+                itemSlot._slotCallback = slotCallback;
             }
         }
     }

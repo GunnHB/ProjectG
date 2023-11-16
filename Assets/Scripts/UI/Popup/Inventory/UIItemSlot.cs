@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Sirenix.OdinInspector;
 
 using TMPro;
+using UnityEngine.Events;
 
 public class UIItemSlot : MonoBehaviour
 {
@@ -22,27 +23,45 @@ public class UIItemSlot : MonoBehaviour
 
     private bool _isSelect = false;
 
+    public UnityAction _slotCallback = null;
+
+    private Item.Data _itemData = null;
+    private Item.Data ItemData => _itemData;
+
     private void Awake()
     {
         Util.AddHoverButtonListener(_slotButton, OnEnterSlot, OnExitSlot, OnClickSlot);
     }
 
-    public void InitSlot(int itemId)
+    public void InitSlot(Item.Data itemData = null)
     {
         // playerInventoryData.json 같은걸 하나 만들어서
         // 거기서 값을 가져오는 방법으로 아이템 세팅해야될 듯..?
+        ClearData();
+
+        _itemData = itemData;
+
+        SetData();
+    }
+
+    // 초기화 시에 일단 데이터 비워주기
+    private void ClearData()
+    {
+        _itemData = null;
+        SetSelect(false);
+    }
+
+    // 슬롯은 인벤토리에 따라 빈 슬롯 / 찬 슬롯일 수 있다.
+    private void SetData()
+    {
+        // 데이터가 비어있으면 리턴
+        if (_itemData == null)
+            return;
     }
 
     private void OnClickSlot()
     {
-        // 선택안된 슬롯일 경우만 실행
-        if (!_isSelect)
-        {
-            _selectFrame.gameObject.SetActive(true);
-            _selectFrame.color = _selectColor;
-
-            _isSelect = true;
-        }
+        ItemManager.Instance.ChangeSelectItemSlot(this);
     }
 
     // 슬롯에 커서 올라갔을 때
@@ -62,5 +81,12 @@ public class UIItemSlot : MonoBehaviour
         // 선택안된 슬롯이면 걍 끔
         if (!_isSelect)
             _selectFrame.gameObject.SetActive(false);
+    }
+
+    public void SetSelect(bool select)
+    {
+        _isSelect = select;
+
+        _selectFrame.gameObject.SetActive(_isSelect);
     }
 }

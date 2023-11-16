@@ -46,7 +46,7 @@ public class UIInventoryTab : MonoBehaviour
 
         // 선택된 카테고리로 초기화
         if (_select)
-            ItemManager.Instance.SetPrevSelectTab(this);
+            ItemManager.Instance.SetCurrSelectTab(this);
     }
 
     private void SetTabName()

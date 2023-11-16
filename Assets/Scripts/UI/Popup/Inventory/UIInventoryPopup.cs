@@ -103,14 +103,19 @@ public class UIInventoryPopup : UIPopupBase
             {
                 // 이름 재정의
                 temp.name = $"InventoryRow_{index}";
-                temp.SetActive(true);
+                row.gameObject.SetActive(true);
 
                 // 마지막 줄 && 나머지가 있으면 나머지 개수만큼만 초기화 해주면 됨
                 int initCount = (index + 1 == rowCount && remainCount != 0) ? remainCount : GameValue.INVENTORY_ROW_AMOUNT;
 
-                row.Init(index, initCount);
+                row.Init(index, initCount, SelectSlotCallback);
             }
         }
+    }
+
+    private void SelectSlotCallback()
+    {
+        Debug.Log(ItemManager.Instance.CurrItemSlot.name);
     }
 
     private void SetGold()
