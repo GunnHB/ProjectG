@@ -89,6 +89,15 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Action"",
+                    ""type"": ""Button"",
+                    ""id"": ""ff8d5d1e-a166-4fcb-91c1-73e8dcd5da75"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -311,6 +320,17 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""action"": ""Shortcut_MainMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2dc4147a-45c0-46d2-855a-c5844f38f031"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""Action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -371,6 +391,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         m_Player_MouseLook = m_Player.FindAction("MouseLook", throwIfNotFound: true);
         m_Player_Shortcut_Inventory = m_Player.FindAction("Shortcut_Inventory", throwIfNotFound: true);
         m_Player_Shortcut_MainMenu = m_Player.FindAction("Shortcut_MainMenu", throwIfNotFound: true);
+        m_Player_Action = m_Player.FindAction("Action", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Escape = m_UI.FindAction("Escape", throwIfNotFound: true);
@@ -440,6 +461,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_MouseLook;
     private readonly InputAction m_Player_Shortcut_Inventory;
     private readonly InputAction m_Player_Shortcut_MainMenu;
+    private readonly InputAction m_Player_Action;
     public struct PlayerActions
     {
         private @PlayerAction m_Wrapper;
@@ -451,6 +473,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         public InputAction @MouseLook => m_Wrapper.m_Player_MouseLook;
         public InputAction @Shortcut_Inventory => m_Wrapper.m_Player_Shortcut_Inventory;
         public InputAction @Shortcut_MainMenu => m_Wrapper.m_Player_Shortcut_MainMenu;
+        public InputAction @Action => m_Wrapper.m_Player_Action;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -481,6 +504,9 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @Shortcut_MainMenu.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut_MainMenu;
                 @Shortcut_MainMenu.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut_MainMenu;
                 @Shortcut_MainMenu.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut_MainMenu;
+                @Action.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAction;
+                @Action.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAction;
+                @Action.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAction;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -506,6 +532,9 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @Shortcut_MainMenu.started += instance.OnShortcut_MainMenu;
                 @Shortcut_MainMenu.performed += instance.OnShortcut_MainMenu;
                 @Shortcut_MainMenu.canceled += instance.OnShortcut_MainMenu;
+                @Action.started += instance.OnAction;
+                @Action.performed += instance.OnAction;
+                @Action.canceled += instance.OnAction;
             }
         }
     }
@@ -561,6 +590,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         void OnMouseLook(InputAction.CallbackContext context);
         void OnShortcut_Inventory(InputAction.CallbackContext context);
         void OnShortcut_MainMenu(InputAction.CallbackContext context);
+        void OnAction(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

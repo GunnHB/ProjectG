@@ -51,9 +51,6 @@ public class JsonManager : SingletonObject<JsonManager>
     {
         var jsonData = ObjectToJson(data);
         File.WriteAllText($"{BASE_PATH}/{path}/{fileName}.json", jsonData);
-
-        // 에셋 리프레시
-        AssetDatabase.Refresh();
     }
 
     public void LoadData<T>(string path, string fileName, out T field) where T : new()
@@ -85,9 +82,6 @@ public class JsonManager : SingletonObject<JsonManager>
 
             field = LoadJsonFile<T>(path, fileName);
         }
-
-        // 에셋 리프레시
-        AssetDatabase.Refresh();
     }
 
     public string ObjectToJson(object obj)

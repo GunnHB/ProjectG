@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -7,24 +8,43 @@ using UnityEngine.UI;
 // 아이템 / 인벤토리 관리는 여기서 합니다.
 public class ItemManager : SingletonObject<ItemManager>
 {
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
-    // 탭 관리용
-    private List<UIInventoryTab> _tabList = new();
-    public List<UIInventoryTab> TabList => _tabList;
-
     private UIInventoryTab _currSelectTab;
     public UIInventoryTab CurrSelectTab => _currSelectTab;
 
     private UIItemSlot _currItemSlot;
     public UIItemSlot CurrItemSlot => _currItemSlot;
 
-    // 캐싱
+    #region 캐싱
+    private string _path = JsonManager.PLAYER_DATA;
+    private string _fileName = JsonManager.PLAYER_INVENTORY_DATA_FILE_NAME;
+
     private UIInventoryPopup _inventoryPopup;
     public UIInventoryPopup InventoryPopup => _inventoryPopup;
+
+    private PlayerInventoryData _inventoryData;
+
+    public Dictionary<InventoryCategory, List<Item.Data>> PlayerInventory
+    {
+        get => _inventoryData._playerInventory[(SlotIndex)GameManager.Instance.SelectedSlotIndex];
+    }
+
+    public int PlayerGold
+    {
+        get => _inventoryData._playerGold[(SlotIndex)GameManager.Instance.SelectedSlotIndex];
+    }
+
+    public Dictionary<InventoryCategory, int> InvenCateSize
+    {
+        get => _inventoryData._invenCateSize[(SlotIndex)GameManager.Instance.SelectedSlotIndex];
+    }
+    #endregion
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        _inventoryData = JsonManager.Instance.InventoryData;
+    }
 
     // 인벤토리는 요걸로 엽시다.
     public void OpenInventory()
@@ -92,11 +112,6 @@ public class ItemManager : SingletonObject<ItemManager>
         _currSelectTab._tabAction?.Invoke();
     }
 
-    public void AddToTabList(UIInventoryTab tab)
-    {
-        _tabList.Add(tab);
-    }
-
     // 인벤토리 처음 열렸을 때에만 실행됨
     // 이후에는 탭의 버튼 리스너로 실행
     public void InvokeTabAction()
@@ -114,12 +129,54 @@ public class ItemManager : SingletonObject<ItemManager>
         _currSelectTab = null;
     }
 
+    public void AddItemToInventory(Item.Data item = null)
+    {
+        if (item == null)
+            return;
+
+        PlayerInventory[GetItemCateory(item)].Add(item);
+
+        JsonManager.Instance.SaveData(_path, _fileName, _inventoryData);
+        JsonManager.Instance.LoadData(_path, _fileName, out _inventoryData);
+
+        Debug.Log("아이템 먹어쓰요");
+    }
+
+    private InventoryCategory GetItemCateory(Item.Data item)
+    {
+        switch (item.type)
+        {
+            case ItemType.Weapon:
+                if (item.ref_id != 0)
+                {
+                    var weaponItem = Weapon.Data.DataList.Where(x => x.id == item.ref_id).FirstOrDefault();
+
+                    if (weaponItem != null)
+                    {
+                        if (weaponItem.type == WeaponType.OneHand || weaponItem.type == WeaponType.TwoHand)
+                            return InventoryCategory.CategoryWeapon;
+                        else if (weaponItem.type == WeaponType.Shield)
+                            return InventoryCategory.CategoryShield;
+                        else if (weaponItem.type == WeaponType.Bow)
+                            return InventoryCategory.CategoryBow;
+                    }
+                }
+                break;
+            case ItemType.Armor:
+                break;
+            case ItemType.Food:
+                break;
+            case ItemType.Default:
+                break;
+        }
+
+        return InventoryCategory.CategoryWeapon;
+    }
+
     // 인벤토리 닫히면 정리해주기
     public void ClearDatas()
     {
         ClearSelectCategory();
         ClearCurrItemSlot();
-
-        _tabList.Clear();
     }
 }

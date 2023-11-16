@@ -69,6 +69,9 @@ public partial class PlayerController : MonoBehaviour
     public Animator PlayerAnimator => _animator;
     public PlayerState PState => _playerState;
 
+    // 기본 행동
+    private InputAction _functionAction;
+
     private void Awake()
     {
         _applySpeed = _walkSpeed;
@@ -108,6 +111,8 @@ public partial class PlayerController : MonoBehaviour
         _mainMenuAction = _playerAction.Player.Shortcut_MainMenu;
 
         _escapeAction = _playerAction.UI.Escape;
+
+        _functionAction = _playerAction.Player.Action;
     }
 
     private void RegistActions()
@@ -118,6 +123,8 @@ public partial class PlayerController : MonoBehaviour
         _mainMenuAction.started += MainMenuActionStarted;
 
         _escapeAction.started += EscapeActionStarted;
+
+        _functionAction.started += FunctionActionStarted;
     }
 
     private void UnRegistActions()
@@ -128,6 +135,8 @@ public partial class PlayerController : MonoBehaviour
         _mainMenuAction.started -= MainMenuActionStarted;
 
         _escapeAction.started -= EscapeActionStarted;
+
+        _functionAction.started -= FunctionActionStarted;
     }
 
     // Actual move
@@ -228,5 +237,30 @@ public partial class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    // 줍기, 대화, ...
+    private void FunctionActionStarted(InputAction.CallbackContext context)
+    {
+        if (GameManager.Instance.CurrentMode != GameManager.GameMode.InGame)
+            return;
+
+        // 인벤토리 추가 테스트
+        AddToinventory();
+    }
+
+    private void AddToinventory()
+    {
+        Item.Data newItem = new Item.Data
+        {
+            id = 100010001,
+            type = ItemType.Armor,
+            name = "Item_Helmet_0001",
+            desc = "Item_Helmet_Desc_0001",
+            image = "Icon_Helmet_0001",
+            ref_id = 200010001,
+        };
+
+        ItemManager.Instance.AddItemToInventory(newItem);
     }
 }

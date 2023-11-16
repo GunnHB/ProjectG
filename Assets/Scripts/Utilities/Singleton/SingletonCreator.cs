@@ -19,6 +19,7 @@ public class SingletonCreator : MonoBehaviour
         InitSingletonObject<LoadSceneManager>();
         InitSingletonObject<WeaponManager>();
         InitSingletonObject<ItemManager>();
+        InitSingletonObject<TableLoadManager>();
     }
 
     /// <summary>

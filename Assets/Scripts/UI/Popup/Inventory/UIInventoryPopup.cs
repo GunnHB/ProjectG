@@ -28,9 +28,9 @@ public class UIInventoryPopup : UIPopupBase
     [TabGroup(RIGHT_PANEL), SerializeField] private TextMeshProUGUI _itemName;
     [TabGroup(RIGHT_PANEL), SerializeField] private TextMeshProUGUI _itemDesc;
 
-    // cache
-    private PlayerInventoryData _inventoryData;
-    private SlotIndex _playerSlotIndex;
+    // // cache
+    // private PlayerInventoryData _inventoryData;
+    // private SlotIndex _playerSlotIndex;
 
     public ScrollRect InvenScrollRect => _invenScrollRect;
 
@@ -41,8 +41,8 @@ public class UIInventoryPopup : UIPopupBase
         _tabPool.Initialize();
         _inventoryRowPool.Initialize();
 
-        _inventoryData = JsonManager.Instance.InventoryData;
-        _playerSlotIndex = (SlotIndex)GameManager.Instance.SelectedSlotIndex;
+        // _inventoryData = JsonManager.Instance.InventoryData;
+        // _playerSlotIndex = (SlotIndex)GameManager.Instance.SelectedSlotIndex;
     }
 
     public void Init()
@@ -57,7 +57,7 @@ public class UIInventoryPopup : UIPopupBase
 
     private void InitTabs()
     {
-        var tabList = InventoryTab.Data.GetList().OrderBy(x => x.order);
+        var tabList = InventoryTab.Data.DataList.OrderBy(x => x.order);
         int tabIndex = 0;
 
         foreach (var tabData in tabList)
@@ -71,8 +71,6 @@ public class UIInventoryPopup : UIPopupBase
 
                 tab.Init(tabData);
                 tab._tabAction = InitInventoryRow;
-
-                ItemManager.Instance.AddToTabList(tab);
             }
 
             tabIndex++;
@@ -86,7 +84,7 @@ public class UIInventoryPopup : UIPopupBase
         if (ItemManager.Instance.CurrSelectTab == null)
             return;
 
-        int invenSize = _inventoryData._invenCateSize[_playerSlotIndex][ItemManager.Instance.CurrSelectTab.TabCategory];
+        int invenSize = ItemManager.Instance.InvenCateSize[ItemManager.Instance.CurrSelectTab.TabCategory];
         int rowCount = invenSize / GameValue.INVENTORY_ROW_AMOUNT;
         int remainCount = invenSize % GameValue.INVENTORY_ROW_AMOUNT;
 
@@ -121,7 +119,7 @@ public class UIInventoryPopup : UIPopupBase
 
     private void SetGold()
     {
-        _goldText.text = _inventoryData._playerGold[_playerSlotIndex].AddComma();
+        _goldText.text = ItemManager.Instance.PlayerGold.AddComma();
     }
 
     public override void Open()
