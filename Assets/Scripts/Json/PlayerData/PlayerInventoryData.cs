@@ -28,12 +28,12 @@ public class PlayerInventoryData
         tempCateSzie.Add(InventoryCategory.CategoryFood, GameValue.INVENTORY_DEFAULT_CATE_FOOD_SIZE);
         tempCateSzie.Add(InventoryCategory.CategoryDefault, GameValue.INVENTORY_DEFAULT_CATE_DEFAULT_SIZE);
 
-        tempInven.Add(InventoryCategory.CategoryWeapon, new());
-        tempInven.Add(InventoryCategory.CategoryArmor, new());
-        tempInven.Add(InventoryCategory.CategoryShield, new());
-        tempInven.Add(InventoryCategory.CategoryBow, new());
-        tempInven.Add(InventoryCategory.CategoryFood, new());
-        tempInven.Add(InventoryCategory.CategoryDefault, new());
+        AddEmptyData(InventoryCategory.CategoryWeapon, tempCateSzie[InventoryCategory.CategoryWeapon], ref tempInven);
+        AddEmptyData(InventoryCategory.CategoryArmor, tempCateSzie[InventoryCategory.CategoryArmor], ref tempInven);
+        AddEmptyData(InventoryCategory.CategoryShield, tempCateSzie[InventoryCategory.CategoryShield], ref tempInven);
+        AddEmptyData(InventoryCategory.CategoryBow, tempCateSzie[InventoryCategory.CategoryBow], ref tempInven);
+        AddEmptyData(InventoryCategory.CategoryFood, tempCateSzie[InventoryCategory.CategoryFood], ref tempInven);
+        AddEmptyData(InventoryCategory.CategoryDefault, tempCateSzie[InventoryCategory.CategoryDefault], ref tempInven);
 
         for (int index = 0; index < GameValue.SAVE_SLOT_COUNT; index++)
         {
@@ -41,5 +41,16 @@ public class PlayerInventoryData
             _invenCateSize.Add((SlotIndex)index, tempCateSzie);
             _playerGold.Add((SlotIndex)index, 0);
         }
+    }
+
+    // json 파일 생성 시에 공갈 데이터 만들기
+    private void AddEmptyData(InventoryCategory cate, int count, ref Dictionary<InventoryCategory, List<Item.Data>> tempDic)
+    {
+        var list = new List<Item.Data>();
+
+        for (int index = 0; index < count; index++)
+            list.Add(new Item.Data());
+
+        tempDic.Add(cate, list);
     }
 }

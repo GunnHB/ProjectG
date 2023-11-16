@@ -134,7 +134,16 @@ public class ItemManager : SingletonObject<ItemManager>
         if (item == null)
             return;
 
-        PlayerInventory[GetItemCateory(item)].Add(item);
+        var cate = GetItemCateory(item);
+        var itemIndex = PlayerInventory[cate].FindIndex(invenItem => invenItem.id == 0L);   // 공갈 데이터를 찾자
+
+        if (itemIndex == -1)
+        {
+            Debug.Log("아이템 추가할 수 업쓰요");
+            return;
+        }
+
+        PlayerInventory[cate][itemIndex] = item;
 
         JsonManager.Instance.SaveData(_path, _fileName, _inventoryData);
         JsonManager.Instance.LoadData(_path, _fileName, out _inventoryData);
@@ -170,7 +179,7 @@ public class ItemManager : SingletonObject<ItemManager>
                 break;
         }
 
-        return InventoryCategory.CategoryWeapon;
+        return InventoryCategory.CategoryArmor;
     }
 
     // 인벤토리 닫히면 정리해주기

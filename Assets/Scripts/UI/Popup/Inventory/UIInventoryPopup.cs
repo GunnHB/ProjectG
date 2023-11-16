@@ -110,11 +110,24 @@ public class UIInventoryPopup : UIPopupBase
                 row.Init(index, initCount, SelectSlotCallback);
             }
         }
+
+        // 인벤토리가 처음 열리거나
+        // 카테고리가 변경되면 아이템 정보가 초기화되도록 호출
+        SelectSlotCallback();
     }
 
     private void SelectSlotCallback()
     {
-        Debug.Log(ItemManager.Instance.CurrItemSlot.name);
+        if (ItemManager.Instance.CurrItemSlot == null || ItemManager.Instance.CurrItemSlot.ItemData == null)
+        {
+            _itemName.text = string.Empty;
+            _itemDesc.text = string.Empty;
+        }
+        else
+        {
+            _itemName.text = ItemManager.Instance.CurrItemSlot.ItemData.name;
+            _itemDesc.text = ItemManager.Instance.CurrItemSlot.ItemData.desc;
+        }
     }
 
     private void SetGold()

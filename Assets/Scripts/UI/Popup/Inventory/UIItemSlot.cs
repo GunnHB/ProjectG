@@ -26,7 +26,7 @@ public class UIItemSlot : MonoBehaviour
     public UnityAction _slotCallback = null;
 
     private Item.Data _itemData = null;
-    private Item.Data ItemData => _itemData;
+    public Item.Data ItemData => _itemData;
 
     private void Awake()
     {
@@ -36,8 +36,6 @@ public class UIItemSlot : MonoBehaviour
 
     public void InitSlot(Item.Data itemData = null)
     {
-        // playerInventoryData.json 같은걸 하나 만들어서
-        // 거기서 값을 가져오는 방법으로 아이템 세팅해야될 듯..?
         ClearData();
 
         _itemData = itemData;
@@ -49,6 +47,11 @@ public class UIItemSlot : MonoBehaviour
     private void ClearData()
     {
         _itemData = null;
+
+        SetImage(false);
+        SetAmountText(false);
+        _equipObj.SetActive(false);
+
         SetSelect(false);
     }
 
@@ -56,8 +59,34 @@ public class UIItemSlot : MonoBehaviour
     private void SetData()
     {
         // 데이터가 비어있으면 리턴
-        if (_itemData == null)
+        if (_itemData.id == 0)
             return;
+
+        SetImage();
+        SetAmountText();
+    }
+
+    private void SetImage(bool active = true)
+    {
+        if (!active)
+        {
+            _itmeImage.gameObject.SetActive(false);
+            return;
+        }
+
+        _itmeImage.sprite = ResourceManager.Instance.GetSprite($"Inventory/Item/{_itemData.image}");
+        _itmeImage.gameObject.SetActive(true);
+    }
+
+    private void SetAmountText(bool active = true)
+    {
+        if (!active)
+        {
+            _itemAmountText.gameObject.SetActive(false);
+            return;
+        }
+
+        _itemAmountText.gameObject.SetActive(true);
     }
 
     private void OnClickSlot()
