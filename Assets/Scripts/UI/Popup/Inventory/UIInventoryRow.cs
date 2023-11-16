@@ -25,7 +25,6 @@ public class UIInventoryRow : MonoBehaviour
             if (temp.TryGetComponent(out UIItemSlot itemSlot))
             {
                 temp.name = $"Row_{rowIndex}_item_{index}";
-                itemSlot.gameObject.SetActive(true);
 
                 itemSlot.InitSlot();
                 itemSlot._slotCallback = slotCallback;

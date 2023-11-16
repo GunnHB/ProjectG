@@ -65,7 +65,12 @@ public class ObjectPool
             return temp;
         }
         else
-            return CreateNewObject();
+        {
+            var temp = CreateNewObject();
+            temp.SetActive(true);
+
+            return temp;
+        }
     }
 
     public void ReturnObject(GameObject obj)
@@ -84,7 +89,9 @@ public class ObjectPool
         {
             var item = _parentObj.transform.GetChild(index);
 
-            ReturnObject(item.gameObject);
+            // 켜진 애들만 리턴
+            if (item.gameObject.activeInHierarchy)
+                ReturnObject(item.gameObject);
         }
     }
 }
