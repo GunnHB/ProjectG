@@ -62,7 +62,7 @@ public class UIInventoryTab : MonoBehaviour
         if (_tabData == null)
             return;
 
-        _tabImage.sprite = ResourceManager.Instance.GetSprite($"Inventory/Icon/{_tabData.image}");
+        _tabImage.sprite = ResourceManager.Instance.GetSpriteByIcon(_tabData.image);
     }
 
     public void SetSelect(bool select)

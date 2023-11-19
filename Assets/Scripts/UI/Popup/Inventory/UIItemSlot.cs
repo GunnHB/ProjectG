@@ -74,7 +74,7 @@ public class UIItemSlot : MonoBehaviour
             return;
         }
 
-        _itmeImage.sprite = ResourceManager.Instance.GetSprite($"Inventory/Item/{_itemData.image}");
+        _itmeImage.sprite = ResourceManager.Instance.GetSpriteByItem(_itemData.type, _itemData.image);
         _itmeImage.gameObject.SetActive(true);
     }
 

@@ -3,12 +3,47 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using System.Linq;
+using System.Text;
 
 public class ResourceManager : SingletonObject<ResourceManager>
 {
     protected override void Awake()
     {
         base.Awake();
+    }
+
+    public Sprite GetSpriteByItem(ItemType type, string fileName)
+    {
+        StringBuilder builder = new();
+        builder.Append("Inventory/Item");
+
+        switch (type)
+        {
+            case ItemType.Armor:
+                builder.Append("Armor/");
+                break;
+            case ItemType.Weapon:
+                builder.Append("Weapon/");
+                break;
+            case ItemType.Food:
+                builder.Append("Food/");
+                break;
+            case ItemType.Default:
+                builder.Append("Default/");
+                break;
+        }
+
+        builder.Append(fileName);
+
+        return GetSprite(builder.ToString());
+    }
+
+    public Sprite GetSpriteByIcon(string fileName)
+    {
+        StringBuilder builder = new();
+        builder.Append($"Inventory/Icon/{fileName}");
+
+        return GetSprite(builder.ToString());
     }
 
     // 나중에 아틀라스로 관리하는 것도 추가합시다.
