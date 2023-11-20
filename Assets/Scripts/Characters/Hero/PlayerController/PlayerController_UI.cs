@@ -11,8 +11,6 @@ using Sirenix.OdinInspector;
 // UI 와 관련된 것들을 조작합니다.
 public partial class PlayerController : MonoBehaviour
 {
-    private PlayerAction _playerAction;
-
     private InputAction _inventoryAction;
     private InputAction _mainMenuAction;
 

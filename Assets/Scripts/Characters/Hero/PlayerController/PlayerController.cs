@@ -32,6 +32,9 @@ public partial class PlayerController : MonoBehaviour
     [SerializeField] private Transform _camera;
     [SerializeField] private Animator _animator;
 
+    // 플레이어 액션
+    private PlayerAction _playerAction;
+
     // 이동 방향 변수
     private Vector3 _direction;
     // 중력 적용
@@ -51,7 +54,6 @@ public partial class PlayerController : MonoBehaviour
     private bool _isWalk = false;
     private bool _isSprint = false;
     private bool _isJump = false;
-    private bool _isAttack = false;
 
     // 플레이어 스탯 데이터
     // 스테미나는 정확하게 값을 매기도록 float 처리 (나중에 수정필요하면 수정하자)
@@ -69,8 +71,8 @@ public partial class PlayerController : MonoBehaviour
     public Animator PlayerAnimator => _animator;
     public PlayerState PState => _playerState;
 
-    // 기본 행동
-    private InputAction _functionAction;
+    // 상호 작용
+    private InputAction _InteractionAction;
 
     private void Awake()
     {
@@ -112,7 +114,10 @@ public partial class PlayerController : MonoBehaviour
 
         _escapeAction = _playerAction.UI.Escape;
 
-        _functionAction = _playerAction.Player.Action;
+        _InteractionAction = _playerAction.Player.Interaction;
+
+        _attackAction = _playerAction.Player.Attack;
+        _focusAction = _playerAction.Player.Focus;
     }
 
     private void RegistActions()
@@ -124,7 +129,18 @@ public partial class PlayerController : MonoBehaviour
 
         _escapeAction.started += EscapeActionStarted;
 
-        _functionAction.started += FunctionActionStarted;
+        _InteractionAction.started += InteractionActionStarted;
+
+        // Attack
+        {
+            _attackAction.started += AttackActionStarted;
+            _attackAction.performed += AttackActionPerformed;
+            _attackAction.canceled += AttackActionCanceled;
+
+            _focusAction.started += FocusActionStarted;
+            _focusAction.started += FocusActionPerformed;
+            _focusAction.started += FocusActionCanceled;
+        }
     }
 
     private void UnRegistActions()
@@ -136,7 +152,18 @@ public partial class PlayerController : MonoBehaviour
 
         _escapeAction.started -= EscapeActionStarted;
 
-        _functionAction.started -= FunctionActionStarted;
+        _InteractionAction.started -= InteractionActionStarted;
+
+        // Attack
+        {
+            _attackAction.started -= AttackActionStarted;
+            _attackAction.performed -= AttackActionPerformed;
+            _attackAction.canceled -= AttackActionCanceled;
+
+            _focusAction.started -= FocusActionStarted;
+            _focusAction.started -= FocusActionPerformed;
+            _focusAction.started -= FocusActionCanceled;
+        }
     }
 
     // Actual move
@@ -240,7 +267,7 @@ public partial class PlayerController : MonoBehaviour
     }
 
     // 줍기, 대화, ...
-    private void FunctionActionStarted(InputAction.CallbackContext context)
+    private void InteractionActionStarted(InputAction.CallbackContext context)
     {
         if (GameManager.Instance.CurrentMode != GameManager.GameMode.InGame)
             return;

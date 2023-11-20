@@ -33,9 +33,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "MouseLeft",
+                    "name": "Attack",
                     "type": "Button",
                     "id": "ed4b79c3-7564-40ab-b22f-f4050532f249",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Focus",
+                    "type": "Button",
+                    "id": "38eb4f8c-a38e-4baa-a482-dc0bad4fde0b",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -46,6 +55,15 @@
                     "type": "PassThrough",
                     "id": "252aca4d-96b9-4725-8c8e-30c82330d8f2",
                     "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Interaction",
+                    "type": "Button",
+                    "id": "ff8d5d1e-a166-4fcb-91c1-73e8dcd5da75",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -63,15 +81,6 @@
                     "name": "Shortcut_MainMenu",
                     "type": "Button",
                     "id": "1e51df5a-7031-4edf-b284-64f7f7ec6cff",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Action",
-                    "type": "Button",
-                    "id": "ff8d5d1e-a166-4fcb-91c1-73e8dcd5da75",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -251,7 +260,7 @@
                     "interactions": "Hold,Press(behavior=1)",
                     "processors": "",
                     "groups": "PC",
-                    "action": "MouseLeft",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -306,7 +315,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "Action",
+                    "action": "Interaction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "516c3daa-b4f2-40c8-bd73-11053f1e988c",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "Hold(duration=0.3,pressPoint=0.05)",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Focus",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

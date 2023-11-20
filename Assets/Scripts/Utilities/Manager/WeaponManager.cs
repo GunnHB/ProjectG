@@ -16,9 +16,9 @@ public class WeaponManager : SingletonObject<WeaponManager>
 
     private void ChangeWeapon(WeaponBase.WeaponType type)
     {
-        var scriptable = GameManager.Instance.PController.AnimCtrlScriptableObj;
-        var controller = GameManager.Instance.PController.PlayerAnimator;
+        // var scriptable = GameManager.Instance.PController.AnimCtrlScriptableObj;
+        // var controller = GameManager.Instance.PController.PlayerAnimator;
 
-        controller.runtimeAnimatorController = scriptable._playerAnimCtrlArray[(int)type];
+        // controller.runtimeAnimatorController = scriptable._playerAnimCtrlArray[(int)type];
     }
 }

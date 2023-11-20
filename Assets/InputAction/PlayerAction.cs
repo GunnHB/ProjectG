@@ -55,9 +55,18 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""MouseLeft"",
+                    ""name"": ""Attack"",
                     ""type"": ""Button"",
                     ""id"": ""ed4b79c3-7564-40ab-b22f-f4050532f249"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Focus"",
+                    ""type"": ""Button"",
+                    ""id"": ""38eb4f8c-a38e-4baa-a482-dc0bad4fde0b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -68,6 +77,15 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""type"": ""PassThrough"",
                     ""id"": ""252aca4d-96b9-4725-8c8e-30c82330d8f2"",
                     ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interaction"",
+                    ""type"": ""Button"",
+                    ""id"": ""ff8d5d1e-a166-4fcb-91c1-73e8dcd5da75"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -85,15 +103,6 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""name"": ""Shortcut_MainMenu"",
                     ""type"": ""Button"",
                     ""id"": ""1e51df5a-7031-4edf-b284-64f7f7ec6cff"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Action"",
-                    ""type"": ""Button"",
-                    ""id"": ""ff8d5d1e-a166-4fcb-91c1-73e8dcd5da75"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -273,7 +282,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""interactions"": ""Hold,Press(behavior=1)"",
                     ""processors"": """",
                     ""groups"": ""PC"",
-                    ""action"": ""MouseLeft"",
+                    ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -328,7 +337,18 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""PC"",
-                    ""action"": ""Action"",
+                    ""action"": ""Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""516c3daa-b4f2-40c8-bd73-11053f1e988c"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Hold(duration=0.3,pressPoint=0.05)"",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""Focus"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -387,11 +407,12 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_MouseLeft = m_Player.FindAction("MouseLeft", throwIfNotFound: true);
+        m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
+        m_Player_Focus = m_Player.FindAction("Focus", throwIfNotFound: true);
         m_Player_MouseLook = m_Player.FindAction("MouseLook", throwIfNotFound: true);
+        m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
         m_Player_Shortcut_Inventory = m_Player.FindAction("Shortcut_Inventory", throwIfNotFound: true);
         m_Player_Shortcut_MainMenu = m_Player.FindAction("Shortcut_MainMenu", throwIfNotFound: true);
-        m_Player_Action = m_Player.FindAction("Action", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Escape = m_UI.FindAction("Escape", throwIfNotFound: true);
@@ -457,11 +478,12 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_MouseLeft;
+    private readonly InputAction m_Player_Attack;
+    private readonly InputAction m_Player_Focus;
     private readonly InputAction m_Player_MouseLook;
+    private readonly InputAction m_Player_Interaction;
     private readonly InputAction m_Player_Shortcut_Inventory;
     private readonly InputAction m_Player_Shortcut_MainMenu;
-    private readonly InputAction m_Player_Action;
     public struct PlayerActions
     {
         private @PlayerAction m_Wrapper;
@@ -469,11 +491,12 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @MouseLeft => m_Wrapper.m_Player_MouseLeft;
+        public InputAction @Attack => m_Wrapper.m_Player_Attack;
+        public InputAction @Focus => m_Wrapper.m_Player_Focus;
         public InputAction @MouseLook => m_Wrapper.m_Player_MouseLook;
+        public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
         public InputAction @Shortcut_Inventory => m_Wrapper.m_Player_Shortcut_Inventory;
         public InputAction @Shortcut_MainMenu => m_Wrapper.m_Player_Shortcut_MainMenu;
-        public InputAction @Action => m_Wrapper.m_Player_Action;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -492,21 +515,24 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @MouseLeft.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseLeft;
-                @MouseLeft.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseLeft;
-                @MouseLeft.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseLeft;
+                @Attack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
+                @Attack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
+                @Attack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
+                @Focus.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFocus;
+                @Focus.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFocus;
+                @Focus.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFocus;
                 @MouseLook.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseLook;
                 @MouseLook.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseLook;
                 @MouseLook.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseLook;
+                @Interaction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteraction;
+                @Interaction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteraction;
+                @Interaction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteraction;
                 @Shortcut_Inventory.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut_Inventory;
                 @Shortcut_Inventory.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut_Inventory;
                 @Shortcut_Inventory.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut_Inventory;
                 @Shortcut_MainMenu.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut_MainMenu;
                 @Shortcut_MainMenu.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut_MainMenu;
                 @Shortcut_MainMenu.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShortcut_MainMenu;
-                @Action.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAction;
-                @Action.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAction;
-                @Action.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAction;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -520,21 +546,24 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
-                @MouseLeft.started += instance.OnMouseLeft;
-                @MouseLeft.performed += instance.OnMouseLeft;
-                @MouseLeft.canceled += instance.OnMouseLeft;
+                @Attack.started += instance.OnAttack;
+                @Attack.performed += instance.OnAttack;
+                @Attack.canceled += instance.OnAttack;
+                @Focus.started += instance.OnFocus;
+                @Focus.performed += instance.OnFocus;
+                @Focus.canceled += instance.OnFocus;
                 @MouseLook.started += instance.OnMouseLook;
                 @MouseLook.performed += instance.OnMouseLook;
                 @MouseLook.canceled += instance.OnMouseLook;
+                @Interaction.started += instance.OnInteraction;
+                @Interaction.performed += instance.OnInteraction;
+                @Interaction.canceled += instance.OnInteraction;
                 @Shortcut_Inventory.started += instance.OnShortcut_Inventory;
                 @Shortcut_Inventory.performed += instance.OnShortcut_Inventory;
                 @Shortcut_Inventory.canceled += instance.OnShortcut_Inventory;
                 @Shortcut_MainMenu.started += instance.OnShortcut_MainMenu;
                 @Shortcut_MainMenu.performed += instance.OnShortcut_MainMenu;
                 @Shortcut_MainMenu.canceled += instance.OnShortcut_MainMenu;
-                @Action.started += instance.OnAction;
-                @Action.performed += instance.OnAction;
-                @Action.canceled += instance.OnAction;
             }
         }
     }
@@ -586,11 +615,12 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
-        void OnMouseLeft(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
+        void OnFocus(InputAction.CallbackContext context);
         void OnMouseLook(InputAction.CallbackContext context);
+        void OnInteraction(InputAction.CallbackContext context);
         void OnShortcut_Inventory(InputAction.CallbackContext context);
         void OnShortcut_MainMenu(InputAction.CallbackContext context);
-        void OnAction(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
