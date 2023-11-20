@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -31,6 +32,7 @@ public partial class PlayerController : MonoBehaviour
     [SerializeField] private PlayerInput _input;
     [SerializeField] private Transform _camera;
     [SerializeField] private Animator _animator;
+    [SerializeField] private AnimEventChecker _checker;
 
     // 플레이어 액션
     private PlayerAction _playerAction;
@@ -76,6 +78,8 @@ public partial class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        _playerState = PlayerState.Idle;
+
         _applySpeed = _walkSpeed;
         _camera = Camera.main.transform;
         _input.camera = Camera.main;
@@ -90,12 +94,28 @@ public partial class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        RegistActions();
+        RegistActions(_inventoryAction, InventoryActionStarted);
+        RegistActions(_mainMenuAction, MainMenuActionStarted);
+
+        RegistActions(_escapeAction, EscapeActionStarted);
+
+        RegistActions(_InteractionAction, InteractionActionStarted);
+
+        RegistActions(_attackAction, null, AttackActionPerformed, null);
+        RegistActions(_focusAction, FocusActionStarted, FocusActionPerformed, FocusActionCanceled);
     }
 
     private void OnDisable()
     {
-        UnRegistActions();
+        UnRegistActions(_inventoryAction, InventoryActionStarted);
+        UnRegistActions(_mainMenuAction, MainMenuActionStarted);
+
+        UnRegistActions(_escapeAction, EscapeActionStarted);
+
+        UnRegistActions(_InteractionAction, InteractionActionStarted);
+
+        UnRegistActions(_attackAction, null, AttackActionPerformed, null);
+        UnRegistActions(_focusAction, FocusActionStarted, FocusActionPerformed, FocusActionCanceled);
     }
 
     private void Update()
@@ -120,56 +140,43 @@ public partial class PlayerController : MonoBehaviour
         _focusAction = _playerAction.Player.Focus;
     }
 
-    private void RegistActions()
+    private void RegistActions(InputAction action,
+                               Action<InputAction.CallbackContext> startCallback = null,
+                               Action<InputAction.CallbackContext> performedCallback = null,
+                               Action<InputAction.CallbackContext> cancelCallback = null)
     {
-        _playerAction.Enable();
+        action.Enable();
 
-        _inventoryAction.started += InventoryActionStarted;
-        _mainMenuAction.started += MainMenuActionStarted;
+        if (startCallback != null)
+            action.started += startCallback;
 
-        _escapeAction.started += EscapeActionStarted;
+        if (performedCallback != null)
+            action.performed += performedCallback;
 
-        _InteractionAction.started += InteractionActionStarted;
-
-        // Attack
-        {
-            _attackAction.started += AttackActionStarted;
-            _attackAction.performed += AttackActionPerformed;
-            _attackAction.canceled += AttackActionCanceled;
-
-            _focusAction.started += FocusActionStarted;
-            _focusAction.started += FocusActionPerformed;
-            _focusAction.started += FocusActionCanceled;
-        }
+        if (cancelCallback != null)
+            action.canceled += cancelCallback;
     }
 
-    private void UnRegistActions()
+    private void UnRegistActions(InputAction action,
+                               Action<InputAction.CallbackContext> startCallback = null,
+                               Action<InputAction.CallbackContext> performedCallback = null,
+                               Action<InputAction.CallbackContext> cancelCallback = null)
     {
-        _playerAction.Disable();
+        action.Disable();
 
-        _inventoryAction.started -= InventoryActionStarted;
-        _mainMenuAction.started -= MainMenuActionStarted;
+        if (startCallback != null)
+            action.started -= startCallback;
 
-        _escapeAction.started -= EscapeActionStarted;
+        if (performedCallback != null)
+            action.performed -= performedCallback;
 
-        _InteractionAction.started -= InteractionActionStarted;
-
-        // Attack
-        {
-            _attackAction.started -= AttackActionStarted;
-            _attackAction.performed -= AttackActionPerformed;
-            _attackAction.canceled -= AttackActionCanceled;
-
-            _focusAction.started -= FocusActionStarted;
-            _focusAction.started -= FocusActionPerformed;
-            _focusAction.started -= FocusActionCanceled;
-        }
+        if (cancelCallback != null)
+            action.canceled -= cancelCallback;
     }
 
     // Actual move
     private void MovePlayer()
     {
-        // 대기 상태일 때 이동이 가능
         _isWalk = _direction.magnitude >= .1f;
 
         if (_isWalk)
@@ -181,10 +188,10 @@ public partial class PlayerController : MonoBehaviour
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             _controller.Move(moveDirection.normalized * _applySpeed * Time.deltaTime);
 
-            _playerState = PlayerState.Move;
+            SetPlayerState(PlayerState.Move);
         }
         else
-            _playerState = PlayerState.Idle;
+            SetPlayerState(PlayerState.Idle);
 
         _applySpeed = _isSprint ? _sprintSpeed : _walkSpeed;
 
@@ -264,6 +271,11 @@ public partial class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void SetPlayerState(PlayerState state)
+    {
+        _playerState = state;
     }
 
     // 줍기, 대화, ...

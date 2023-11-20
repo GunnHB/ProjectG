@@ -84,8 +84,7 @@ MonoBehaviour:
   _input: {fileID: 5969814911113478580}
   _camera: {fileID: 0}
   _animator: {fileID: 6020624301045614321}
-  _attackEventChecker: {fileID: 2621957855407789514}
-  _animCtrlScriptableObject: {fileID: 11400000, guid: e992315b367f65243a253aa5d0bea663, type: 2}
+  _checker: {fileID: 2621957855407789514}
   _targetTransform: {fileID: 5969814910860098805}
   _boxSize: {x: 0.75, y: 0.05, z: 0.75}
   _maxDistance: 1
@@ -169,19 +168,7 @@ MonoBehaviour:
     m_ActionId: 392a2118-6417-4b42-b5cf-a0ed1d218f7b
     m_ActionName: PlayerAction/Sprint[/Keyboard/leftShift]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5969814911113478586}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnClickMouseLeft
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: ed4b79c3-7564-40ab-b22f-f4050532f249
     m_ActionName: PlayerAction/MouseLeft[/Mouse/leftButton]
   - m_PersistentCalls:
@@ -204,6 +191,26 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 23b4c711-36c0-4582-9511-3ef2f06efcd2
     m_ActionName: PlayerAction/Jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 38eb4f8c-a38e-4baa-a482-dc0bad4fde0b
+    m_ActionName: Player/Focus[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ff8d5d1e-a166-4fcb-91c1-73e8dcd5da75
+    m_ActionName: Player/Interaction[/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 57253873-6c9f-498e-8c5d-f842abf4f451
+    m_ActionName: Player/Shortcut_Inventory[/Keyboard/i]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1e51df5a-7031-4edf-b284-64f7f7ec6cff
+    m_ActionName: Player/Shortcut_MainMenu[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 93ae2436-1c5f-4836-ba2d-4a85a1656ce8
+    m_ActionName: UI/Escape[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: Player
@@ -1923,7 +1930,7 @@ Animator:
   m_GameObject: {fileID: 5970834659911613919}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: dc603c42b6599174e901596a1f756de4, type: 3}
-  m_Controller: {fileID: 9100000, guid: d2915d9f218195b4dbd872f55fd78e4b, type: 2}
+  m_Controller: {fileID: 9100000, guid: 2f23a128bb235574aa5a62a944f90a21, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -6499,7 +6506,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9121514725314362914}
-  m_LocalRotation: {x: 0.16754349, y: -1e-45, z: -0, w: 0.9858647}
+  m_LocalRotation: {x: 0.16754349, y: -0, z: -0, w: 0.9858647}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6965,7 +6972,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9121514726685392078}
-  m_LocalRotation: {x: 0.14958338, y: 1e-45, z: -0, w: 0.98874915}
+  m_LocalRotation: {x: 0.14958341, y: -0, z: -0, w: 0.98874915}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
