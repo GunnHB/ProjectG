@@ -62,6 +62,7 @@ namespace Item
 		public System.String desc;
 		public System.String image;
 		public System.Int64 ref_id;
+		public System.Boolean stackable;
   
 
 #region fuctions

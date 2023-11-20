@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ScriptURL: https://script.google.com/macros/s/AKfycbwXf2EZKvZegam31LFX7S6UNNRzEAZZi1fKAO5nwWbtiZ-MUwUoGG-NII67UBkNK5ee/exec
   ScriptPassword: 9563
-  GoogleFolderID: 17NmdfZbCTpKqk-SAqGZ8FRAPMVGNyfgF
+  GoogleFolderID: 1GDPFDtS67jxrZg-Re5J2QahCM0QyUgCS
   GenerateCodePath: Assets/UGS.Generated/Scripts/
   DataPath: Assets/UGS.Generated/Resources/
   RuntimeDataPath: UGS/UGS.Data/

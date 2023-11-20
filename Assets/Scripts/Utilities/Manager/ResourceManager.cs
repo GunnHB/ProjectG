@@ -15,7 +15,7 @@ public class ResourceManager : SingletonObject<ResourceManager>
     public Sprite GetSpriteByItem(ItemType type, string fileName)
     {
         StringBuilder builder = new();
-        builder.Append("Inventory/Item");
+        builder.Append("Inventory/Item/");
 
         switch (type)
         {
