@@ -6,16 +6,17 @@ using UnityEngine;
 [Serializable]
 public class PlayerInventoryData
 {
-    // 인벤토리는 가변형이라 리스트
     public Dictionary<SlotIndex, Dictionary<InventoryCategory, List<Item.Data>>> _playerInventory;
     public Dictionary<SlotIndex, int> _playerGold;
     public Dictionary<SlotIndex, Dictionary<InventoryCategory, int>> _invenCateSize;
+    public Dictionary<SlotIndex, Dictionary<long, int>> _invenItemAmount;   // typeconverter 생성해야됨...
 
     public PlayerInventoryData()
     {
         _playerInventory = new();
         _playerGold = new();
         _invenCateSize = new();
+        _invenItemAmount = new();
 
         var tempCateSzie = new Dictionary<InventoryCategory, int>();
         var tempInven = new Dictionary<InventoryCategory, List<Item.Data>>();
@@ -40,6 +41,7 @@ public class PlayerInventoryData
             _playerInventory.Add((SlotIndex)index, tempInven);
             _invenCateSize.Add((SlotIndex)index, tempCateSzie);
             _playerGold.Add((SlotIndex)index, 0);
+            _invenItemAmount.Add((SlotIndex)index, new());
         }
     }
 

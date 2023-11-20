@@ -37,6 +37,11 @@ public class ItemManager : SingletonObject<ItemManager>
     {
         get => _inventoryData._invenCateSize[(SlotIndex)GameManager.Instance.SelectedSlotIndex];
     }
+
+    public Dictionary<long, int> InvenItemAmount
+    {
+        get => _inventoryData._invenItemAmount[(SlotIndex)GameManager.Instance.SelectedSlotIndex];
+    }
     #endregion
 
     protected override void Awake()
@@ -134,21 +139,51 @@ public class ItemManager : SingletonObject<ItemManager>
         if (item == null)
             return;
 
+        // 해당 아이템의 카테고리 얻기
         var cate = GetItemCateory(item);
-        var itemIndex = PlayerInventory[cate].FindIndex(invenItem => invenItem.id == 0L);   // 공갈 데이터를 찾자
 
-        if (itemIndex == -1)
+        // 누적 가능한 아이템이라면
+        if (item.stackable)
         {
-            Debug.Log("아이템 추가할 수 업쓰요");
-            return;
-        }
+            var hasItem = PlayerInventory[cate].Find(x => x.id == item.id);
 
-        PlayerInventory[cate][itemIndex] = item;
+            // 해당 아이템이 인벤토리에 있음
+            if (hasItem != null)
+                InvenItemAmount[hasItem.id]++;
+            // 해당 아이템이 인벤토리에 없음
+            else
+                ActualAddItem(cate, item);
+        }
+        // 누적 불가한 아이템이라면
+        else
+            ActualAddItem(cate, item);
 
         JsonManager.Instance.SaveData(_path, _fileName, _inventoryData);
         JsonManager.Instance.LoadData(_path, _fileName, out _inventoryData);
 
         Debug.Log("아이템 먹어쓰요");
+    }
+
+    private void ActualAddItem(InventoryCategory cate, Item.Data item)
+    {
+        // 빈 슬롯이 있는지 확인
+        var emptySlotIndex = PlayerInventory[cate].FindIndex(x => x.id == 0);
+
+        if (emptySlotIndex == -1)
+        {
+            Debug.Log("아이템 추가할 수 업쓰요");
+            return;
+        }
+        else
+        {
+            PlayerInventory[cate][emptySlotIndex] = item;
+
+            // 수량 데이터 추가
+            if (InvenItemAmount.ContainsKey(item.id))
+                InvenItemAmount.Remove(item.id);
+
+            InvenItemAmount.Add(item.id, 1);
+        }
     }
 
     private InventoryCategory GetItemCateory(Item.Data item)

@@ -18,7 +18,7 @@ public class UIItemSlot : MonoBehaviour
     [SerializeField] private CommonButton _slotButton;
     [SerializeField] private GameObject _equipObj;
 
-    private Color _hoverColor = new Color(1f, 1f, 1f, .5f);
+    private Color _hoverColor = new Color(1f, 1f, 1f, .75f);
     private Color _selectColor = new Color(1f, 1f, 1f, 1f);
 
     private bool _isSelect = false;
@@ -86,7 +86,13 @@ public class UIItemSlot : MonoBehaviour
             return;
         }
 
-        _itemAmountText.gameObject.SetActive(true);
+        if (ItemManager.Instance.InvenItemAmount.TryGetValue(_itemData.id, out int amount))
+        {
+            if (amount == 1)
+                _itemAmountText.gameObject.SetActive(false);
+            else
+                _itemAmountText.text = $"X {amount}";
+        }
     }
 
     private void OnClickSlot()
@@ -117,6 +123,7 @@ public class UIItemSlot : MonoBehaviour
     {
         _isSelect = select;
 
+        _selectFrame.color = _selectColor;
         _selectFrame.gameObject.SetActive(_isSelect);
     }
 }
