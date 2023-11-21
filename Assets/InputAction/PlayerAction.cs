@@ -279,7 +279,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""e61eb2f4-6b1f-4d86-83f0-328dd1b44b74"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Hold,Press(pressPoint=0.25)"",
+                    ""interactions"": ""Hold,Press(behavior=1)"",
                     ""processors"": """",
                     ""groups"": ""PC"",
                     ""action"": ""Attack"",

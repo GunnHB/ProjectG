@@ -10,91 +10,64 @@ public partial class PlayerController : MonoBehaviour
     private InputAction _attackAction;
     private InputAction _focusAction;
 
+    // [공격 중]은 애니메이션 이벤트에서 확인
     private bool _isAttack = false;             // 공격 시작
     private bool _isFocus = false;              // 포커스 시작
 
-    private bool _isAttacking = false;          // 공격 중
+    private bool _doCombo = false;              // 후속 공격 여부
+    private int _comboCount = 0;                // 후속 공격 순번
 
-    private bool _doCombo = false;
-
-    private int _comboCount = 0;
-
-    private Coroutine _attackAnimEndCoroutine;
-    private Coroutine _checkComboAttackCoroutine;
+    private Coroutine _continueAttackCoroutine;
 
     private void AttackActionPerformed(InputAction.CallbackContext context)
     {
-        if (!_isAttacking)
+        if (context.interaction is HoldInteraction)
         {
-            if (context.interaction is HoldInteraction)
-            {
-                Debug.Log("charge");
+            Debug.Log("charge");
 
-                // 차징 애니 실행
-                _isAttacking = true;
+            // 차징 애니 실행
+        }
+        else if (context.interaction is PressInteraction)
+        {
+            if (_continueAttackCoroutine != null)
+                StopCoroutine(_continueAttackCoroutine);
+
+            _continueAttackCoroutine = StartCoroutine(nameof(Cor_ContinueAttack));
+
+            // 후속 공격하기로 했으면 리턴
+            if (_doCombo)
+                return;
+
+            // 공격 중이면 후속 공격에 대한 입력을 확인함
+            if (_checker.ProcessingAttack)
+            {
+                if (!_doCombo)
+                {
+                    _doCombo = true;
+                    _comboCount++;
+
+                    _animator.SetInteger(ANIM_COMBOCOUNT, _comboCount);
+                }
             }
-            else if (context.interaction is PressInteraction)
-            {
-                Debug.Log("normal");
-
-                // 일반 공격 애니 실행
+            else
                 _animator.SetTrigger(ANIM_ATTACK);
-                _isAttacking = true;
-
-                CheckComboAttack();
-            }
         }
     }
 
-    private void CheckComboAttack()
-    {
-        if (_checkComboAttackCoroutine != null)
-        {
-            StopCoroutine(_checkComboAttackCoroutine);
-            _checkComboAttackCoroutine = null;
-        }
-
-        _checkComboAttackCoroutine = StartCoroutine(nameof(Cor_CheckComboAttack));
-    }
-
-    private IEnumerator Cor_CheckComboAttack()
+    private IEnumerator Cor_ContinueAttack()
     {
         while (true)
         {
-            // 애니 시작할 때까지 대기
-            if (!_checker.ProcessingAttack)
-                yield return null;
-            else
-                break;
-        }
-
-        while (true)
-        {
-            // 애니메이션 이벤트로 공격이 끝났는지 확인
-            if (!_checker.ProcessingAttack)
+            if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
-                _isAttack = false;
-                _isAttacking = false;
+                _comboCount = 0;
+                _animator.SetInteger(ANIM_COMBOCOUNT, 0);
+                _doCombo = false;
 
                 yield break;
             }
 
-            // 공격 애니가 진행 중인지 확인
-            if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
-            {
-                Debug.Log(_animator.GetCurrentAnimatorClipInfo(0)[0].clip.name);
-                yield return null;
-            }
-            else
-            {
-                Debug.Log(_animator.GetCurrentAnimatorClipInfo(0)[0].clip.name);
-                _isAttack = false;
-                _isAttacking = false;
-
-                yield break;
-            }
-
-            yield break;
+            yield return null;
         }
     }
 

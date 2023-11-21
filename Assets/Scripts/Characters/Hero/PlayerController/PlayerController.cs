@@ -11,20 +11,10 @@ using Sirenix.OdinInspector;
 
 public partial class PlayerController : MonoBehaviour
 {
-    public enum PlayerState
-    {
-        None,
-        Idle,
-        Move,
-        Attack,
-    }
-
     // 애니 트랜지션 파라미터
     private const string ANIM_ISWALK = "IsWalk";
     private const string ANIM_ISSPRINT = "IsSprint";
-    private const string ANIM_ISJUMP = "IsJump";
     private const string ANIM_ATTACK = "Attack";
-    private const string ANIM_EQUIPCHANGE = "EquipChange";
     private const string ANIM_COMBOCOUNT = "ComboCount";
 
     [Title("[Components]")]
@@ -66,20 +56,14 @@ public partial class PlayerController : MonoBehaviour
     // 스태미나 충전에 걸리는 시간
     private float _currentStaminaChargeTime = 0f;
 
-    // 플레이어 상태 변수
-    private PlayerState _playerState = PlayerState.None;
-
     // Properties
     public Animator PlayerAnimator => _animator;
-    public PlayerState PState => _playerState;
 
     // 상호 작용
     private InputAction _InteractionAction;
 
     private void Awake()
     {
-        _playerState = PlayerState.Idle;
-
         _applySpeed = _walkSpeed;
         _camera = Camera.main.transform;
         _input.camera = Camera.main;
@@ -121,7 +105,9 @@ public partial class PlayerController : MonoBehaviour
     private void Update()
     {
         ApplyGravity();
-        MovePlayer();
+
+        if (!_checker.ProcessingAttack)
+            MovePlayer();
     }
 
     private void SetPlayerActions()
@@ -187,11 +173,7 @@ public partial class PlayerController : MonoBehaviour
 
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             _controller.Move(moveDirection.normalized * _applySpeed * Time.deltaTime);
-
-            SetPlayerState(PlayerState.Move);
         }
-        else
-            SetPlayerState(PlayerState.Idle);
 
         _applySpeed = _isSprint ? _sprintSpeed : _walkSpeed;
 
@@ -271,11 +253,6 @@ public partial class PlayerController : MonoBehaviour
                 }
             }
         }
-    }
-
-    public void SetPlayerState(PlayerState state)
-    {
-        _playerState = state;
     }
 
     // 줍기, 대화, ...
