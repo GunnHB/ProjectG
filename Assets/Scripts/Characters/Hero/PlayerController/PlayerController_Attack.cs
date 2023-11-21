@@ -19,6 +19,10 @@ public partial class PlayerController : MonoBehaviour
 
     private Coroutine _continueAttackCoroutine;
 
+    private AnimationClip _currClip = null;
+
+    public bool DoCombo => _doCombo;
+
     private void AttackActionPerformed(InputAction.CallbackContext context)
     {
         if (context.interaction is HoldInteraction)
@@ -34,9 +38,15 @@ public partial class PlayerController : MonoBehaviour
 
             _continueAttackCoroutine = StartCoroutine(nameof(Cor_ContinueAttack));
 
-            // 후속 공격하기로 했으면 리턴
             if (_doCombo)
-                return;
+            {
+                var tempClip = _animator.GetCurrentAnimatorClipInfo(0)[0].clip;
+
+                if (_currClip == tempClip)
+                    return;
+                else
+                    _doCombo = false;
+            }
 
             // 공격 중이면 후속 공격에 대한 입력을 확인함
             if (_checker.ProcessingAttack)
@@ -47,6 +57,8 @@ public partial class PlayerController : MonoBehaviour
                     _comboCount++;
 
                     _animator.SetInteger(ANIM_COMBOCOUNT, _comboCount);
+
+                    _currClip = _animator.GetCurrentAnimatorClipInfo(0)[0].clip;
                 }
             }
             else
@@ -63,6 +75,7 @@ public partial class PlayerController : MonoBehaviour
                 _comboCount = 0;
                 _animator.SetInteger(ANIM_COMBOCOUNT, 0);
                 _doCombo = false;
+                _checker.ChangeProcessingAttack(false);
 
                 yield break;
             }
