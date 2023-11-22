@@ -10,16 +10,13 @@ public partial class PlayerController : MonoBehaviour
     private InputAction _attackAction;
     private InputAction _focusAction;
 
-    // [공격 중]은 애니메이션 이벤트에서 확인
-    private bool _isAttack = false;             // 공격 시작
-    private bool _isFocus = false;              // 포커스 시작
-
+    // [공격 중]은 AnimEventChecker 에서 확인
     private bool _doCombo = false;              // 후속 공격 여부
     private int _comboCount = 0;                // 후속 공격 순번
 
     private Coroutine _continueAttackCoroutine;
 
-    private AnimationClip _currClip = null;
+    private AnimationClip _startedClip = null;
 
     public bool DoCombo => _doCombo;
 
@@ -40,9 +37,10 @@ public partial class PlayerController : MonoBehaviour
 
             if (_doCombo)
             {
-                var tempClip = _animator.GetCurrentAnimatorClipInfo(0)[0].clip;
+                // 현재 재생되는 클립과 공격을 시작한 클립이 다르면 
+                var currClip = _animator.GetCurrentAnimatorClipInfo(0)[0].clip;
 
-                if (_currClip == tempClip)
+                if (_startedClip == currClip)
                     return;
                 else
                     _doCombo = false;
@@ -58,7 +56,7 @@ public partial class PlayerController : MonoBehaviour
 
                     _animator.SetInteger(ANIM_COMBOCOUNT, _comboCount);
 
-                    _currClip = _animator.GetCurrentAnimatorClipInfo(0)[0].clip;
+                    _startedClip = _animator.GetCurrentAnimatorClipInfo(0)[0].clip;
                 }
             }
             else
@@ -75,7 +73,7 @@ public partial class PlayerController : MonoBehaviour
                 _comboCount = 0;
                 _animator.SetInteger(ANIM_COMBOCOUNT, 0);
                 _doCombo = false;
-                _checker.ChangeProcessingAttack(false);
+                _checker.ChangeProcessingAttack(false);     // 후속 공격 없이 공격이 끝났으면 수동으로 값을 변경
 
                 yield break;
             }
@@ -87,7 +85,7 @@ public partial class PlayerController : MonoBehaviour
     // Focus
     private void FocusActionStarted(InputAction.CallbackContext context)
     {
-        _isFocus = true;
+        // _isFocus = true;
     }
 
     private void FocusActionPerformed(InputAction.CallbackContext context)
@@ -98,6 +96,6 @@ public partial class PlayerController : MonoBehaviour
 
     private void FocusActionCanceled(InputAction.CallbackContext context)
     {
-        _isFocus = false;
+        // _isFocus = false;
     }
 }

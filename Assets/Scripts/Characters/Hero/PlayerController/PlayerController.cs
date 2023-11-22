@@ -108,6 +108,16 @@ public partial class PlayerController : MonoBehaviour
 
         if (!_checker.ProcessingAttack)
             MovePlayer();
+        else
+        {
+            // fsm으로 수정해야될지도...
+            if (_isWalk)
+            {
+                _isWalk = false;
+                _animator.SetBool(ANIM_ISWALK, _isWalk);
+            }
+        }
+
     }
 
     private void SetPlayerActions()
