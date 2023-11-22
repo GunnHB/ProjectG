@@ -58,6 +58,9 @@ namespace Weapon
 
 		public System.Int64 id;
 		public WeaponType type;
+		public System.Int32 stat;
+		public StatType stat_type;
+		public System.Int32 Durability;
   
 
 #region fuctions

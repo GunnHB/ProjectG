@@ -78,6 +78,7 @@ public enum WeaponType
     TwoHand,    // 양손 무기
     Shield,     // 방패 (방패가 무기로 들어가도 되나..???)
     Bow,        // 활
+    Arrow,      // 화살
 }
 
 [UGS(typeof(InventoryCategory))]
@@ -89,5 +90,13 @@ public enum InventoryCategory
     CategoryBow,
     CategoryFood,
     CategoryDefault,
+}
+
+[UGS(typeof(StatType))]
+public enum StatType
+{
+    None = -1,
+    Attack,
+    Defend,
 }
 #endregion
