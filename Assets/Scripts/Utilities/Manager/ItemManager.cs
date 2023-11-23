@@ -164,6 +164,13 @@ public class ItemManager : SingletonObject<ItemManager>
         Debug.Log("아이템 먹어쓰요");
     }
 
+    // 필드에 있는 아이템을 주울 때 해당 아이템은 사라져야하므로
+    public void DestoryItem(ItemBase item)
+    {
+        // if (item != null)
+        //     item.PickUpItem();
+    }
+
     private void ActualAddItem(InventoryCategory cate, Item.Data item)
     {
         // 빈 슬롯이 있는지 확인

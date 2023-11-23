@@ -304,6 +304,18 @@ public static class Util
     {
         return text.All(char.IsDigit);
     }
+
+    // ui 좌표를 월드 좌표로 변환
+    public static RectTransform WorldToCanvasPosition(Transform worldPos)
+    {
+        return null;
+    }
+
+    // 월드 좌표를 ui 좌표로 변환
+    public static Transform CanvasToWorldPosition(RectTransform canvasPos)
+    {
+        return null;
+    }
 }
 
 public static class StringUtil

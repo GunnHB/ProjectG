@@ -59,8 +59,12 @@ public partial class PlayerController : MonoBehaviour
     // Properties
     public Animator PlayerAnimator => _animator;
 
-    // 상호 작용
+    #region 상호 작용
     private InputAction _InteractionAction;
+    public UnityAction<ItemBase> _itemEnterAction;
+    public UnityAction<ItemBase> _itemExitAction;
+    private List<ItemBase> _interactItemList = new();
+    #endregion
 
     private void Awake()
     {
@@ -73,7 +77,8 @@ public partial class PlayerController : MonoBehaviour
         _playerStamina = GameValue.INIT_STAMINA;
         _playerLevel = GameValue.INIT_LEVEL;
 
-        SetPlayerActions();
+        SetPlayerInputActions();        // 입력 감지
+        SetPlayerActions();             // 콜백 세팅
     }
 
     private void OnEnable()
@@ -120,7 +125,7 @@ public partial class PlayerController : MonoBehaviour
 
     }
 
-    private void SetPlayerActions()
+    private void SetPlayerInputActions()
     {
         // PlayerActions
         _playerAction = new();
@@ -168,6 +173,14 @@ public partial class PlayerController : MonoBehaviour
 
         if (cancelCallback != null)
             action.canceled -= cancelCallback;
+    }
+
+    private void SetPlayerActions()
+    {
+        _itemEnterAction = null;
+        _itemExitAction = null;
+        _interactItemList.Clear();
+
     }
 
     // Actual move
@@ -265,14 +278,35 @@ public partial class PlayerController : MonoBehaviour
         }
     }
 
+    private void EnterItemCallback(ItemBase item)
+    {
+        _interactItemList.Add(item);
+
+        // 이미 먼저 감지된 아이템이 있으면 걍 추가만
+        if (_interactItemList.IndexOf(item) != 0)
+            return;
+
+        UIManager.Instance.ShowItemInteractUI(item);
+    }
+
+    private void ExitItemCallback(ItemBase item)
+    {
+        _interactItemList.Remove(item);
+
+        if (_interactItemList.Count > 0)
+            UIManager.Instance.ShowItemInteractUI(item);
+        else
+            UIManager.Instance.CloseItemInteractUI();
+    }
+
     // 줍기, 대화, ...
     private void InteractionActionStarted(InputAction.CallbackContext context)
     {
-        if (GameManager.Instance.CurrentMode != GameManager.GameMode.InGame)
-            return;
+        // if (GameManager.Instance.CurrentMode != GameManager.GameMode.InGame)
+        //     return;
 
-        // 인벤토리 추가 테스트
-        AddToinventory();
+        // // 인벤토리 추가 테스트
+        // AddToinventory();
     }
 
     private void AddToinventory()

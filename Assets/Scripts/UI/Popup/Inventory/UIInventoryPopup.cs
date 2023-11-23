@@ -135,11 +135,6 @@ public class UIInventoryPopup : UIPopupBase
         _goldText.text = ItemManager.Instance.PlayerGold.AddComma();
     }
 
-    public override void Open()
-    {
-        base.Open();
-    }
-
     public override void Close()
     {
         base.Close();

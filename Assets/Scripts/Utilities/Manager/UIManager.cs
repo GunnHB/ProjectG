@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Mono.Cecil.Cil;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -108,6 +109,31 @@ public partial class UIManager : SingletonObject<UIManager>
                                   cancelString, cancelAction);
     }
 
+    public void ShowItemInteractUI(ItemBase item)
+    {
+        var interact = FindOpendUI<UIItemInteract>();
+
+        if (interact != null)
+            interact.ShowInteractUI(item);
+        else
+        {
+            interact = OpenUI<UIItemInteract>("ItemInteract/ItemInteract");
+
+            if (interact != null)
+                interact.ShowInteractUI(item);
+        }
+    }
+
+    public void CloseItemInteractUI(ItemBase item = null)
+    {
+        var interact = FindOpendUI<UIItemInteract>();
+
+        if (interact == null)
+            return;
+
+        interact.CloseInteractUI(item);
+    }
+
     private Transform GetParentCanvasTransform<T>()
     {
         if (typeof(T).BaseType.Equals(typeof(UIPanelBase)))
@@ -132,6 +158,8 @@ public partial class UIManager : SingletonObject<UIManager>
             return POPUP;
         else if (typeof(T).BaseType.Equals(typeof(UIDialogueBase)))
             return DIALOGUE;
+        else if (typeof(T).BaseType.Equals(typeof(UIInteractBase)))
+            return INTERACT;
 
         return string.Empty;
     }

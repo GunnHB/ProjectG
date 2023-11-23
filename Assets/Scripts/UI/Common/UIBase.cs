@@ -18,6 +18,7 @@ public class UIBase : MonoBehaviour
         Toast,
         HUD,
         Panel,
+        Interact,
     }
 
     // 그룹명 상수
@@ -80,13 +81,18 @@ public class UIBase : MonoBehaviour
         }
     }
 
-    public virtual void Open()
-    {
-
-    }
-
     public virtual void Close()
     {
         UIManager.Instance.CloseUI(this.transform);
+    }
+
+    public virtual void Hide()
+    {
+        this.gameObject.SetActive(false);
+    }
+
+    public virtual void Show()
+    {
+        this.gameObject.SetActive(true);
     }
 }

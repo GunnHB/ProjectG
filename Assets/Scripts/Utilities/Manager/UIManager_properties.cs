@@ -11,6 +11,7 @@ public partial class UIManager : SingletonObject<UIManager>
     private const string HUD = "HUD/";
     private const string DIALOGUE = "Dialogue/";
     private const string TOAST = "Toast/";
+    private const string INTERACT = "Interact/";
 
     private Canvas _popupCanvas;
     private Canvas _hudCanvas;

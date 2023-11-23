@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class WeaponManager : SingletonObject<WeaponManager>
 {
-    private WeaponBase _currentWeapon;
+    // private WeaponBase _currentWeapon;
 
     public WeaponType weaponType;
 
