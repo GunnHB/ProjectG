@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class WeaponBase : ItemBase
 {
-    [SerializeField]
     private Weapon.Data _weaponData;
 
     public Weapon.Data WeaponData => _weaponData;
 
-    protected override void PickUpItem()
-    {
-        base.PickUpItem();
-    }
+    private bool _isEquip = false;
 
-    protected override void DestoryItem()
+    private void Awake()
     {
-        base.DestoryItem();
+        if (_itemData != null)
+            _weaponData = ItemManager.Instance.GetWeaponDataByRefId(_itemData.ref_id);
+
+        _rigidBody.isKinematic = !_isEquip;
+        _rigidBody.detectCollisions = !_isEquip;
     }
 }

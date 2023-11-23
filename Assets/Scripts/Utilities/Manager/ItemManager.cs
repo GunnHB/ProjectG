@@ -224,6 +224,11 @@ public class ItemManager : SingletonObject<ItemManager>
         return InventoryCategory.CategoryArmor;
     }
 
+    public Weapon.Data GetWeaponDataByRefId(long refId)
+    {
+        return Weapon.Data.GetList().Find(x => x.id == refId);
+    }
+
     // 인벤토리 닫히면 정리해주기
     public void ClearDatas()
     {
