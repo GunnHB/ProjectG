@@ -9,20 +9,24 @@ public class ItemBase : SerializedMonoBehaviour
 {
     [SerializeField]
     protected Item.Data _itemData;
-
-    [SerializeField]
     protected Collider _collider;         // 충돌 감지용
-    [SerializeField]
-    protected Rigidbody _rigidBody;       // 중력 적용
 
     public Item.Data ItemData => _itemData;
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void Awake()
     {
-        Debug.Log("여기는...???");
+        _collider = this.GetComponent<Collider>();
+    }
+
+    public void SetItemData(Item.Data newData)
+    {
+        _itemData = newData;
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Debug.Log("여기는 탐1");
             if (GameManager.Instance.PController == null)
                 return;
 
@@ -30,11 +34,10 @@ public class ItemBase : SerializedMonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnCollisionExit(Collision other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Debug.Log("여기는 탐2");
             if (GameManager.Instance.PController == null)
                 return;
 

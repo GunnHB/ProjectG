@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponBase : ItemBase
+public class ItemWeaponBase : ItemBase
 {
     private Weapon.Data _weaponData;
 
@@ -10,12 +10,11 @@ public class WeaponBase : ItemBase
 
     private bool _isEquip = false;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         if (_itemData != null)
             _weaponData = ItemManager.Instance.GetWeaponDataByRefId(_itemData.ref_id);
-
-        _rigidBody.isKinematic = !_isEquip;
-        _rigidBody.detectCollisions = !_isEquip;
     }
 }
