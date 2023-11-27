@@ -107,10 +107,14 @@ public partial class PlayerController : MonoBehaviour
         UnRegistActions(_focusAction, FocusActionStarted, FocusActionPerformed, FocusActionCanceled);
     }
 
-    private void Update()
+    // 중력 적용
+    private void FixedUpdate()
     {
         ApplyGravity();
+    }
 
+    private void Update()
+    {
         if (!_checker.ProcessingAttack)
             MovePlayer();
         else

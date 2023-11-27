@@ -107,9 +107,32 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes:
     - Name: _itemData
-      Entry: 6
+      Entry: 7
+      Data: 0|Item.Data, Assembly-CSharp
+    - Name: id
+      Entry: 3
+      Data: 100020004
+    - Name: type
+      Entry: 3
+      Data: 1
+    - Name: name
+      Entry: 1
+      Data: Item_Weapon_Bow_0001
+    - Name: desc
+      Entry: 1
+      Data: Item_Weapon_Bow_Desc_0003
+    - Name: image
+      Entry: 1
+      Data: Icon_Weapon_Bow_0003
+    - Name: ref_id
+      Entry: 3
+      Data: 300040001
+    - Name: stackable
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
       Data: 
-  _collider: {fileID: 0}
 --- !u!136 &-3685287686726259958
 CapsuleCollider:
   m_ObjectHideFlags: 0

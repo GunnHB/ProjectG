@@ -132,6 +132,7 @@ public class ItemMaker : OdinEditorWindow
         public string _desc;
         public string _image;
         public long _ref_id;
+        [TableColumnWidth(80, Resizable = false)]
         public bool _stackable;
 
         public UnityAction<ItemBase, Item.Data> _setDataCallback;
@@ -169,6 +170,8 @@ public class ItemMaker : OdinEditorWindow
             SetItemDataValue(data);
 
             _itemData = data;
+
+            EditorUtility.SetDirty(this._itemBase.gameObject);
         }
 
         [VerticalGroup("Actions")]
