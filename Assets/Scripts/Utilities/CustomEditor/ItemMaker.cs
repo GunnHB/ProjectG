@@ -5,8 +5,8 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using Sirenix.OdinInspector.Editor;
-using Unity.VisualScripting;
 using System;
+using UnityEngine.Events;
 
 public class ItemMaker : OdinEditorWindow
 {
@@ -22,18 +22,6 @@ public class ItemMaker : OdinEditorWindow
 
     [TableList]
     public List<TableClass> _tableList = new();
-
-    // [TableList, ShowIf(nameof(_itemType), ItemType.Armor), SerializeField]
-    // public TableClass _armorTable = new();
-
-    // [TableList, ShowIf(nameof(_itemType), ItemType.Weapon), SerializeField]
-    // public TableClass _weaponTable = new();
-
-    // [TableList, ShowIf(nameof(_itemType), ItemType.Food)]
-    // public TableClass _foodTable = new();
-
-    // [TableList, ShowIf(nameof(_itemType), ItemType.Default)]
-    // public TableClass _defaultTable = new();
 
     private List<ItemArmorBase> _armorList = new();
     private List<ItemFoodBase> _foodList = new();
@@ -51,7 +39,7 @@ public class ItemMaker : OdinEditorWindow
         SetItemPrefabs();
     }
 
-    // 내가 무릎을 굽힌건 추진력을 얻기 위함
+    // 내가 무릎을 꿇었던 건 추진력을 얻기 위함
     private void SetItemPrefabs()
     {
         switch (_itemType)
@@ -73,8 +61,6 @@ public class ItemMaker : OdinEditorWindow
 
     private void ActualSetItemPrefabs<T>(ref List<T> itemList) where T : ItemBase
     {
-        Debug.Log(_itemType);
-
         var itemPrefabList = Resources.LoadAll($"Prefabs/Item/{_itemType}");
 
         foreach (var prefab in itemPrefabList)
@@ -115,31 +101,90 @@ public class ItemMaker : OdinEditorWindow
         {
             var itemData = item.GetComponent<T>().ItemData;
 
-            _tableList.Add(new(item.gameObject, itemData == null ? new Item.Data() : itemData));
+            if (itemData == null)
+                itemData = new Item.Data();
+
+            TableClass newData = new(item, itemData);
+
+            _tableList.Add(newData);
+            newData._setDataCallback = SaveCallback;
         }
     }
 
-    [Button("Save item data")]
-    public void SaveItemData()
+    private void SaveCallback(ItemBase itemBase, Item.Data itemData)
     {
-        Debug.Log("SAVE!");
+        itemBase.SetItemData(itemData);
     }
 
     // 테이블용 클래스
+    [Serializable]
     public class TableClass
     {
+        [TableColumnWidth(60, Resizable = false)]
+        [PreviewField(Alignment = ObjectFieldAlignment.Center)]
         public GameObject _prefab;
+        // Item.Data 변수들
+        // 테이블에 컬럼 추가되면 여기에도 추가합시다. (그래야 수정하고 싶을 때 보입니다.)
+        [VerticalGroup("Id"), HideLabel]
+        public long _id;
+        public ItemType _type;
+        public string _name;
+        public string _desc;
+        public string _image;
+        public long _ref_id;
+        public bool _stackable;
 
-        public TableClass(GameObject prefab, Item.Data data)
+        public UnityAction<ItemBase, Item.Data> _setDataCallback;
+
+        private ItemBase _itemBase;
+        private Item.Data _itemData;
+
+        public TableClass(ItemBase itemBase, Item.Data itemData)
         {
-            this._prefab = prefab;
-            Activator.CreateInstance(data.GetType());
+            this._prefab = itemBase.gameObject;
 
-            foreach (var field in data.GetType().GetFields(System.Reflection.BindingFlags.Public |
-                                                           System.Reflection.BindingFlags.Instance))
-            {
-                Debug.Log(field.Name);
-            }
+            SetItemDataValue(itemData);
+
+            this._itemBase = itemBase;
+            this._itemData = itemData;
+        }
+
+        private void SetItemDataValue(Item.Data data)
+        {
+            this._id = data.id;
+            this._type = data.type;
+            this._name = data.name;
+            this._desc = data.desc;
+            this._image = data.image;
+            this._ref_id = data.ref_id;
+            this._stackable = data.stackable;
+        }
+
+        [VerticalGroup("Id")]
+        [Button]
+        public void SetData()
+        {
+            var data = Item.Data.GetList().Find(x => x.id == _id);
+
+            SetItemDataValue(data);
+
+            _itemData = data;
+        }
+
+        [VerticalGroup("Actions")]
+        [Button]
+        public void ResetData()
+        {
+            this._itemData = this._itemBase.ItemData;
+
+            SetItemDataValue(_itemData);
+        }
+
+        [VerticalGroup("Actions")]
+        [Button]
+        public void SaveData()
+        {
+            _setDataCallback?.Invoke(_itemBase, _itemData);
         }
     }
 }
