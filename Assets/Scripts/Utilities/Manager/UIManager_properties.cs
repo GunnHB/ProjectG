@@ -18,6 +18,7 @@ public partial class UIManager : SingletonObject<UIManager>
     private Canvas _panelCanvas;
     private Canvas _dialogueCanvas;
     private Canvas _toastCanvas;
+    private Canvas _interactCanvas;
 
     public Canvas PopupCanvas
     {
@@ -98,4 +99,19 @@ public partial class UIManager : SingletonObject<UIManager>
         }
     }
 
+    public Canvas InteractCanvas
+    {
+        get
+        {
+            if (_interactCanvas == null)
+            {
+                var interactObj = GameObject.Find("InteractCanvas");
+
+                if (interactObj != null)
+                    _interactCanvas = interactObj.GetComponent<Canvas>();
+            }
+
+            return _interactCanvas;
+        }
+    }
 }

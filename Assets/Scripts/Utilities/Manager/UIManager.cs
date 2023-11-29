@@ -144,6 +144,8 @@ public partial class UIManager : SingletonObject<UIManager>
             return PopupCanvas.transform;
         else if (typeof(T).BaseType.Equals(typeof(UIDialogueBase)))
             return DialogueCanvas.transform;
+        else if (typeof(T).BaseType.Equals(typeof(UIInteractBase)))
+            return InteractCanvas.transform;
 
         return null;
     }

@@ -282,49 +282,8 @@ public partial class PlayerController : MonoBehaviour
         }
     }
 
-    private void EnterItemCallback(ItemBase item)
-    {
-        _interactItemList.Add(item);
-
-        // 이미 먼저 감지된 아이템이 있으면 걍 추가만
-        if (_interactItemList.IndexOf(item) != 0)
-            return;
-
-        UIManager.Instance.ShowItemInteractUI(item);
-    }
-
-    private void ExitItemCallback(ItemBase item)
-    {
-        _interactItemList.Remove(item);
-
-        if (_interactItemList.Count > 0)
-            UIManager.Instance.ShowItemInteractUI(item);
-        else
-            UIManager.Instance.CloseItemInteractUI();
-    }
-
     // 줍기, 대화, ...
     private void InteractionActionStarted(InputAction.CallbackContext context)
     {
-        // if (GameManager.Instance.CurrentMode != GameManager.GameMode.InGame)
-        //     return;
-
-        // // 인벤토리 추가 테스트
-        // AddToinventory();
-    }
-
-    private void AddToinventory()
-    {
-        Item.Data newItem = new Item.Data
-        {
-            id = 100010001,
-            type = ItemType.Armor,
-            name = "Item_Helmet_0001",
-            desc = "Item_Helmet_Desc_0001",
-            image = "Icon_Helmet_0001",
-            ref_id = 200010001,
-        };
-
-        ItemManager.Instance.AddItemToInventory(newItem);
     }
 }

@@ -13,16 +13,23 @@ public class ItemBase : SerializedMonoBehaviour
 
     [BoxGroup("Gravity"), SerializeField]
     protected Vector3 _boxSize;
-    [BoxGroup("Gravity"), SerializeField, Space]
-    protected float _maxDistance;
-
     [BoxGroup("Gravity"), SerializeField]
+    protected float _maxDistance;
+    [BoxGroup("Gravity"), SerializeField]
+    protected LayerMask _groundMask;
+
+    [BoxGroup("Gravity"), SerializeField, Space]
     protected bool _drawGizmos;
 
     private Vector3 _velocity;
     private bool _isGrounded = false;
 
     public Item.Data ItemData => _itemData;
+
+    public bool IsGrounded
+    {
+        get => Physics.Raycast(transform.position, Vector3.down, _maxDistance);
+    }
 
     protected virtual void Awake()
     {
@@ -34,12 +41,12 @@ public class ItemBase : SerializedMonoBehaviour
         _itemData = newData;
     }
 
-    // 중력 적용
-    private void FixedUpdate()
-    {
-        if (!_isGrounded)
-            ApplyGravity();
-    }
+    // // 중력 적용
+    // private void FixedUpdate()
+    // {
+    //     if (!_isGrounded)
+    //         ApplyGravity();
+    // }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -48,8 +55,7 @@ public class ItemBase : SerializedMonoBehaviour
             if (GameManager.Instance.PController == null)
                 return;
 
-            Debug.Log("ui 켜기!");
-            // GameManager.Instance.PController._itemEnterAction?.Invoke(this);
+            UIManager.Instance.ShowItemInteractUI(this);
         }
     }
 
@@ -60,39 +66,30 @@ public class ItemBase : SerializedMonoBehaviour
             if (GameManager.Instance.PController == null)
                 return;
 
-            Debug.Log("ui 끄기!");
-            // GameManager.Instance.PController._itemEnterAction?.Invoke(this);
+            UIManager.Instance.CloseItemInteractUI(this);
         }
     }
 
     private void ApplyGravity()
     {
         _velocity.y += GameValue.GRAVITY * Time.deltaTime;
-        transform.position += _velocity * Time.deltaTime;
+
+        float posX = transform.position.x;
+        float posY = transform.position.y + (_velocity.y * Time.deltaTime);
+        float posZ = transform.position.z;
+
+        transform.position = new Vector3(posX, posY, posZ);
     }
 
     private void OnDrawGizmos()
     {
-        var boolean = Physics.BoxCast(transform.position, _boxSize, -Vector3.up, out RaycastHit hit,
-                                      transform.rotation, _maxDistance, LayerMask.NameToLayer("Ground"));
+        var isHit = Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, _maxDistance);
 
-        if (boolean)
-        {
-            if (hit.distance <= _maxDistance)
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawCube(transform.position - Vector3.up * hit.distance, _boxSize);
-            }
-            else
-            {
-                Gizmos.color = Color.blue;
-                Gizmos.DrawCube(transform.position - Vector3.up * _maxDistance, _boxSize);
-            }
-        }
+        Gizmos.color = Color.red;
+
+        if (isHit)
+            Gizmos.DrawRay(transform.position, Vector3.down * hit.distance);
         else
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawCube(transform.position - Vector3.up * _maxDistance, _boxSize);
-        }
+            Gizmos.DrawRay(transform.position, Vector3.down * _maxDistance);
     }
 }
