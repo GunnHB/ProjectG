@@ -132,6 +132,7 @@ public class ItemMaker : OdinEditorWindow
         public string _desc;
         public string _image;
         public long _ref_id;
+        public string _prefab_name;
         [TableColumnWidth(80, Resizable = false)]
         public bool _stackable;
 
@@ -159,6 +160,7 @@ public class ItemMaker : OdinEditorWindow
             this._image = data.image;
             this._ref_id = data.ref_id;
             this._stackable = data.stackable;
+            this._prefab_name = data.prefab_name;
         }
 
         [VerticalGroup("Id")]
@@ -170,6 +172,7 @@ public class ItemMaker : OdinEditorWindow
             SetItemDataValue(data);
 
             _itemData = data;
+            _prefab_name = _itemBase.name;
 
             EditorUtility.SetDirty(this._itemBase.gameObject);
         }
@@ -188,6 +191,13 @@ public class ItemMaker : OdinEditorWindow
         public void SaveData()
         {
             _setDataCallback?.Invoke(_itemBase, _itemData);
+
+            var fieldInfos = typeof(Item.Data).GetFields();
+
+            // foreach(var item in fieldInfos)
+            // {
+
+            // }
         }
     }
 }

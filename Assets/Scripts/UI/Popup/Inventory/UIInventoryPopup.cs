@@ -10,6 +10,7 @@ using UnityEngine;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine.UI;
+using UniRx;
 
 public class UIInventoryPopup : UIPopupBase
 {
@@ -27,6 +28,12 @@ public class UIInventoryPopup : UIPopupBase
 
     [TabGroup(RIGHT_PANEL), SerializeField] private TextMeshProUGUI _itemName;
     [TabGroup(RIGHT_PANEL), SerializeField] private TextMeshProUGUI _itemDesc;
+    [Title("Buttons")]
+    [TabGroup(RIGHT_PANEL), SerializeField] private GameObject _buttonGroup;
+    [TabGroup(RIGHT_PANEL), SerializeField] private Button _useButton;
+    [TabGroup(RIGHT_PANEL), SerializeField] private TextMeshProUGUI _useText;
+    [TabGroup(RIGHT_PANEL), SerializeField] private Button _discardButton;
+    [TabGroup(RIGHT_PANEL), SerializeField] private TextMeshProUGUI _discardText;
 
     // // cache
     // private PlayerInventoryData _inventoryData;
@@ -41,14 +48,16 @@ public class UIInventoryPopup : UIPopupBase
         _tabPool.Initialize();
         _inventoryRowPool.Initialize();
 
-        // _inventoryData = JsonManager.Instance.InventoryData;
-        // _playerSlotIndex = (SlotIndex)GameManager.Instance.SelectedSlotIndex;
+        _useButton.onClick.AddListener(ItemManager.Instance.UseItem);
+        _discardButton.onClick.AddListener(ItemManager.Instance.DiscardItem);
     }
 
     public void Init()
     {
         _tabPool.ReturnAllObject();
         _inventoryRowPool.ReturnAllObject();
+
+        _buttonGroup.gameObject.SetActive(false);
 
         SetGold();
 
@@ -118,15 +127,19 @@ public class UIInventoryPopup : UIPopupBase
 
     private void SelectSlotCallback()
     {
-        if (ItemManager.Instance.CurrItemSlot == null || ItemManager.Instance.CurrItemSlot.ItemData == null)
+        if (ItemManager.Instance.CurrItemSlot == null || ItemManager.Instance.CurrItemSlot.IsNullData)
         {
             _itemName.text = string.Empty;
             _itemDesc.text = string.Empty;
+
+            _buttonGroup.gameObject.SetActive(false);
         }
         else
         {
             _itemName.text = ItemManager.Instance.CurrItemSlot.ItemData.name;
             _itemDesc.text = ItemManager.Instance.CurrItemSlot.ItemData.desc;
+
+            _buttonGroup.gameObject.SetActive(true);
         }
     }
 

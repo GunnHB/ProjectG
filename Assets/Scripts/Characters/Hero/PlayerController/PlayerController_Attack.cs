@@ -22,6 +22,10 @@ public partial class PlayerController : MonoBehaviour
 
     private void AttackActionPerformed(InputAction.CallbackContext context)
     {
+        // 인게임 모드에서만 공격이 이루어짐
+        if (GameManager.Instance.CurrentMode != GameManager.GameMode.InGame)
+            return;
+
         if (context.interaction is HoldInteraction)
         {
             Debug.Log("charge");

@@ -184,7 +184,6 @@ public partial class PlayerController : MonoBehaviour
         _itemEnterAction = null;
         _itemExitAction = null;
         _interactItemList.Clear();
-
     }
 
     // Actual move
@@ -285,5 +284,6 @@ public partial class PlayerController : MonoBehaviour
     // 줍기, 대화, ...
     private void InteractionActionStarted(InputAction.CallbackContext context)
     {
+
     }
 }

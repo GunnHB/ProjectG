@@ -366,6 +366,15 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShowOption"",
+                    ""type"": ""Button"",
+                    ""id"": ""eb9e3a00-6012-4888-8e92-000617783271"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -377,6 +386,17 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""PC"",
                     ""action"": ""Escape"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""985a4166-e8d9-462a-9bf5-b69b3465202c"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""ShowOption"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -416,6 +436,7 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Escape = m_UI.FindAction("Escape", throwIfNotFound: true);
+        m_UI_ShowOption = m_UI.FindAction("ShowOption", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -573,11 +594,13 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_UI;
     private IUIActions m_UIActionsCallbackInterface;
     private readonly InputAction m_UI_Escape;
+    private readonly InputAction m_UI_ShowOption;
     public struct UIActions
     {
         private @PlayerAction m_Wrapper;
         public UIActions(@PlayerAction wrapper) { m_Wrapper = wrapper; }
         public InputAction @Escape => m_Wrapper.m_UI_Escape;
+        public InputAction @ShowOption => m_Wrapper.m_UI_ShowOption;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -590,6 +613,9 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @Escape.started -= m_Wrapper.m_UIActionsCallbackInterface.OnEscape;
                 @Escape.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnEscape;
                 @Escape.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnEscape;
+                @ShowOption.started -= m_Wrapper.m_UIActionsCallbackInterface.OnShowOption;
+                @ShowOption.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnShowOption;
+                @ShowOption.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnShowOption;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -597,6 +623,9 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
                 @Escape.started += instance.OnEscape;
                 @Escape.performed += instance.OnEscape;
                 @Escape.canceled += instance.OnEscape;
+                @ShowOption.started += instance.OnShowOption;
+                @ShowOption.performed += instance.OnShowOption;
+                @ShowOption.canceled += instance.OnShowOption;
             }
         }
     }
@@ -625,5 +654,6 @@ public partial class @PlayerAction : IInputActionCollection2, IDisposable
     public interface IUIActions
     {
         void OnEscape(InputAction.CallbackContext context);
+        void OnShowOption(InputAction.CallbackContext context);
     }
 }

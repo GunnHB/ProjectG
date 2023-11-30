@@ -63,6 +63,7 @@ namespace Item
 		public System.String image;
 		public System.Int64 ref_id;
 		public System.Boolean stackable;
+		public System.String prefab_name;
   
 
 #region fuctions

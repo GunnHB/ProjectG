@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -8,6 +9,11 @@ using UnityEngine.UI;
 // 아이템 / 인벤토리 관리는 여기서 합니다.
 public class ItemManager : SingletonObject<ItemManager>
 {
+    private const string WEAPON_PREFAB_PATH = "Prefabs/Item/Weapon";
+    private const string ARMOR_PREFAB_PATH = "Prefabs/Item/Armor";
+    private const string FOOD_PREFAB_PATH = "Prefabs/Item/Food";
+    private const string DEFAULT_PREFAB_PATH = "Prefabs/Item/Default";
+
     private UIInventoryTab _currSelectTab;
     public UIInventoryTab CurrSelectTab => _currSelectTab;
 
@@ -227,6 +233,46 @@ public class ItemManager : SingletonObject<ItemManager>
     public Weapon.Data GetWeaponDataByRefId(long refId)
     {
         return Weapon.Data.GetList().Find(x => x.id == refId);
+    }
+
+    public void UseItem()
+    {
+        if (_currItemSlot.IsNullData || GameManager.Instance.PController == null)
+            return;
+
+        switch (_currItemSlot.ItemData.type)
+        {
+            case ItemType.Weapon:
+                EquipWeapon();
+                break;
+            case ItemType.Armor:
+                EquipArmor();
+                break;
+            case ItemType.Food:
+                break;
+            case ItemType.Default:
+                break;
+        }
+    }
+
+    private void EquipWeapon()
+    {
+        var weaponData = GetWeaponDataByRefId(_currItemSlot.ItemData.ref_id);
+
+
+    }
+
+    private void EquipArmor()
+    {
+
+    }
+
+    public void DiscardItem()
+    {
+        if (_currItemSlot.IsNullData)
+            return;
+
+
     }
 
     // 인벤토리 닫히면 정리해주기

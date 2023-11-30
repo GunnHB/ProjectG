@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -12,9 +13,11 @@ public class CommonButton : Button, IPointerDownHandler, IPointerUpHandler, IPoi
 
     private bool _isPress = false;              // 버튼 눌렸는지
     private bool _isEnter = false;              // 버튼 위에 마우스 올라갔는지
+    private bool _isRightClick = false;         // 마우스 오른쪽 클릭인지
 
     public bool IsPress => _isPress;
     public bool IsEnter => _isEnter;
+    public bool IsRightClick => _isRightClick;
 
     public UnityAction buttonCallback = null;
 
@@ -72,5 +75,16 @@ public class CommonButton : Button, IPointerDownHandler, IPointerUpHandler, IPoi
         _isEnter = false;
 
         base.OnPointerExit(eventData);
+    }
+
+    // Click
+    public override void OnPointerClick(PointerEventData eventData)
+    {
+        _isRightClick = false;
+
+        if (eventData.button == PointerEventData.InputButton.Right)
+            _isRightClick = true;
+
+        onClick?.Invoke();
     }
 }

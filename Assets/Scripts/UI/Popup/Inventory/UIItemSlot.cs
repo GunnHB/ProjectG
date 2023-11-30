@@ -23,10 +23,17 @@ public class UIItemSlot : MonoBehaviour
 
     private bool _isSelect = false;
 
+    // 슬롯 선택 시의 콜백
     public UnityAction _slotCallback = null;
 
     private Item.Data _itemData = null;
     public Item.Data ItemData => _itemData;
+
+    public bool IsNullData
+    {
+        // 아이디 값이 0이면 널로 판단
+        get => _itemData.id == 0;
+    }
 
     private void Awake()
     {

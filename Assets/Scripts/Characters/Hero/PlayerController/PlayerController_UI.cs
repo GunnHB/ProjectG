@@ -21,7 +21,6 @@ public partial class PlayerController : MonoBehaviour
         _input.SwitchCurrentActionMap("UI");
         GameManager.Instance.ChangeCurrentMode(GameManager.GameMode.Pause);
 
-        Debug.Log("인벤토리 열기");
         ItemManager.Instance.OpenInventory();
     }
 
@@ -33,8 +32,6 @@ public partial class PlayerController : MonoBehaviour
 
         _input.SwitchCurrentActionMap("UI");
         GameManager.Instance.ChangeCurrentMode(GameManager.GameMode.Pause);
-
-        Debug.Log("메인 메뉴 열기");
     }
 
     private void EscapeActionStarted(InputAction.CallbackContext context)
@@ -44,10 +41,8 @@ public partial class PlayerController : MonoBehaviour
             return;
 
         _input.SwitchCurrentActionMap("Player");
-        GameManager.Instance.ChangeCurrentMode(GameManager.GameMode.InGame);
-
-        Debug.Log("열린 팝업 끄기");
 
         UIManager.Instance.CloseUI(UIManager.Instance.FindOpenedPopupUI());
+        GameManager.Instance.ChangeCurrentMode(GameManager.GameMode.InGame);
     }
 }
