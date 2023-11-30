@@ -9,10 +9,10 @@ using UnityEngine.UI;
 // 아이템 / 인벤토리 관리는 여기서 합니다.
 public class ItemManager : SingletonObject<ItemManager>
 {
-    private const string WEAPON_PREFAB_PATH = "Prefabs/Item/Weapon";
-    private const string ARMOR_PREFAB_PATH = "Prefabs/Item/Armor";
-    private const string FOOD_PREFAB_PATH = "Prefabs/Item/Food";
-    private const string DEFAULT_PREFAB_PATH = "Prefabs/Item/Default";
+    private const string WEAPON_PREFAB_PATH = "Prefabs/Item/Weapon/";
+    private const string ARMOR_PREFAB_PATH = "Prefabs/Item/Armor/";
+    private const string FOOD_PREFAB_PATH = "Prefabs/Item/Food/";
+    private const string DEFAULT_PREFAB_PATH = "Prefabs/Item/Default/";
 
     private UIInventoryTab _currSelectTab;
     public UIInventoryTab CurrSelectTab => _currSelectTab;
@@ -258,8 +258,9 @@ public class ItemManager : SingletonObject<ItemManager>
     private void EquipWeapon()
     {
         var weaponData = GetWeaponDataByRefId(_currItemSlot.ItemData.ref_id);
+        var itemPrefab = Resources.Load<GameObject>($"{WEAPON_PREFAB_PATH}{_currItemSlot.ItemData.prefab_name}");
 
-
+        WeaponManager.Instance.EquipWeapon(weaponData, itemPrefab);
     }
 
     private void EquipArmor()

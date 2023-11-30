@@ -1,12 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-using Sirenix.OdinInspector;
-using UnityEditor;
-using Sirenix.OdinInspector.Editor;
-using System;
+using UnityEngine;
 using UnityEngine.Events;
+
+using UnityEditor;
+using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor;
 
 public class ItemMaker : OdinEditorWindow
 {
@@ -190,14 +191,21 @@ public class ItemMaker : OdinEditorWindow
         [Button]
         public void SaveData()
         {
-            _setDataCallback?.Invoke(_itemBase, _itemData);
+            var itemData = new Item.Data
+            {
+                id = this._id,
+                type = this._type,
+                name = this._name,
+                desc = this._desc,
+                image = this._image,
+                ref_id = this._ref_id,
+                stackable = this._stackable,
+                prefab_name = this._prefab_name,
+            };
 
-            var fieldInfos = typeof(Item.Data).GetFields();
+            Item.Data.Write(itemData);
 
-            // foreach(var item in fieldInfos)
-            // {
-
-            // }
+            _setDataCallback?.Invoke(_itemBase, itemData);
         }
     }
 }

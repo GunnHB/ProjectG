@@ -14,8 +14,14 @@ public class WeaponManager : SingletonObject<WeaponManager>
         base.Awake();
     }
 
-    private void ChangeWeapon(WeaponType type)
+    public void EquipWeapon(Weapon.Data data, GameObject obj)
     {
+        if (GameManager.Instance.PController == null)
+            return;
 
+        if (data.type == WeaponType.OneHand || data.type == WeaponType.Arrow)
+            Instantiate(obj, GameManager.Instance.PController.RightHand);
+        else
+            Instantiate(obj, GameManager.Instance.PController.LeftHand);
     }
 }

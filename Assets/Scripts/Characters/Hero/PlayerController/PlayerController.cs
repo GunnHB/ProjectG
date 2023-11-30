@@ -24,6 +24,10 @@ public partial class PlayerController : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private AnimEventChecker _checker;
 
+    [Title("[PlayerTransform]")]
+    [SerializeField] private Transform _leftHandTransform;
+    [SerializeField] private Transform _rightHandTransform;
+
     // 플레이어 액션
     private PlayerAction _playerAction;
 
@@ -58,6 +62,8 @@ public partial class PlayerController : MonoBehaviour
 
     // Properties
     public Animator PlayerAnimator => _animator;
+    public Transform LeftHand => _leftHandTransform;
+    public Transform RightHand => _rightHandTransform;
 
     #region 상호 작용
     private InputAction _InteractionAction;

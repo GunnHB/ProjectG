@@ -130,11 +130,17 @@ MonoBehaviour:
     - Name: stackable
       Entry: 5
       Data: false
+    - Name: prefab_name
+      Entry: 1
+      Data: Hammer01
     - Name: 
       Entry: 8
       Data: 
   _boxSize: {x: 0, y: 0, z: 0}
   _maxDistance: 0
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 0
   _drawGizmos: 0
 --- !u!136 &-3171634559923812834
 CapsuleCollider:

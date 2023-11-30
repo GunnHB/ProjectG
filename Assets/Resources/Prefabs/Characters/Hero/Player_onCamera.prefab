@@ -85,6 +85,8 @@ MonoBehaviour:
   _camera: {fileID: 0}
   _animator: {fileID: 6020624301045614321}
   _checker: {fileID: 2621957855407789514}
+  _leftHandTransform: {fileID: 5969099151685055095}
+  _rightHandTransform: {fileID: 5969210922367234267}
   _targetTransform: {fileID: 5969814910860098805}
   _boxSize: {x: 0.75, y: 0.05, z: 0.75}
   _maxDistance: 1
@@ -211,6 +213,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 93ae2436-1c5f-4836-ba2d-4a85a1656ce8
     m_ActionName: UI/Escape[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: eb9e3a00-6012-4888-8e92-000617783271
+    m_ActionName: UI/ShowOption[/Mouse/rightButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: Player

@@ -2176,6 +2176,11 @@ MonoBehaviour:
   _goldText: {fileID: 577244042016037154}
   _itemName: {fileID: 1141336107563835468}
   _itemDesc: {fileID: 1933563481420888309}
+  _buttonGroup: {fileID: 4644977102798603942}
+  _useButton: {fileID: 1110282492172959652}
+  _useText: {fileID: 4452859159870199793}
+  _discardButton: {fileID: 4204328672734629373}
+  _discardText: {fileID: 1483371378074019605}
 --- !u!1 &9043138002309308662
 GameObject:
   m_ObjectHideFlags: 0
