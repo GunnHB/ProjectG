@@ -11,5 +11,5 @@ using UnityEditor.Animations;
 public class PlayerAnimCtrlScriptableObject : SerializedScriptableObject
 {
     [Tooltip("WeaponBase.WeaponType 의 순서와 동일하게 넣으시오")]
-    public Dictionary<WeaponType, AnimatorController> _playerAnimCtrlDic;
+    public AnimatorController[] _playerAnimCtrlArray;
 }
