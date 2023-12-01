@@ -8,8 +8,6 @@ public class ItemWeaponBase : ItemBase
 
     public Weapon.Data WeaponData => _weaponData;
 
-    private bool _isEquip = false;
-
     protected override void Awake()
     {
         base.Awake();

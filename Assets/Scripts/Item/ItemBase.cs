@@ -23,13 +23,10 @@ public class ItemBase : SerializedMonoBehaviour
 
     private Vector3 _velocity;
     private bool _isGrounded = false;
+    protected bool _isEquip = false;          // 플레이어와의 ontrigger 감지를 막기 위해
 
     public Item.Data ItemData => _itemData;
-
-    public bool IsGrounded
-    {
-        get => Physics.Raycast(transform.position, Vector3.down, _maxDistance);
-    }
+    public bool IsGrounded => Physics.Raycast(transform.position, Vector3.down, _maxDistance);
 
     protected virtual void Awake()
     {
@@ -50,6 +47,9 @@ public class ItemBase : SerializedMonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (this._isEquip)
+            return;
+
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             if (GameManager.Instance.PController == null)
@@ -61,6 +61,9 @@ public class ItemBase : SerializedMonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (this._isEquip)
+            return;
+
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             if (GameManager.Instance.PController == null)
@@ -91,5 +94,10 @@ public class ItemBase : SerializedMonoBehaviour
             Gizmos.DrawRay(transform.position, Vector3.down * hit.distance);
         else
             Gizmos.DrawRay(transform.position, Vector3.down * _maxDistance);
+    }
+
+    public void SetItemEquip(bool active)
+    {
+        _isEquip = active;
     }
 }
