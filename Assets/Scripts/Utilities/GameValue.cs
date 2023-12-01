@@ -76,6 +76,8 @@ public enum WeaponType
 {
     // 한손무기 / 화살은 오른손으로 들어감다.
     // 나머지는 왼손으로 들어감다.
+    None = -1,
+    NoWeapon,   // 무기 없음
     OneHand,    // 한손 무기
     TwoHand,    // 양손 무기
     Shield,     // 방패 (방패가 무기로 들어가도 되나..???)
