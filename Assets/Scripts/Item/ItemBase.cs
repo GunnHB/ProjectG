@@ -27,6 +27,11 @@ public class ItemData
         this._isEquip = isEquip;
     }
 
+    public void ResetData()
+    {
+        this._data = new Item.Data();
+    }
+
     public void SetData(Item.Data data)
     {
         this._data = data;

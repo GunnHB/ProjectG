@@ -11,6 +11,28 @@ public class WeaponManager : SingletonObject<WeaponManager>
     private string _path => JsonManager.PLAYER_DATA;
     private string _fileName => JsonManager.PLAYER_BASE_DATA_FILE_NAME;
 
+    private Transform _rightHand
+    {
+        get
+        {
+            if (GameManager.Instance.PController == null)
+                return null;
+            else
+                return GameManager.Instance.PController.RightHand;
+        }
+    }
+
+    private Transform _leftHand
+    {
+        get
+        {
+            if (GameManager.Instance.PController == null)
+                return null;
+            else
+                return GameManager.Instance.PController.LeftHand;
+        }
+    }
+
     public Dictionary<HandPosition, ItemData> CurrWeaponInfo
     {
         get => JsonManager.Instance.BaseData._playerWeapon[(SlotIndex)GameManager.Instance.SelectedSlotIndex];
@@ -48,7 +70,7 @@ public class WeaponManager : SingletonObject<WeaponManager>
 
         if (needSave)
         {
-            if (weaponData.type == WeaponType.Arrow || weaponData.type == WeaponType.OneHand)
+            if (IsRightWeapon(weaponData))
                 CurrWeaponInfo[HandPosition.Right] = itemData;
             else
                 CurrWeaponInfo[HandPosition.Left] = itemData;
@@ -70,10 +92,7 @@ public class WeaponManager : SingletonObject<WeaponManager>
         // 프리팹을 생성
         GameObject itemObj = null;
 
-        if (data.type == WeaponType.OneHand || data.type == WeaponType.Arrow)
-            itemObj = Instantiate(obj, GameManager.Instance.PController.RightHand);
-        else
-            itemObj = Instantiate(obj, GameManager.Instance.PController.LeftHand);
+        itemObj = Instantiate(obj, IsRightWeapon(data) ? _rightHand : _leftHand);
 
         if (itemObj != null)
         {
@@ -87,10 +106,32 @@ public class WeaponManager : SingletonObject<WeaponManager>
     }
 
     // 장비 해제
-    public void UnequipWeapon(Item.Data data)
+    public void UnequipWeapon(ItemData data)
     {
         if (GameManager.Instance.PController == null)
             return;
+
+        data.SetEquip(false);
+
+        var weaponData = ItemManager.Instance.GetWeaponDataByRefId(data.Data.ref_id);
+        var handTransform = IsRightWeapon(weaponData) ? _rightHand : _leftHand;
+
+        for (int index = 0; index < handTransform.childCount; index++)
+        {
+            var prefab = handTransform.GetChild(index);
+
+            if (prefab != null)
+                Destroy(prefab.gameObject);
+        }
+
+        if (IsRightWeapon(weaponData))
+            CurrWeaponInfo[HandPosition.Right].ResetData();
+        else
+            CurrWeaponInfo[HandPosition.Left].ResetData();
+
+        JsonManager.Instance.SaveData(_path, _fileName, _baseData);
+
+        SetNoWeaponAnim();
     }
 
     // 앞 선 무기의 여부에 따라 방패, 화살은 애니가 약간 달라질 필요가 있음
@@ -123,5 +164,22 @@ public class WeaponManager : SingletonObject<WeaponManager>
                 pController.PlayerAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.Bow];
                 break;
         }
+    }
+
+    private void SetNoWeaponAnim()
+    {
+        if (GameManager.Instance.PController == null)
+            return;
+
+        GameManager.Instance.PController.PlayerAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.NoWeapon];
+    }
+
+    // 오른쪽이 아닐 땐 놀랍게도 왼쪽입니다.
+    private bool IsRightWeapon(Weapon.Data data)
+    {
+        if (data.type == WeaponType.Arrow || data.type == WeaponType.OneHand)
+            return true;
+        else
+            return false;
     }
 }

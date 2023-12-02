@@ -238,7 +238,10 @@ public class ItemManager : SingletonObject<ItemManager>
         switch (_currItemSlot.ItemData.Data.type)
         {
             case ItemType.Weapon:
-                WeaponManager.Instance.EquipWeapon(_currItemSlot.ItemData, true);
+                if (!_currItemSlot.ItemData.IsEquip)
+                    WeaponManager.Instance.EquipWeapon(_currItemSlot.ItemData, true);
+                else
+                    WeaponManager.Instance.UnequipWeapon(_currItemSlot.ItemData);
                 break;
             case ItemType.Armor:
                 EquipArmor();
