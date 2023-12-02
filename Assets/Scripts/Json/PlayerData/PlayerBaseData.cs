@@ -11,7 +11,7 @@ public class PlayerBaseData
     public int[] _playerHP;
     public int[] _playerStamina;
 
-    public Dictionary<SlotIndex, Dictionary<HandPosition, ItemWeaponBase>> _playerWeapon = new();
+    public Dictionary<SlotIndex, Dictionary<HandPosition, ItemData>> _playerWeapon = new();
 
     public PlayerBaseData()
     {
@@ -20,10 +20,10 @@ public class PlayerBaseData
         this._playerHP = new int[GameValue.SAVE_SLOT_COUNT];
         this._playerStamina = new int[GameValue.SAVE_SLOT_COUNT];
 
-        var tempData = new Dictionary<HandPosition, ItemWeaponBase>();
+        var tempData = new Dictionary<HandPosition, ItemData>();
 
-        tempData.Add(HandPosition.Left, null);
-        tempData.Add(HandPosition.Right, null);
+        tempData.Add(HandPosition.Left, new ItemData());
+        tempData.Add(HandPosition.Right, new ItemData());
 
         for (int index = 0; index < GameValue.SAVE_SLOT_COUNT; index++)
             _playerWeapon.Add((SlotIndex)index, tempData);

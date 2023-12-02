@@ -4,9 +4,15 @@ using UnityEngine;
 
 using System.Linq;
 using System.Text;
+using Mono.Cecil;
 
 public class ResourceManager : SingletonObject<ResourceManager>
 {
+    private const string WEAPON_PREFAB_PATH = "Prefabs/Item/Weapon/";
+    private const string ARMOR_PREFAB_PATH = "Prefabs/Item/Armor/";
+    private const string FOOD_PREFAB_PATH = "Prefabs/Item/Food/";
+    private const string DEFAULT_PREFAB_PATH = "Prefabs/Item/Default/";
+
     protected override void Awake()
     {
         base.Awake();
@@ -71,5 +77,15 @@ public class ResourceManager : SingletonObject<ResourceManager>
             Debug.LogWarning("There is no texture! Please check the path!");
             return null;
         }
+    }
+
+    public T GetPrefab<T>(string path) where T : Object
+    {
+        return Resources.Load<T>(path);
+    }
+
+    public T GetWeaponPrefab<T>(string prefabName) where T : Object
+    {
+        return GetPrefab<T>($"{WEAPON_PREFAB_PATH}{prefabName}");
     }
 }

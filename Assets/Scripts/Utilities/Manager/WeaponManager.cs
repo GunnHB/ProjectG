@@ -5,25 +5,66 @@ using UnityEngine;
 public class WeaponManager : SingletonObject<WeaponManager>
 {
     private PlayerAnimCtrlScriptableObject _animSO;
+    private PlayerBaseData _baseData;
 
-    private Dictionary<HandPosition, ItemWeaponBase> _currWeaponInfo = new();
+    #region 캐싱
+    private string _path => JsonManager.PLAYER_DATA;
+    private string _fileName => JsonManager.PLAYER_BASE_DATA_FILE_NAME;
 
+    public Dictionary<HandPosition, ItemData> CurrWeaponInfo
+    {
+        get => JsonManager.Instance.BaseData._playerWeapon[(SlotIndex)GameManager.Instance.SelectedSlotIndex];
+    }
+    #endregion
     protected override void Awake()
     {
         base.Awake();
 
+        _baseData = JsonManager.Instance.BaseData;
+
         _animSO = Resources.Load<PlayerAnimCtrlScriptableObject>("ScriptableObject/PlayerAnimCtrlSO");
+
+        InitWeaponInfo();
     }
 
     private void InitWeaponInfo()
     {
+        if (GameManager.Instance.PController == null)
+            return;
 
+        if (CurrWeaponInfo.TryGetValue(HandPosition.Left, out ItemData leftItem))
+            EquipWeapon(leftItem);
+
+        if (CurrWeaponInfo.TryGetValue(HandPosition.Right, out ItemData rightData))
+            EquipWeapon(rightData);
+    }
+
+    public void EquipWeapon(ItemData itemData, bool needSave = false)
+    {
+        var weaponData = ItemManager.Instance.GetWeaponDataByRefId(itemData.Data.ref_id);
+        var prefab = ResourceManager.Instance.GetWeaponPrefab<GameObject>(itemData.Data.prefab_name);
+
+        itemData.SetEquip(true);
+
+        if (needSave)
+        {
+            if (weaponData.type == WeaponType.Arrow || weaponData.type == WeaponType.OneHand)
+                CurrWeaponInfo[HandPosition.Right] = itemData;
+            else
+                CurrWeaponInfo[HandPosition.Left] = itemData;
+
+            JsonManager.Instance.SaveData(_path, _fileName, _baseData);
+        }
+
+        InstantiateWeapon(weaponData, prefab);
     }
 
     // 장비 착용
-    public void EquipWeapon(Weapon.Data data, GameObject obj)
+    private void InstantiateWeapon(Weapon.Data data, GameObject obj)
     {
         if (GameManager.Instance.PController == null)
+            return;
+        else if (data == null || obj == null)
             return;
 
         // 프리팹을 생성

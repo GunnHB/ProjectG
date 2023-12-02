@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class PlayerInventoryData
 {
-    public Dictionary<SlotIndex, Dictionary<InventoryCategory, List<Item.Data>>> _playerInventory;
+    public Dictionary<SlotIndex, Dictionary<InventoryCategory, List<ItemData>>> _playerInventory;
     public Dictionary<SlotIndex, int> _playerGold;
     public Dictionary<SlotIndex, Dictionary<InventoryCategory, int>> _invenCateSize;
     public Dictionary<SlotIndex, Dictionary<long, int>> _invenItemAmount;   // typeconverter 생성해야됨...
@@ -19,7 +19,7 @@ public class PlayerInventoryData
         _invenItemAmount = new();
 
         var tempCateSzie = new Dictionary<InventoryCategory, int>();
-        var tempInven = new Dictionary<InventoryCategory, List<Item.Data>>();
+        var tempInven = new Dictionary<InventoryCategory, List<ItemData>>();
 
         // 노가다 느낌......
         tempCateSzie.Add(InventoryCategory.CategoryWeapon, GameValue.INVENTORY_DEFAULT_CATE_WEAPON_SIZE);
@@ -46,12 +46,12 @@ public class PlayerInventoryData
     }
 
     // json 파일 생성 시에 공갈 데이터 만들기
-    private void AddEmptyData(InventoryCategory cate, int count, ref Dictionary<InventoryCategory, List<Item.Data>> tempDic)
+    private void AddEmptyData(InventoryCategory cate, int count, ref Dictionary<InventoryCategory, List<ItemData>> tempDic)
     {
-        var list = new List<Item.Data>();
+        var list = new List<ItemData>();
 
         for (int index = 0; index < count; index++)
-            list.Add(new Item.Data());
+            list.Add(new ItemData());
 
         tempDic.Add(cate, list);
     }

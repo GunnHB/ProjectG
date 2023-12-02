@@ -26,13 +26,13 @@ public class UIItemSlot : MonoBehaviour
     // 슬롯 선택 시의 콜백
     public UnityAction _slotCallback = null;
 
-    private Item.Data _itemData = null;
-    public Item.Data ItemData => _itemData;
+    private ItemData _itemData = null;
+    public ItemData ItemData => _itemData;
 
     public bool IsNullData
     {
         // 아이디 값이 0이면 널로 판단
-        get => _itemData.id == 0;
+        get => _itemData == null || _itemData.Data == null || _itemData.Data.id == 0;
     }
 
     private void Awake()
@@ -41,7 +41,7 @@ public class UIItemSlot : MonoBehaviour
                                     ItemManager.Instance.InventoryPopup.InvenScrollRect);
     }
 
-    public void InitSlot(Item.Data itemData = null)
+    public void InitSlot(ItemData itemData = null)
     {
         ClearData();
 
@@ -66,7 +66,7 @@ public class UIItemSlot : MonoBehaviour
     private void SetData()
     {
         // 데이터가 비어있으면 리턴
-        if (_itemData.id == 0)
+        if (_itemData.Data.id == 0)
             return;
 
         SetImage();
@@ -81,7 +81,7 @@ public class UIItemSlot : MonoBehaviour
             return;
         }
 
-        _itmeImage.sprite = ResourceManager.Instance.GetSpriteByItem(_itemData.type, _itemData.image);
+        _itmeImage.sprite = ResourceManager.Instance.GetSpriteByItem(_itemData.Data.type, _itemData.Data.image);
         _itmeImage.gameObject.SetActive(true);
     }
 
@@ -93,7 +93,7 @@ public class UIItemSlot : MonoBehaviour
             return;
         }
 
-        if (ItemManager.Instance.InvenItemAmount.TryGetValue(_itemData.id, out int amount))
+        if (ItemManager.Instance.InvenItemAmount.TryGetValue(_itemData.Data.id, out int amount))
         {
             if (amount == 1)
                 _itemAmountText.gameObject.SetActive(false);

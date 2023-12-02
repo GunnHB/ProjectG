@@ -9,11 +9,6 @@ using UnityEngine.UI;
 // 아이템 / 인벤토리 관리는 여기서 합니다.
 public class ItemManager : SingletonObject<ItemManager>
 {
-    private const string WEAPON_PREFAB_PATH = "Prefabs/Item/Weapon/";
-    private const string ARMOR_PREFAB_PATH = "Prefabs/Item/Armor/";
-    private const string FOOD_PREFAB_PATH = "Prefabs/Item/Food/";
-    private const string DEFAULT_PREFAB_PATH = "Prefabs/Item/Default/";
-
     private UIInventoryTab _currSelectTab;
     public UIInventoryTab CurrSelectTab => _currSelectTab;
 
@@ -29,7 +24,7 @@ public class ItemManager : SingletonObject<ItemManager>
 
     private PlayerInventoryData _inventoryData;
 
-    public Dictionary<InventoryCategory, List<Item.Data>> PlayerInventory
+    public Dictionary<InventoryCategory, List<ItemData>> PlayerInventory
     {
         get => _inventoryData._playerInventory[(SlotIndex)GameManager.Instance.SelectedSlotIndex];
     }
@@ -140,22 +135,22 @@ public class ItemManager : SingletonObject<ItemManager>
         _currSelectTab = null;
     }
 
-    public void AddItemToInventory(Item.Data item = null)
+    public void AddItemToInventory(ItemData item = null)
     {
         if (item == null)
             return;
 
         // 해당 아이템의 카테고리 얻기
-        var cate = GetItemCateory(item);
+        var cate = GetItemCateory(item.Data);
 
         // 누적 가능한 아이템이라면
-        if (item.stackable)
+        if (item.Data.stackable)
         {
-            var hasItem = PlayerInventory[cate].Find(x => x.id == item.id);
+            var hasItem = PlayerInventory[cate].Find(x => x.Data.id == item.Data.id);
 
             // 해당 아이템이 인벤토리에 있음
             if (hasItem != null)
-                InvenItemAmount[hasItem.id]++;
+                InvenItemAmount[hasItem.Data.id]++;
             // 해당 아이템이 인벤토리에 없음
             else
                 ActualAddItem(cate, item);
@@ -177,10 +172,10 @@ public class ItemManager : SingletonObject<ItemManager>
         //     item.PickUpItem();
     }
 
-    private void ActualAddItem(InventoryCategory cate, Item.Data item)
+    private void ActualAddItem(InventoryCategory cate, ItemData item)
     {
         // 빈 슬롯이 있는지 확인
-        var emptySlotIndex = PlayerInventory[cate].FindIndex(x => x.id == 0);
+        var emptySlotIndex = PlayerInventory[cate].FindIndex(x => x.Data.id == 0);
 
         if (emptySlotIndex == -1)
         {
@@ -192,10 +187,10 @@ public class ItemManager : SingletonObject<ItemManager>
             PlayerInventory[cate][emptySlotIndex] = item;
 
             // 수량 데이터 추가
-            if (InvenItemAmount.ContainsKey(item.id))
-                InvenItemAmount.Remove(item.id);
+            if (InvenItemAmount.ContainsKey(item.Data.id))
+                InvenItemAmount.Remove(item.Data.id);
 
-            InvenItemAmount.Add(item.id, 1);
+            InvenItemAmount.Add(item.Data.id, 1);
         }
     }
 
@@ -240,10 +235,10 @@ public class ItemManager : SingletonObject<ItemManager>
         if (_currItemSlot.IsNullData || GameManager.Instance.PController == null)
             return;
 
-        switch (_currItemSlot.ItemData.type)
+        switch (_currItemSlot.ItemData.Data.type)
         {
             case ItemType.Weapon:
-                EquipWeapon();
+                WeaponManager.Instance.EquipWeapon(_currItemSlot.ItemData, true);
                 break;
             case ItemType.Armor:
                 EquipArmor();
@@ -253,14 +248,9 @@ public class ItemManager : SingletonObject<ItemManager>
             case ItemType.Default:
                 break;
         }
-    }
 
-    private void EquipWeapon()
-    {
-        var weaponData = GetWeaponDataByRefId(_currItemSlot.ItemData.ref_id);
-        var itemPrefab = Resources.Load<GameObject>($"{WEAPON_PREFAB_PATH}{_currItemSlot.ItemData.prefab_name}");
-
-        WeaponManager.Instance.EquipWeapon(weaponData, itemPrefab);
+        JsonManager.Instance.SaveData(_path, _fileName, _inventoryData);
+        JsonManager.Instance.LoadData(_path, _fileName, out _inventoryData);
     }
 
     private void EquipArmor()
