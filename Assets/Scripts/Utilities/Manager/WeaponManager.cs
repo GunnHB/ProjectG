@@ -39,7 +39,7 @@ public class WeaponManager : SingletonObject<WeaponManager>
             var item = itemObj.GetComponent<ItemBase>();
 
             if (item != null)
-                item.SetItemEquip(true);
+                item.ThisItemData.SetEquip(true);
         }
 
         SetPlayerAnim(data);

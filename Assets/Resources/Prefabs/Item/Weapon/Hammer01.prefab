@@ -108,7 +108,10 @@ MonoBehaviour:
     SerializationNodes:
     - Name: _itemData
       Entry: 7
-      Data: 0|Item.Data, Assembly-CSharp
+      Data: 0|ItemData, Assembly-CSharp
+    - Name: _data
+      Entry: 7
+      Data: 1|Item.Data, Assembly-CSharp
     - Name: id
       Entry: 3
       Data: 100020001
@@ -133,6 +136,12 @@ MonoBehaviour:
     - Name: prefab_name
       Entry: 1
       Data: Hammer01
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _isEquip
+      Entry: 5
+      Data: false
     - Name: 
       Entry: 8
       Data: 

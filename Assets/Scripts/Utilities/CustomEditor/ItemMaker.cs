@@ -100,10 +100,20 @@ public class ItemMaker : OdinEditorWindow
 
         foreach (var item in itemList)
         {
-            var itemData = item.GetComponent<T>().ItemData;
+            // var itemData = item.GetComponent<T>().ItemData;
 
-            if (itemData == null)
-                itemData = new Item.Data();
+            // if (itemData == null)
+            //     itemData = new Item.Data();
+
+            if (item.ThisItemData == null)
+                item.SetItemData(new Item.Data());
+            else
+            {
+                if (item.ThisItemData.Data == null)
+                    item.ThisItemData.SetData(new Item.Data());
+            }
+
+            var itemData = item.ThisItemData.Data;
 
             TableClass newData = new(item, itemData);
 
@@ -182,7 +192,8 @@ public class ItemMaker : OdinEditorWindow
         [Button]
         public void ResetData()
         {
-            this._itemData = this._itemBase.ItemData;
+            // this._itemData = this._itemBase.ItemData;
+            this._itemData = this._itemBase.ThisItemData.Data;
 
             SetItemDataValue(_itemData);
         }
@@ -206,6 +217,8 @@ public class ItemMaker : OdinEditorWindow
             Item.Data.Write(itemData);
 
             _setDataCallback?.Invoke(_itemBase, itemData);
+
+            EditorUtility.SetDirty(_itemBase);
         }
     }
 }

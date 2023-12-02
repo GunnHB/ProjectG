@@ -5,10 +5,44 @@ using UnityEngine;
 
 using Sirenix.OdinInspector;
 
+public class ItemData
+{
+    [SerializeField]
+    private Item.Data _data = null;
+    [SerializeField]
+    private bool _isEquip = false;
+
+    public Item.Data Data => _data;
+    public bool IsEquip => _isEquip;
+
+    public ItemData()
+    {
+        this._data = new Item.Data();
+        this._isEquip = false;
+    }
+
+    public ItemData(Item.Data data, bool isEquip = false)
+    {
+        this._data = data;
+        this._isEquip = isEquip;
+    }
+
+    public void SetData(Item.Data data)
+    {
+        this._data = data;
+    }
+
+    public void SetEquip(bool active)
+    {
+        this._isEquip = active;
+    }
+}
+
 public class ItemBase : SerializedMonoBehaviour
 {
     [SerializeField]
-    protected Item.Data _itemData;
+    // protected Item.Data _itemData;
+    protected ItemData _itemData;
     protected Collider _collider;         // 충돌 감지용
 
     [BoxGroup("Gravity"), SerializeField]
@@ -23,9 +57,9 @@ public class ItemBase : SerializedMonoBehaviour
 
     private Vector3 _velocity;
     private bool _isGrounded = false;
-    protected bool _isEquip = false;          // 플레이어와의 ontrigger 감지를 막기 위해
 
-    public Item.Data ItemData => _itemData;
+    // public Item.Data ItemData => _itemData;
+    public ItemData ThisItemData => _itemData;
     public bool IsGrounded => Physics.Raycast(transform.position, Vector3.down, _maxDistance);
 
     protected virtual void Awake()
@@ -35,7 +69,13 @@ public class ItemBase : SerializedMonoBehaviour
 
     public void SetItemData(Item.Data newData)
     {
-        _itemData = newData;
+        // _itemData = newData;
+        // _itemData.SetData(newData);
+
+        if (_itemData == null)
+            _itemData = new ItemData();
+
+        _itemData.SetData(newData);
     }
 
     // // 중력 적용
@@ -47,7 +87,7 @@ public class ItemBase : SerializedMonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (this._isEquip)
+        if (this._itemData.IsEquip)
             return;
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
@@ -61,7 +101,7 @@ public class ItemBase : SerializedMonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (this._isEquip)
+        if (this._itemData.IsEquip)
             return;
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
@@ -94,10 +134,5 @@ public class ItemBase : SerializedMonoBehaviour
             Gizmos.DrawRay(transform.position, Vector3.down * hit.distance);
         else
             Gizmos.DrawRay(transform.position, Vector3.down * _maxDistance);
-    }
-
-    public void SetItemEquip(bool active)
-    {
-        _isEquip = active;
     }
 }

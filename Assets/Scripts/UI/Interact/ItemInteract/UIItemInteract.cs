@@ -36,7 +36,7 @@ public class UIItemInteract : UIInteractBase
         // 아니면 인벤토리에 해당 아이템 넣어줌
         if (item != null)
         {
-            ItemManager.Instance.AddItemToInventory(item.ItemData);
+            ItemManager.Instance.AddItemToInventory(item.ThisItemData.Data);
             ItemManager.Instance.DestoryItem(item);
         }
 

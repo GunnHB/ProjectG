@@ -13,6 +13,7 @@ public class ItemWeaponBase : ItemBase
         base.Awake();
 
         if (_itemData != null)
-            _weaponData = ItemManager.Instance.GetWeaponDataByRefId(_itemData.ref_id);
+            _weaponData = ItemManager.Instance.GetWeaponDataByRefId(_itemData.Data.ref_id);
+        // _weaponData = ItemManager.Instance.GetWeaponDataByRefId(_itemData.ref_id);
     }
 }
