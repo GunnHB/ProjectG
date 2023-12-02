@@ -46,6 +46,13 @@ public enum SlotIndex
     Third,
 }
 
+public enum HandPosition
+{
+    None = -1,
+    Left,
+    Right,
+}
+
 // 테이블에 사용되는 enum 은 요기에 추가합시다.
 #region 
 // 해당 어트리뷰트를 추가해줘야 테이블에서 enum 으로 인식합니다.

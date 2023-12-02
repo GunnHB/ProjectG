@@ -1,8 +1,12 @@
+using System.Collections.Generic;
+
 using UnityEngine;
 
 public class WeaponManager : SingletonObject<WeaponManager>
 {
     private PlayerAnimCtrlScriptableObject _animSO;
+
+    private Dictionary<HandPosition, ItemWeaponBase> _currWeaponInfo = new();
 
     protected override void Awake()
     {
@@ -11,6 +15,12 @@ public class WeaponManager : SingletonObject<WeaponManager>
         _animSO = Resources.Load<PlayerAnimCtrlScriptableObject>("ScriptableObject/PlayerAnimCtrlSO");
     }
 
+    private void InitWeaponInfo()
+    {
+
+    }
+
+    // 장비 착용
     public void EquipWeapon(Weapon.Data data, GameObject obj)
     {
         if (GameManager.Instance.PController == null)
@@ -35,6 +45,14 @@ public class WeaponManager : SingletonObject<WeaponManager>
         SetPlayerAnim(data);
     }
 
+    // 장비 해제
+    public void UnequipWeapon(Item.Data data)
+    {
+        if (GameManager.Instance.PController == null)
+            return;
+    }
+
+    // 앞 선 무기의 여부에 따라 방패, 화살은 애니가 약간 달라질 필요가 있음
     private void SetPlayerAnim(Weapon.Data data)
     {
         var pController = GameManager.Instance.PController;
