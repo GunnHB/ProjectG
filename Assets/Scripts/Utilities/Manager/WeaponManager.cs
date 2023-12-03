@@ -61,12 +61,11 @@ public class WeaponManager : SingletonObject<WeaponManager>
             EquipWeapon(rightData);
     }
 
+    // 장비 착용
     public void EquipWeapon(ItemData itemData, bool needSave = false)
     {
         var weaponData = ItemManager.Instance.GetWeaponDataByRefId(itemData.Data.ref_id);
         var prefab = ResourceManager.Instance.GetWeaponPrefab<GameObject>(itemData.Data.prefab_name);
-
-        itemData.SetEquip(true);
 
         if (needSave)
         {
@@ -81,7 +80,6 @@ public class WeaponManager : SingletonObject<WeaponManager>
         InstantiateWeapon(weaponData, prefab);
     }
 
-    // 장비 착용
     private void InstantiateWeapon(Weapon.Data data, GameObject obj)
     {
         if (GameManager.Instance.PController == null)

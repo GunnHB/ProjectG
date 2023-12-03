@@ -239,9 +239,15 @@ public class ItemManager : SingletonObject<ItemManager>
         {
             case ItemType.Weapon:
                 if (!_currItemSlot.ItemData.IsEquip)
+                {
                     WeaponManager.Instance.EquipWeapon(_currItemSlot.ItemData, true);
+                    _currItemSlot.ItemData.SetEquip(true);
+                }
                 else
+                {
                     WeaponManager.Instance.UnequipWeapon(_currItemSlot.ItemData);
+                    _currItemSlot.ItemData.SetEquip(false);
+                }
                 break;
             case ItemType.Armor:
                 EquipArmor();
@@ -253,7 +259,6 @@ public class ItemManager : SingletonObject<ItemManager>
         }
 
         JsonManager.Instance.SaveData(_path, _fileName, _inventoryData);
-        JsonManager.Instance.LoadData(_path, _fileName, out _inventoryData);
     }
 
     private void EquipArmor()
