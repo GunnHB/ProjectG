@@ -9,14 +9,14 @@ public class PlayerInventoryData
     public Dictionary<SlotIndex, Dictionary<InventoryCategory, List<ItemData>>> _playerInventory;
     public Dictionary<SlotIndex, int> _playerGold;
     public Dictionary<SlotIndex, Dictionary<InventoryCategory, int>> _invenCateSize;
-    public Dictionary<SlotIndex, Dictionary<long, int>> _invenItemAmount;   // typeconverter 생성해야됨...
+    // public Dictionary<SlotIndex, Dictionary<long, int>> _invenItemAmount;
 
     public PlayerInventoryData()
     {
         _playerInventory = new();
         _playerGold = new();
         _invenCateSize = new();
-        _invenItemAmount = new();
+        // _invenItemAmount = new();
 
         var tempCateSzie = new Dictionary<InventoryCategory, int>();
         var tempInven = new Dictionary<InventoryCategory, List<ItemData>>();
@@ -41,7 +41,7 @@ public class PlayerInventoryData
             _playerInventory.Add((SlotIndex)index, tempInven);
             _invenCateSize.Add((SlotIndex)index, tempCateSzie);
             _playerGold.Add((SlotIndex)index, 0);
-            _invenItemAmount.Add((SlotIndex)index, new());
+            // _invenItemAmount.Add((SlotIndex)index, new());
         }
     }
 

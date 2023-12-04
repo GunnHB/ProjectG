@@ -11,25 +11,37 @@ public class ItemData
     private Item.Data _data = null;
     [SerializeField]
     private bool _isEquip = false;
+    [SerializeField]
+    private int _amount = 0;
 
     public Item.Data Data => _data;
     public bool IsEquip => _isEquip;
+    public int Amount => _amount;
+
+    public bool IsEmpty
+    {
+        get => this._data == null || this._data.id == 0;
+    }
 
     public ItemData()
     {
         this._data = new Item.Data();
         this._isEquip = false;
+        this._amount = 1;
     }
 
-    public ItemData(Item.Data data, bool isEquip = false)
+    public ItemData(Item.Data data, bool isEquip = false, int amount = 1)
     {
         this._data = data;
         this._isEquip = isEquip;
+        this._amount = amount;
     }
 
     public void ResetData()
     {
         this._data = new Item.Data();
+        this._isEquip = false;
+        this._amount = 0;
     }
 
     public void SetData(Item.Data data)
@@ -40,6 +52,28 @@ public class ItemData
     public void SetEquip(bool active)
     {
         this._isEquip = active;
+    }
+
+    // 원하는 수량으로 세팅
+    public void SetAmount(int amount)
+    {
+        this._amount = amount;
+    }
+
+    // 수량 1 증가 or 감소
+    public void AddItemAmount(bool isPlus = true)
+    {
+        if (isPlus)
+            _amount++;
+        else
+            _amount--;
+    }
+
+    public void SetItemData(ItemData itemData)
+    {
+        SetData(itemData.Data);
+        SetEquip(itemData.IsEquip);
+        SetAmount(itemData.Amount);
     }
 }
 

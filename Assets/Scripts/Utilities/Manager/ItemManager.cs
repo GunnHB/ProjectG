@@ -39,10 +39,10 @@ public class ItemManager : SingletonObject<ItemManager>
         get => _inventoryData._invenCateSize[(SlotIndex)GameManager.Instance.SelectedSlotIndex];
     }
 
-    public Dictionary<long, int> InvenItemAmount
-    {
-        get => _inventoryData._invenItemAmount[(SlotIndex)GameManager.Instance.SelectedSlotIndex];
-    }
+    // public Dictionary<long, int> InvenItemAmount
+    // {
+    //     get => _inventoryData._invenItemAmount[(SlotIndex)GameManager.Instance.SelectedSlotIndex];
+    // }
     #endregion
 
     protected override void Awake()
@@ -150,7 +150,8 @@ public class ItemManager : SingletonObject<ItemManager>
 
             // 해당 아이템이 인벤토리에 있음
             if (hasItem != null)
-                InvenItemAmount[hasItem.Data.id]++;
+                // InvenItemAmount[hasItem.Data.id]++;
+                hasItem.AddItemAmount();
             // 해당 아이템이 인벤토리에 없음
             else
                 ActualAddItem(cate, item);
@@ -186,11 +187,11 @@ public class ItemManager : SingletonObject<ItemManager>
         {
             PlayerInventory[cate][emptySlotIndex] = item;
 
-            // 수량 데이터 추가
-            if (InvenItemAmount.ContainsKey(item.Data.id))
-                InvenItemAmount.Remove(item.Data.id);
+            // // 수량 데이터 추가
+            // if (InvenItemAmount.ContainsKey(item.Data.id))
+            //     InvenItemAmount.Remove(item.Data.id);
 
-            InvenItemAmount.Add(item.Data.id, 1);
+            // InvenItemAmount.Add(item.Data.id, 1);
         }
     }
 
@@ -241,12 +242,12 @@ public class ItemManager : SingletonObject<ItemManager>
                 if (!_currItemSlot.ItemData.IsEquip)
                 {
                     WeaponManager.Instance.EquipWeapon(_currItemSlot.ItemData, true);
-                    _currItemSlot.ItemData.SetEquip(true);
+                    // _currItemSlot.ItemData.SetEquip(true);
                 }
                 else
                 {
                     WeaponManager.Instance.UnequipWeapon(_currItemSlot.ItemData);
-                    _currItemSlot.ItemData.SetEquip(false);
+                    // _currItemSlot.ItemData.SetEquip(false);
                 }
                 break;
             case ItemType.Armor:
@@ -259,6 +260,8 @@ public class ItemManager : SingletonObject<ItemManager>
         }
 
         JsonManager.Instance.SaveData(_path, _fileName, _inventoryData);
+
+        _currItemSlot.RefreshSlot();
     }
 
     private void EquipArmor()
@@ -271,6 +274,15 @@ public class ItemManager : SingletonObject<ItemManager>
         if (_currItemSlot.IsNullData)
             return;
 
+        string title = "UI_TEXT_WARNING";
+        string message = "UI_ITEM_NOTICE_DISCARD";
+
+        UIManager.Instance.OpenSimpleDialogue(title, message, confirmAction: ActualDiscardItem);
+    }
+
+    // 실제 아이템 버리기 실행
+    private void ActualDiscardItem()
+    {
 
     }
 

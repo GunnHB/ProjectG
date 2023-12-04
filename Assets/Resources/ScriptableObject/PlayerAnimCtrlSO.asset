@@ -15,14 +15,87 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 9100000, guid: d2915d9f218195b4dbd872f55fd78e4b, type: 2}
+    - {fileID: 9100000, guid: 2f23a128bb235574aa5a62a944f90a21, type: 2}
+    - {fileID: 9100000, guid: 9e6f5facf18495e4698f2030023bb814, type: 2}
+    - {fileID: 9100000, guid: cb51a837d8b740b408e4b2904af4e861, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
-  _playerAnimCtrlArray:
-  - {fileID: 9100000, guid: d2915d9f218195b4dbd872f55fd78e4b, type: 2}
-  - {fileID: 9100000, guid: 2f23a128bb235574aa5a62a944f90a21, type: 2}
-  - {fileID: 9100000, guid: 9e6f5facf18495e4698f2030023bb814, type: 2}
-  - {fileID: 9100000, guid: cb51a837d8b740b408e4b2904af4e861, type: 2}
+    SerializationNodes:
+    - Name: _playerAnimCtrlDic
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[WeaponType, Assembly-CSharp],[UnityEditor.Animations.AnimatorController,
+        UnityEditor.CoreModule]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[WeaponType, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 4
+    - Name: $v
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 

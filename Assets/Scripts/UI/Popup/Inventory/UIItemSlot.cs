@@ -71,6 +71,7 @@ public class UIItemSlot : MonoBehaviour
 
         SetImage();
         SetAmountText();
+        SetItemEquipInfo();
     }
 
     private void SetImage(bool active = true)
@@ -93,13 +94,26 @@ public class UIItemSlot : MonoBehaviour
             return;
         }
 
-        if (ItemManager.Instance.InvenItemAmount.TryGetValue(_itemData.Data.id, out int amount))
+        if (!_itemData.Data.stackable || _itemData.Amount == 1)
+            _itemAmountText.gameObject.SetActive(false);
+        else
         {
-            if (amount == 1)
-                _itemAmountText.gameObject.SetActive(false);
-            else
-                _itemAmountText.text = $"X {amount}";
+            _itemAmountText.text = $"{_itemData.Amount}";
+            _itemAmountText.gameObject.SetActive(true);
         }
+
+        // if (ItemManager.Instance.InvenItemAmount.TryGetValue(_itemData.Data.id, out int amount))
+        // {
+        //     if (amount == 1)
+        //         _itemAmountText.gameObject.SetActive(false);
+        //     else
+        //         _itemAmountText.text = $"X {amount}";
+        // }
+    }
+
+    private void SetItemEquipInfo()
+    {
+        _equipObj.SetActive(_itemData.IsEquip);
     }
 
     private void OnClickSlot()
@@ -132,5 +146,10 @@ public class UIItemSlot : MonoBehaviour
 
         _selectFrame.color = _selectColor;
         _selectFrame.gameObject.SetActive(_isSelect);
+    }
+
+    public void RefreshSlot()
+    {
+        SetData();
     }
 }
