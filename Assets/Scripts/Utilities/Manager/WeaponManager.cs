@@ -60,13 +60,13 @@ public class WeaponManager : SingletonObject<WeaponManager>
         // 인벤토리의 데이터를 공용으로 사용하기 때문에 그렇습니다.
         if (CurrWeaponInfo.TryGetValue(HandPosition.Left, out ItemData leftItem))
         {
-            if (leftItem.Data != null && leftItem.Data.id != 0 && leftItem.IsEquip)
+            if (leftItem._data != null && leftItem._data.id != 0 && leftItem._isEquip)
                 EquipWeapon(leftItem);
         }
 
         if (CurrWeaponInfo.TryGetValue(HandPosition.Right, out ItemData rightItem))
         {
-            if (rightItem.Data != null && rightItem.Data.id != 0 && rightItem.IsEquip)
+            if (rightItem._data != null && rightItem._data.id != 0 && rightItem._isEquip)
                 EquipWeapon(rightItem);
         }
     }
@@ -74,8 +74,8 @@ public class WeaponManager : SingletonObject<WeaponManager>
     // 장비 착용
     public void EquipWeapon(ItemData itemData, bool needSave = false)
     {
-        var weaponData = ItemManager.Instance.GetWeaponDataByRefId(itemData.Data.ref_id);
-        var prefab = ResourceManager.Instance.GetWeaponPrefab<GameObject>(itemData.Data.prefab_name);
+        var weaponData = ItemManager.Instance.GetWeaponDataByRefId(itemData._data.ref_id);
+        var prefab = ResourceManager.Instance.GetWeaponPrefab<GameObject>(itemData._data.prefab_name);
 
         itemData.SetEquip(true);
 
@@ -104,18 +104,7 @@ public class WeaponManager : SingletonObject<WeaponManager>
         else if (data == null || obj == null)
             return;
 
-        // // 프리팹을 생성
-        // GameObject itemObj = null;
-
         itemObj = Instantiate(obj, IsRightWeapon(data) ? _rightHand : _leftHand);
-
-        // if (itemObj != null)
-        // {
-        //     var item = itemObj.GetComponent<ItemBase>();
-
-        //     if (item != null)
-        //         item.ThisItemData.SetEquip(true);
-        // }
 
         SetPlayerAnim(data);
     }
@@ -123,10 +112,7 @@ public class WeaponManager : SingletonObject<WeaponManager>
     private void SetItemData(GameObject itemObj, ItemData itemData)
     {
         if (itemObj.TryGetComponent(out ItemBase itemBase))
-        {
-            if (!itemBase.ThisItemData.IsEmpty)
-                itemBase.ThisItemData.SetItemData(itemData);
-        }
+            itemBase.ThisItemData.SetItemData(itemData);
     }
 
     // 장비 해제
@@ -137,7 +123,7 @@ public class WeaponManager : SingletonObject<WeaponManager>
 
         data.SetEquip(false);
 
-        var weaponData = ItemManager.Instance.GetWeaponDataByRefId(data.Data.ref_id);
+        var weaponData = ItemManager.Instance.GetWeaponDataByRefId(data._data.ref_id);
         var handTransform = IsRightWeapon(weaponData) ? _rightHand : _leftHand;
 
         for (int index = 0; index < handTransform.childCount; index++)
@@ -147,11 +133,6 @@ public class WeaponManager : SingletonObject<WeaponManager>
             if (prefab != null)
                 Destroy(prefab.gameObject);
         }
-
-        // if (IsRightWeapon(weaponData))
-        //     CurrWeaponInfo[HandPosition.Right].ResetData();
-        // else
-        //     CurrWeaponInfo[HandPosition.Left].ResetData();
 
         JsonManager.Instance.SaveData(_path, _fileName, _baseData);
 

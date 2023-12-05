@@ -141,12 +141,12 @@ public class ItemManager : SingletonObject<ItemManager>
             return;
 
         // 해당 아이템의 카테고리 얻기
-        var cate = GetItemCateory(item.Data);
+        var cate = GetItemCateory(item._data);
 
         // 누적 가능한 아이템이라면
-        if (item.Data.stackable)
+        if (item._data.stackable)
         {
-            var hasItem = PlayerInventory[cate].Find(x => x.Data.id == item.Data.id);
+            var hasItem = PlayerInventory[cate].Find(x => x._data.id == item._data.id);
 
             // 해당 아이템이 인벤토리에 있음
             if (hasItem != null)
@@ -161,7 +161,6 @@ public class ItemManager : SingletonObject<ItemManager>
             ActualAddItem(cate, item);
 
         JsonManager.Instance.SaveData(_path, _fileName, _inventoryData);
-        JsonManager.Instance.LoadData(_path, _fileName, out _inventoryData);
 
         Debug.Log("아이템 먹어쓰요");
     }
@@ -176,7 +175,7 @@ public class ItemManager : SingletonObject<ItemManager>
     private void ActualAddItem(InventoryCategory cate, ItemData item)
     {
         // 빈 슬롯이 있는지 확인
-        var emptySlotIndex = PlayerInventory[cate].FindIndex(x => x.Data.id == 0);
+        var emptySlotIndex = PlayerInventory[cate].FindIndex(x => x._data.id == 0);
 
         if (emptySlotIndex == -1)
         {
@@ -236,10 +235,10 @@ public class ItemManager : SingletonObject<ItemManager>
         if (_currItemSlot.IsNullData || GameManager.Instance.PController == null)
             return;
 
-        switch (_currItemSlot.ItemData.Data.type)
+        switch (_currItemSlot.ItemData._data.type)
         {
             case ItemType.Weapon:
-                if (!_currItemSlot.ItemData.IsEquip)
+                if (!_currItemSlot.ItemData._isEquip)
                 {
                     WeaponManager.Instance.EquipWeapon(_currItemSlot.ItemData, true);
                     // _currItemSlot.ItemData.SetEquip(true);

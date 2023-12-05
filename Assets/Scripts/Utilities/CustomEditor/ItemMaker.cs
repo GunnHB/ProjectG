@@ -109,11 +109,11 @@ public class ItemMaker : OdinEditorWindow
                 item.SetItemData(new Item.Data());
             else
             {
-                if (item.ThisItemData.Data == null)
+                if (item.ThisItemData._data == null)
                     item.ThisItemData.SetData(new Item.Data());
             }
 
-            var itemData = item.ThisItemData.Data;
+            var itemData = item.ThisItemData._data;
 
             TableClass newData = new(item, itemData);
 
@@ -193,7 +193,7 @@ public class ItemMaker : OdinEditorWindow
         public void ResetData()
         {
             // this._itemData = this._itemBase.ItemData;
-            this._itemData = this._itemBase.ThisItemData.Data;
+            this._itemData = this._itemBase.ThisItemData._data;
 
             SetItemDataValue(_itemData);
         }

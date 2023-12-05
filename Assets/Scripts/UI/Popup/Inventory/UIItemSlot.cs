@@ -32,7 +32,7 @@ public class UIItemSlot : MonoBehaviour
     public bool IsNullData
     {
         // 아이디 값이 0이면 널로 판단
-        get => _itemData == null || _itemData.Data == null || _itemData.Data.id == 0;
+        get => _itemData == null || _itemData._data == null || _itemData._data.id == 0;
     }
 
     private void Awake()
@@ -66,7 +66,7 @@ public class UIItemSlot : MonoBehaviour
     private void SetData()
     {
         // 데이터가 비어있으면 리턴
-        if (_itemData.Data.id == 0)
+        if (_itemData._data.id == 0)
             return;
 
         SetImage();
@@ -82,7 +82,7 @@ public class UIItemSlot : MonoBehaviour
             return;
         }
 
-        _itmeImage.sprite = ResourceManager.Instance.GetSpriteByItem(_itemData.Data.type, _itemData.Data.image);
+        _itmeImage.sprite = ResourceManager.Instance.GetSpriteByItem(_itemData._data.type, _itemData._data.image);
         _itmeImage.gameObject.SetActive(true);
     }
 
@@ -94,11 +94,11 @@ public class UIItemSlot : MonoBehaviour
             return;
         }
 
-        if (!_itemData.Data.stackable || _itemData.Amount == 1)
+        if (!_itemData._data.stackable || _itemData._amount == 1)
             _itemAmountText.gameObject.SetActive(false);
         else
         {
-            _itemAmountText.text = $"{_itemData.Amount}";
+            _itemAmountText.text = $"{_itemData._amount}";
             _itemAmountText.gameObject.SetActive(true);
         }
 
@@ -113,7 +113,7 @@ public class UIItemSlot : MonoBehaviour
 
     private void SetItemEquipInfo()
     {
-        _equipObj.SetActive(_itemData.IsEquip);
+        _equipObj.SetActive(_itemData._isEquip);
     }
 
     private void OnClickSlot()

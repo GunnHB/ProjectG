@@ -136,8 +136,8 @@ public class UIInventoryPopup : UIPopupBase
         }
         else
         {
-            _itemName.text = ItemManager.Instance.CurrItemSlot.ItemData.Data.name;
-            _itemDesc.text = ItemManager.Instance.CurrItemSlot.ItemData.Data.desc;
+            _itemName.text = ItemManager.Instance.CurrItemSlot.ItemData._data.name;
+            _itemDesc.text = ItemManager.Instance.CurrItemSlot.ItemData._data.desc;
 
             _buttonGroup.gameObject.SetActive(true);
         }

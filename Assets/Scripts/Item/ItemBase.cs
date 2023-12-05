@@ -1,27 +1,14 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 using Sirenix.OdinInspector;
 
+[Serializable]
 public class ItemData
 {
-    [SerializeField]
-    private Item.Data _data = null;
-    [SerializeField]
-    private bool _isEquip = false;
-    [SerializeField]
-    private int _amount = 0;
-
-    public Item.Data Data => _data;
-    public bool IsEquip => _isEquip;
-    public int Amount => _amount;
-
-    public bool IsEmpty
-    {
-        get => this._data == null || this._data.id == 0;
-    }
+    public Item.Data _data;
+    public bool _isEquip;
+    public int _amount;
 
     public ItemData()
     {
@@ -71,9 +58,9 @@ public class ItemData
 
     public void SetItemData(ItemData itemData)
     {
-        SetData(itemData.Data);
-        SetEquip(itemData.IsEquip);
-        SetAmount(itemData.Amount);
+        SetData(itemData._data);
+        SetEquip(itemData._isEquip);
+        SetAmount(itemData._amount);
     }
 }
 
@@ -126,7 +113,7 @@ public class ItemBase : SerializedMonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (this._itemData.IsEquip)
+        if (this._itemData._isEquip)
             return;
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
@@ -140,7 +127,7 @@ public class ItemBase : SerializedMonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (this._itemData.IsEquip)
+        if (this._itemData._isEquip)
             return;
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))

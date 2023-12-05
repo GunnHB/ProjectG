@@ -105,46 +105,19 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: _itemData
-      Entry: 7
-      Data: 0|ItemData, Assembly-CSharp
-    - Name: _data
-      Entry: 7
-      Data: 1|Item.Data, Assembly-CSharp
-    - Name: id
-      Entry: 3
-      Data: 100020001
-    - Name: type
-      Entry: 3
-      Data: 1
-    - Name: name
-      Entry: 1
-      Data: Item_Weapon_One_Hand_0001
-    - Name: desc
-      Entry: 1
-      Data: Item_Weapon_One_Hand_Desc_0001
-    - Name: image
-      Entry: 1
-      Data: Icon_Weapon_One_Hand_0001
-    - Name: ref_id
-      Entry: 3
-      Data: 300010001
-    - Name: stackable
-      Entry: 5
-      Data: false
-    - Name: prefab_name
-      Entry: 1
-      Data: Hammer01
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: _isEquip
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []
+  _itemData:
+    _data:
+      id: 100020001
+      type: 1
+      name: Item_Weapon_One_Hand_0001
+      desc: Item_Weapon_One_Hand_Desc_0001
+      image: Icon_Weapon_One_Hand_0001
+      ref_id: 300010001
+      stackable: 0
+      prefab_name: Hammer01
+    _isEquip: 0
+    _amount: 1
   _boxSize: {x: 0, y: 0, z: 0}
   _maxDistance: 0
   _groundMask:
