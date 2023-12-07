@@ -77,10 +77,10 @@ public class WeaponManager : SingletonObject<WeaponManager>
         var weaponData = ItemManager.Instance.GetWeaponDataByRefId(itemData._data.ref_id);
         var prefab = ResourceManager.Instance.GetWeaponPrefab<GameObject>(itemData._data.prefab_name);
 
-        itemData.SetEquip(true);
-
         if (needSave)
         {
+            itemData.SetEquip(true);
+
             if (IsRightWeapon(weaponData))
                 CurrWeaponInfo[HandPosition.Right] = itemData;
             else

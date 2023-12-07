@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
+using System.Collections.Generic;
+
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
 
 // 아이템 / 인벤토리 관리는 여기서 합니다.
 public class ItemManager : SingletonObject<ItemManager>
@@ -14,6 +11,10 @@ public class ItemManager : SingletonObject<ItemManager>
 
     private UIItemSlot _currItemSlot;
     public UIItemSlot CurrItemSlot => _currItemSlot;
+
+    // 장착된 아이템 슬롯 리스트
+    private List<UIItemSlot> _equipedItemSlotList = new();
+    public List<UIItemSlot> EquipedItemSlotList => _equipedItemSlotList;
 
     #region 캐싱
     private string _path = JsonManager.PLAYER_DATA;
@@ -239,15 +240,9 @@ public class ItemManager : SingletonObject<ItemManager>
         {
             case ItemType.Weapon:
                 if (!_currItemSlot.ItemData._isEquip)
-                {
                     WeaponManager.Instance.EquipWeapon(_currItemSlot.ItemData, true);
-                    // _currItemSlot.ItemData.SetEquip(true);
-                }
                 else
-                {
                     WeaponManager.Instance.UnequipWeapon(_currItemSlot.ItemData);
-                    // _currItemSlot.ItemData.SetEquip(false);
-                }
                 break;
             case ItemType.Armor:
                 EquipArmor();
@@ -281,6 +276,36 @@ public class ItemManager : SingletonObject<ItemManager>
 
     // 실제 아이템 버리기 실행
     private void ActualDiscardItem()
+    {
+
+    }
+
+    // EquipedItemSlotList 에 있는 슬롯들 중 신규 데이터와 비교하여
+    // 같은 타입의 슬롯이 있다면 신규로 교체
+    // 없으면 리스트에 추가만 해줌
+    public void ChangeEquipedItemSlot(ItemData newItemData)
+    {
+        if (!newItemData._isEquip)
+            return;
+
+        if (newItemData._data.type == ItemType.Weapon)
+            ChangeEquipedByWeapon(newItemData);
+        else if (newItemData._data.type == ItemType.Armor)
+            ChangeEquipedByArmor(newItemData);
+    }
+
+    public void ChangeEquipedByWeapon(ItemData newItemData)
+    {
+        if (!newItemData._isEquip)
+            return;
+
+        for (int index = 0; index < _equipedItemSlotList.Count; index++)
+        {
+            var oldSlot = _equipedItemSlotList[index];
+        }
+    }
+
+    public void ChangeEquipedByArmor(ItemData newItemData)
     {
 
     }

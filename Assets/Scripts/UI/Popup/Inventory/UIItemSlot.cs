@@ -101,18 +101,11 @@ public class UIItemSlot : MonoBehaviour
             _itemAmountText.text = $"{_itemData._amount}";
             _itemAmountText.gameObject.SetActive(true);
         }
-
-        // if (ItemManager.Instance.InvenItemAmount.TryGetValue(_itemData.Data.id, out int amount))
-        // {
-        //     if (amount == 1)
-        //         _itemAmountText.gameObject.SetActive(false);
-        //     else
-        //         _itemAmountText.text = $"X {amount}";
-        // }
     }
 
     private void SetItemEquipInfo()
     {
+        ItemManager.Instance.ChangeEquipedItemSlot(_itemData);
         _equipObj.SetActive(_itemData._isEquip);
     }
 

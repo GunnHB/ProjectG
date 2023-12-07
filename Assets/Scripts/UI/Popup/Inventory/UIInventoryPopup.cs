@@ -104,6 +104,8 @@ public class UIInventoryPopup : UIPopupBase
         // 모두 반환
         _inventoryRowPool.ReturnAllObject();
 
+        ItemManager.Instance.EquipedItemSlotList.Clear();
+
         for (int index = 0; index < rowCount; index++)
         {
             var temp = _inventoryRowPool.GetObject();

@@ -30,13 +30,6 @@ public static class GameValue
 
     // 인벤토리 한 행에 들어가는 슬롯 수
     public static int INVENTORY_ROW_AMOUNT = 5;
-
-    // 플레이어 애니 관련
-    public static string PLAYER_ANIM_ATTACK_01 = "Attack_01";
-    public static string PLAYER_ANIM_ATTACK_02 = "Attack_02";
-    public static string PLAYER_ANIM_ATTACK_03 = "Attack_03";
-    public static string PLAYER_ANIM_ATTACK_04 = "Attack_04";
-    public static string PLAYER_ANIM_ATTACK_05 = "Attack_05";
 }
 
 public enum SlotIndex
