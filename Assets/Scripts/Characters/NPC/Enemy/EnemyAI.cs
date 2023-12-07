@@ -20,6 +20,9 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float _chaseMovementSpeed = 3f;
     [SerializeField] private Transform[] _wayPoints;
 
+    [Title("[Evnet Checker]")]
+    [SerializeField] private AnimEventChecker _checker;
+
     private Vector3 _originPosition = default;
     private BahaviorTreeRunner _btRunner = null;
 
@@ -27,7 +30,7 @@ public class EnemyAI : MonoBehaviour
     private Transform _detectedPlayer = null;
     private Transform _currentWayPoint = null;
 
-    private const string ATTACK_ANIM_STATE_NAME = "Attack";
+    private const string ATTACK_ANIM_STATE_NAME = "Attack01";
     private const string ATTACK_ANIM_TRIGGER_NAME = "attack";
 
     private float _turnSmoothTime = .2f;
@@ -114,7 +117,8 @@ public class EnemyAI : MonoBehaviour
     private INode.ENodeState CheckMeleeAttacking()
     {
         // 공격 중인지 확인
-        return IsAnimationRunning(ATTACK_ANIM_STATE_NAME) ? INode.ENodeState.RunningState : INode.ENodeState.SuccessState;
+        // return IsAnimationRunning(ATTACK_ANIM_STATE_NAME) ? INode.ENodeState.RunningState : INode.ENodeState.SuccessState;
+        return _checker.ProcessingAttack ? INode.ENodeState.RunningState : INode.ENodeState.SuccessState;
     }
 
     private INode.ENodeState CheckPlayerWithinMeleeAttackRange()
@@ -135,7 +139,7 @@ public class EnemyAI : MonoBehaviour
         // 공격 상태로 전환
         if (_detectedPlayer != null)
         {
-            if (_animator != null)
+            if (_animator != null && !_checker.ProcessingAttack)
                 _animator.SetTrigger(ATTACK_ANIM_TRIGGER_NAME);
 
             return INode.ENodeState.SuccessState;
@@ -204,23 +208,6 @@ public class EnemyAI : MonoBehaviour
         // 플레이어를 놓치고 잠시 대기
         return DoIdle();
     }
-
-    // // Move to origin position node
-    // private INode.ENodeState MoveToOriginPosition()
-    // {
-    //     // float epsilon -> 부동 소수점 비교를 통해 오차를 정밀하게 계산
-    //     if (Vector3.SqrMagnitude(_originPosition - transform.position) <= (float.Epsilon * float.Epsilon))
-    //         return INode.ENodeState.SuccessState;
-    //     else
-    //     {
-    //         transform.position = Vector3.MoveTowards(transform.position, _originPosition, _applyMovementSpeed * Time.deltaTime);
-
-    //         if (_fieldOfView != null && _detectedPlayer != null)
-    //             RotateToTarget(_detectedPlayer.position);
-
-    //         return INode.ENodeState.RunningState;
-    //     }
-    // }
 
     // Patrol node
     private INode.ENodeState DoPatrol()

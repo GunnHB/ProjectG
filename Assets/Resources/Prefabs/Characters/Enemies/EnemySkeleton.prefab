@@ -50,10 +50,12 @@ MonoBehaviour:
   _fieldOfView: {fileID: 6988450777119453044}
   _animator: {fileID: 4071466643629465012}
   _meleeAttackRange: 2
-  _movementSpeed: 1
+  _patrolMovementSpeed: 1
+  _chaseMovementSpeed: 3
   _wayPoints:
   - {fileID: 0}
   - {fileID: 0}
+  _checker: {fileID: 5071362153856462967}
 --- !u!114 &6988450777119453044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,7 +93,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &4166117051951005904
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -158,6 +160,23 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 95072803331382628, guid: cb598c38dddcdda49a7c3b18e90f08b0, type: 3}
   m_PrefabInstance: {fileID: 4166117051951005904}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4166657911101301082 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1112885853905290, guid: cb598c38dddcdda49a7c3b18e90f08b0, type: 3}
+  m_PrefabInstance: {fileID: 4166117051951005904}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5071362153856462967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4166657911101301082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d61e88f1e3b1dff4383dfd73b494d7b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4170145847947424720 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4029638548730624, guid: cb598c38dddcdda49a7c3b18e90f08b0, type: 3}
