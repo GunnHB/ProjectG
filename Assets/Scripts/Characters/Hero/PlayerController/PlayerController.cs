@@ -24,6 +24,9 @@ public partial class PlayerController : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private AnimEventChecker _checker;
 
+    [Title("[PlayerMeshData]")]
+    [SerializeField] private PlayerSkinnedMesh _meshData;
+
     [Title("[PlayerTransform]")]
     [SerializeField] private Transform _leftHandTransform;
     [SerializeField] private Transform _rightHandTransform;

@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 using Sirenix.OdinInspector;
 using UnityEngine.Events;
+using Unity.Mathematics;
+using UnityEngine.InputSystem;
 
 public class SelectSlot : MonoBehaviour
 {
@@ -27,10 +29,19 @@ public class SelectSlot : MonoBehaviour
     [SerializeField] private Button _deleteButton;
     [SerializeField] private Button _playButton;
 
+    [Title("[Player]")]
+    [SerializeField] private GameObject _prefab;
+    [SerializeField] private GameObject _camera;
+
     private SeparateType _currentType;
     private UnityAction _closePanelAction;
 
     private bool _emptyState = false;
+
+    private Vector3 _playerPosition = new Vector3(0, -1000, 0);
+    private Vector3 _playerRotation = new Vector3(0, -180, 0);
+
+    private GameObject _playerPrefab = null;
 
     public void InitSlot(SeparateType type, UnityAction callback)
     {
@@ -58,6 +69,34 @@ public class SelectSlot : MonoBehaviour
             return;
 
         _playerName.text = JsonManager.Instance.BaseData._playerName[(int)_currentType];
+    }
+
+    private void SetPlayerPrefab()
+    {
+        // 빈 슬롯은 할 필요가 없음다.
+        if (_emptyState)
+            return;
+
+        _playerPrefab = Instantiate(_prefab, _playerPosition, Quaternion.Euler(_playerRotation), this.transform);
+
+        if (_playerPrefab != null)
+        {
+            // 불필요한 컴포넌트는 끄기
+            var controller = _playerPrefab.GetComponent<PlayerController>();
+            var input = _playerPrefab.GetComponent<PlayerInput>();
+            var meshData = _playerPrefab.GetComponent<PlayerSkinnedMesh>();
+
+            if (controller != null)
+                controller.enabled = false;
+
+            if (input != null)
+                input.enabled = false;
+        }
+    }
+
+    private void SetCamera()
+    {
+        _camera.SetActive(!_emptyState);
     }
 
     private void SetButtonListener()
@@ -120,6 +159,12 @@ public class SelectSlot : MonoBehaviour
     private void ResetData()
     {
         _closePanelAction = null;
+
+        if (_playerPrefab != null)
+        {
+            Destroy(_playerPrefab);
+            _playerPrefab = null;
+        }
     }
 
     private void RefreshSlot()
@@ -128,5 +173,7 @@ public class SelectSlot : MonoBehaviour
 
         SetSlotState();
         SetPlayerNameText();
+        SetPlayerPrefab();
+        SetCamera();
     }
 }
