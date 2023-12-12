@@ -367,15 +367,12 @@ public class UICustomizePanel : UIPanelBase
     // 캐릭터 생성 버튼 콜백
     private void CreateNewCharacter()
     {
-        SavePlayerMeshData();
         SavePlayerBaseData();
+        SavePlayerMeshData();
 
         // 빈 슬롯 여부 저장
         JsonManager.Instance.SlotBaseData._isEmpty[_slotIndex] = false;
         JsonManager.Instance.SaveData(_slotDataPath, _slotDataFileName, JsonManager.Instance.SlotBaseData);
-
-        JsonManager.Instance.SaveData(_playerBaseDataPath, _playerBaseDataFileName, JsonManager.Instance.BaseData);
-        JsonManager.Instance.SaveData(_playerBaseDataPath, _playerMeshDataFileName, JsonManager.Instance.MeshData);
 
         LoadSceneManager.Instance.FadeInOut(null, LoadSceneManager.SceneType.InGame);
     }
@@ -384,6 +381,8 @@ public class UICustomizePanel : UIPanelBase
     {
         JsonManager.Instance.MeshData._hairHesh[_slotIndex] = _currHairMesh;
         JsonManager.Instance.MeshData._skinMesh[_slotIndex] = _currHairMesh;
+
+        JsonManager.Instance.SaveDataByJsonUtility(_playerBaseDataPath, _playerMeshDataFileName, JsonManager.Instance.MeshData);
     }
 
     private void SavePlayerBaseData()
@@ -391,6 +390,8 @@ public class UICustomizePanel : UIPanelBase
         JsonManager.Instance.BaseData._playerName[_slotIndex] = _nameInputField.text;
         JsonManager.Instance.BaseData._playerHP[_slotIndex] = GameValue.INIT_HP;
         JsonManager.Instance.BaseData._playerStamina[_slotIndex] = GameValue.INIT_STAMINA;
+
+        JsonManager.Instance.SaveData(_playerBaseDataPath, _playerBaseDataFileName, JsonManager.Instance.BaseData);
     }
 
     private void BackToSelectScharacter()

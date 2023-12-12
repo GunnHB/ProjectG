@@ -40,10 +40,34 @@ public class JsonManager : SingletonObject<JsonManager>
         LoadData(SLOT_DATA, SLOT_DATA_FILE_NAME, out _slotBaseData);
 
         LoadData(PLAYER_DATA, PLAYER_BASE_DATA_FILE_NAME, out _baseData);
-        LoadData(PLAYER_DATA, PLAYER_MESH_DATA_FILE_NAME, out _meshData);
+        // LoadData(PLAYER_DATA, PLAYER_MESH_DATA_FILE_NAME, out _meshData);
         LoadData(PLAYER_DATA, PLAYER_INVENTORY_DATA_FILE_NAME, out _inventoryData);
+
+        LoadDataByJsonUtility(PLAYER_DATA, PLAYER_MESH_DATA_FILE_NAME, out _meshData);
     }
 
+    public void CreateJsonFile(string createPath, string fileName, string jsonData)
+    {
+        FileStream fileStream = new FileStream($"{BASE_PATH}/{createPath}/{fileName}.json", FileMode.Create);
+        byte[] data = Encoding.UTF8.GetBytes(jsonData);
+        fileStream.Write(data, 0, data.Length);
+        fileStream.Close();
+    }
+
+    public T LoadJsonFile<T>(string loadPath, string fileName)
+    {
+        FileStream fileStream = new FileStream($"{BASE_PATH}/{loadPath}/{fileName}.json", FileMode.Open);
+        byte[] data = new byte[fileStream.Length];
+        fileStream.Read(data, 0, data.Length);
+        fileStream.Close();
+        string jsonData = Encoding.UTF8.GetString(data);
+
+        return JsonConvert.DeserializeObject<T>(jsonData);
+    }
+
+    // ================================================================
+    // 하위의 json 저장은 newtonsoft.json을 사용합니다.
+    // ================================================================
     public void SaveData<T>(string path, string fileName, T data)
     {
         var jsonData = ObjectToJson(data);
@@ -91,22 +115,44 @@ public class JsonManager : SingletonObject<JsonManager>
         return JsonConvert.DeserializeObject<T>(jsonData);
     }
 
-    public void CreateJsonFile(string createPath, string fileName, string jsonData)
+    // ================================================================
+    // 하위의 json 저장은 jsonutility를 사용합니다.
+    // ================================================================
+    public void SaveDataByJsonUtility<T>(string path, string fileName, T data)
     {
-        FileStream fileStream = new FileStream($"{BASE_PATH}/{createPath}/{fileName}.json", FileMode.Create);
-        byte[] data = Encoding.UTF8.GetBytes(jsonData);
-        fileStream.Write(data, 0, data.Length);
-        fileStream.Close();
+        var jsonData = ObjectToJsonByJsonUtility(data);
+        File.WriteAllText($"{BASE_PATH}/{path}/{fileName}.json", jsonData);
     }
 
-    public T LoadJsonFile<T>(string loadPath, string fileName)
+    // 기존의 LoadData 와 형태는 거의 동일합니다.
+    public void LoadDataByJsonUtility<T>(string path, string fileName, out T field) where T : new()
     {
-        FileStream fileStream = new FileStream($"{BASE_PATH}/{loadPath}/{fileName}.json", FileMode.Open);
-        byte[] data = new byte[fileStream.Length];
-        fileStream.Read(data, 0, data.Length);
-        fileStream.Close();
-        string jsonData = Encoding.UTF8.GetString(data);
+        try
+        {
+            field = LoadJsonFile<T>(path, fileName);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
 
-        return JsonConvert.DeserializeObject<T>(jsonData);
+            field = new T();
+
+            string jsonData = ObjectToJsonByJsonUtility(field);
+            CreateJsonFile(path, fileName, jsonData);
+
+            field = LoadJsonFile<T>(path, fileName);
+        }
+    }
+
+    public string ObjectToJsonByJsonUtility(object obj)
+    {
+        // serialize 함다
+        return JsonUtility.ToJson(obj);
+    }
+
+    public T JsonToObjectByJsonUtility<T>(string jsonData)
+    {
+        // deserialize 함다
+        return JsonUtility.FromJson<T>(jsonData);
     }
 }
