@@ -3064,7 +3064,7 @@ MonoBehaviour:
   _resetRotateButton: {fileID: 1874883329454321168}
   _rightRotateButton: {fileID: 1352850242069760234}
   _rotateSpeed: 0.75
-  _playerPrefab: {fileID: 3192817222028608321, guid: 71e61aa9ec1e4f54fad47f0f2af3f975, type: 3}
+  _playerPrefab: {fileID: 5969814911113478584, guid: 542ee8d562bef7a4aa0983e54d8d6619, type: 3}
   _meshScriptableObject: {fileID: 11400000, guid: d4b7f7246754b68418c2cd0b37ea0d81, type: 2}
   _hairLeftButton: {fileID: 7287324243612037368}
   _hairRightButton: {fileID: 4756473996656091343}

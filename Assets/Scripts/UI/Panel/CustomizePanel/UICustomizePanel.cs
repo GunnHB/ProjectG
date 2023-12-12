@@ -90,6 +90,20 @@ public class UICustomizePanel : UIPanelBase
     private CustomMode _currentCustomMode = CustomMode.None;
     public CustomMode CurrentCustomMode => _currentCustomMode;
 
+    private Mesh _currHairMesh = null;
+    private Mesh _currSkinMesh = null;
+
+    #region 캐싱
+    private int _slotIndex = GameManager.Instance.SelectedSlotIndex;
+
+    private string _slotDataPath = JsonManager.SLOT_DATA;
+    private string _slotDataFileName = JsonManager.SLOT_DATA_FILE_NAME;
+
+    private string _playerBaseDataPath = JsonManager.PLAYER_DATA;
+    private string _playerBaseDataFileName = JsonManager.PLAYER_BASE_DATA_FILE_NAME;
+    private string _playerMeshDataFileName = JsonManager.PLAYER_MESH_DATA_FILE_NAME;
+    #endregion
+
     protected override void Awake()
     {
         base.Awake();
@@ -149,6 +163,10 @@ public class UICustomizePanel : UIPanelBase
 
         AddMeshDictionary(MeshCategory.Hair, _meshScriptableObject._hairMeshArray);
         AddMeshDictionary(MeshCategory.Skin, _meshScriptableObject._skinMeshArray);
+
+        // 초기화
+        _currHairMesh = _meshScriptableObject._hairMeshArray[0];
+        _currSkinMesh = _meshScriptableObject._skinMeshArray[0];
     }
 
     private void GetSkinnedMeshRenderer(MeshCategory meshCategory, string _objName)
@@ -263,15 +281,21 @@ public class UICustomizePanel : UIPanelBase
     private void OnClickHairButton(bool next)
     {
         SetIndex(next, ref _hairIndex, MeshCategory.Hair);
-        _socketDictionary[MeshCategory.Hair].sharedMesh = _meshDictionary[MeshCategory.Hair][_hairIndex];
+
+        _currHairMesh = _meshDictionary[MeshCategory.Hair][_hairIndex];
+        _socketDictionary[MeshCategory.Hair].sharedMesh = _currHairMesh;
 
         SetText(_hairInfoText, "Hair", _hairIndex);
+
+
     }
 
     private void OnClickSkinButton(bool next)
     {
         SetIndex(next, ref _skinIndex, MeshCategory.Skin);
-        _socketDictionary[MeshCategory.Skin].sharedMesh = _meshDictionary[MeshCategory.Skin][_skinIndex];
+
+        _currSkinMesh = _meshDictionary[MeshCategory.Skin][_skinIndex];
+        _socketDictionary[MeshCategory.Skin].sharedMesh = _currSkinMesh;
 
         SetText(_skinInfoText, "Skin", _skinIndex);
     }
@@ -343,10 +367,30 @@ public class UICustomizePanel : UIPanelBase
     // 캐릭터 생성 버튼 콜백
     private void CreateNewCharacter()
     {
-        JsonManager.Instance.SlotBaseData._isEmpty[GameManager.Instance.SelectedSlotIndex] = false;
-        JsonManager.Instance.SaveData(JsonManager.SLOT_DATA, JsonManager.SLOT_DATA_FILE_NAME, JsonManager.Instance.SlotBaseData);
+        SavePlayerMeshData();
+        SavePlayerBaseData();
+
+        // 빈 슬롯 여부 저장
+        JsonManager.Instance.SlotBaseData._isEmpty[_slotIndex] = false;
+        JsonManager.Instance.SaveData(_slotDataPath, _slotDataFileName, JsonManager.Instance.SlotBaseData);
+
+        JsonManager.Instance.SaveData(_playerBaseDataPath, _playerBaseDataFileName, JsonManager.Instance.BaseData);
+        JsonManager.Instance.SaveData(_playerBaseDataPath, _playerMeshDataFileName, JsonManager.Instance.MeshData);
 
         LoadSceneManager.Instance.FadeInOut(null, LoadSceneManager.SceneType.InGame);
+    }
+
+    private void SavePlayerMeshData()
+    {
+        JsonManager.Instance.MeshData._hairHesh[_slotIndex] = _currHairMesh;
+        JsonManager.Instance.MeshData._skinMesh[_slotIndex] = _currHairMesh;
+    }
+
+    private void SavePlayerBaseData()
+    {
+        JsonManager.Instance.BaseData._playerName[_slotIndex] = _nameInputField.text;
+        JsonManager.Instance.BaseData._playerHP[_slotIndex] = GameValue.INIT_HP;
+        JsonManager.Instance.BaseData._playerStamina[_slotIndex] = GameValue.INIT_STAMINA;
     }
 
     private void BackToSelectScharacter()

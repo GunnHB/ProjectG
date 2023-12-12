@@ -24,8 +24,8 @@ public class GameManager : SingletonObject<GameManager>
     {
         get
         {
-            // if (_currentMode == GameMode.InGame)
-            _pController = GameObject.Find("Player_onCamera").GetComponent<PlayerController>();
+            if (_currentMode == GameMode.InGame)
+                _pController = GameObject.Find("Player_onCamera").GetComponent<PlayerController>();
 
             return _pController;
         }
