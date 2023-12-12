@@ -25,7 +25,7 @@ public partial class PlayerController : MonoBehaviour
     [SerializeField] private AnimEventChecker _checker;
 
     [Title("[PlayerMeshData]")]
-    [SerializeField] private PlayerSkinnedMesh _meshData;
+    [SerializeField] private PlayerSkinnedMesh _skinnedMeshData;
 
     [Title("[PlayerTransform]")]
     [SerializeField] private Transform _leftHandTransform;
@@ -67,6 +67,7 @@ public partial class PlayerController : MonoBehaviour
     public Animator PlayerAnimator => _animator;
     public Transform LeftHand => _leftHandTransform;
     public Transform RightHand => _rightHandTransform;
+    public PlayerSkinnedMesh SkinnedMeshData => _skinnedMeshData;
 
     #region 상호 작용
     private InputAction _InteractionAction;

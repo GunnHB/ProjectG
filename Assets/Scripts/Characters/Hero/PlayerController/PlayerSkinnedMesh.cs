@@ -22,8 +22,11 @@ public class PlayerSkinnedMesh : SerializedMonoBehaviour
 
     public Dictionary<string, SkinnedMeshRenderer> PlayerSkinnedMeshDic => _skinnedDic;
 
-    private void SetPlayerSkinnedMesh()
+    public void SetPlayerSkinnedMesh(string key, Mesh mesh)
     {
+        if (!_skinnedDic.ContainsKey(key) || mesh.name == string.Empty)
+            return;
 
+        _skinnedDic[key].sharedMesh = mesh;
     }
 }

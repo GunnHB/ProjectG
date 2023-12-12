@@ -43,6 +43,11 @@ public class SelectSlot : MonoBehaviour
 
     private GameObject _playerPrefab = null;
 
+    #region 캐싱
+    private Mesh _hairMesh { get => JsonManager.Instance.MeshData._hairHesh[(int)_currentType]; }
+    private Mesh _skinMesh { get => JsonManager.Instance.MeshData._skinMesh[(int)_currentType]; }
+    #endregion
+
     public void InitSlot(SeparateType type, UnityAction callback)
     {
         ResetData();
@@ -84,13 +89,19 @@ public class SelectSlot : MonoBehaviour
             // 불필요한 컴포넌트는 끄기
             var controller = _playerPrefab.GetComponent<PlayerController>();
             var input = _playerPrefab.GetComponent<PlayerInput>();
-            var meshData = _playerPrefab.GetComponent<PlayerSkinnedMesh>();
+            var skinnedMeshData = _playerPrefab.GetComponent<PlayerSkinnedMesh>();
 
             if (controller != null)
                 controller.enabled = false;
 
             if (input != null)
                 input.enabled = false;
+
+            if (skinnedMeshData != null)
+            {
+                skinnedMeshData.SetPlayerSkinnedMesh(PlayerSkinnedMesh.SKINNED_MESH_HAIR, _hairMesh);
+                skinnedMeshData.SetPlayerSkinnedMesh(PlayerSkinnedMesh.SKINNED_MESH_SKIN, _skinMesh);
+            }
         }
     }
 
