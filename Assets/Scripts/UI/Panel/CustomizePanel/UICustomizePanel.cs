@@ -380,7 +380,7 @@ public class UICustomizePanel : UIPanelBase
     private void SavePlayerMeshData()
     {
         JsonManager.Instance.MeshData._hairHesh[_slotIndex] = _currHairMesh;
-        JsonManager.Instance.MeshData._skinMesh[_slotIndex] = _currHairMesh;
+        JsonManager.Instance.MeshData._skinMesh[_slotIndex] = _currSkinMesh;
 
         JsonManager.Instance.SaveDataByJsonUtility(_playerBaseDataPath, _playerMeshDataFileName, JsonManager.Instance.MeshData);
     }

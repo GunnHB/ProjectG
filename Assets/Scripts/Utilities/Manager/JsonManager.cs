@@ -54,7 +54,7 @@ public class JsonManager : SingletonObject<JsonManager>
         fileStream.Close();
     }
 
-    public T LoadJsonFile<T>(string loadPath, string fileName)
+    public T LoadJsonFile<T>(string loadPath, string fileName, bool isNewtonSoft = true)
     {
         FileStream fileStream = new FileStream($"{BASE_PATH}/{loadPath}/{fileName}.json", FileMode.Open);
         byte[] data = new byte[fileStream.Length];
@@ -62,7 +62,10 @@ public class JsonManager : SingletonObject<JsonManager>
         fileStream.Close();
         string jsonData = Encoding.UTF8.GetString(data);
 
-        return JsonConvert.DeserializeObject<T>(jsonData);
+        if (isNewtonSoft)
+            return JsonToObject<T>(jsonData);
+        else
+            return JsonToObjectByJsonUtility<T>(jsonData);
     }
 
     // ================================================================
@@ -129,7 +132,7 @@ public class JsonManager : SingletonObject<JsonManager>
     {
         try
         {
-            field = LoadJsonFile<T>(path, fileName);
+            field = LoadJsonFile<T>(path, fileName, false);
         }
         catch (Exception e)
         {
@@ -140,7 +143,7 @@ public class JsonManager : SingletonObject<JsonManager>
             string jsonData = ObjectToJsonByJsonUtility(field);
             CreateJsonFile(path, fileName, jsonData);
 
-            field = LoadJsonFile<T>(path, fileName);
+            field = LoadJsonFile<T>(path, fileName, false);
         }
     }
 
