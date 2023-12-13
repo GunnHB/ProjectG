@@ -162,6 +162,9 @@ public class LoadSceneManager : SingletonObject<LoadSceneManager>
         _callback = null;
         _sceneType = SceneType.None;
 
+        if (_scenePanel == null)
+            LoadPanel();
+
         // 페이드 종료 후 ui 클릭 허용
         _scenePanel.FadeImage.raycastTarget = false;
     }

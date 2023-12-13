@@ -370,7 +370,7 @@ public class UICustomizePanel : UIPanelBase
 
             // 씬 이동하거나 같은 씬에서 해당 허드만 종료 시키는 기능 추가하면 될 듯...?
             UIManager.Instance.OpenSimpleDialogue(title, message,
-                                                  confirm, BackToSelectScharacter,
+                                                  confirm, BackToSelectCharacter,
                                                   cancel, null);
         }
     }
@@ -428,7 +428,7 @@ public class UICustomizePanel : UIPanelBase
         JsonManager.Instance.SaveData(_playerBaseDataPath, _playerBaseDataFileName, JsonManager.Instance.BaseData);
     }
 
-    private void BackToSelectScharacter()
+    private void BackToSelectCharacter()
     {
         LoadSceneManager.Instance.FadeInOut(BackButtonAction);
     }
