@@ -162,10 +162,8 @@ public class UICustomizePanel : UIPanelBase
 
         InitMeshDictionary();
 
-        // 우측의 메시 선택 버튼이 먼저 초기화되어야 
-        // 플레이어 프리팹의 메시도 정상적으로 초기화됩니다용
-        SetRightPanel();
         SetLeftPanel();
+        SetRightPanel();
     }
 
     private void GetPlayerTransform()
@@ -184,18 +182,19 @@ public class UICustomizePanel : UIPanelBase
             input.enabled = false;
 
         _playerMeshTransform = Util.GetComponent<Transform>(_playerTransform, "NoWeapon01");
-
-        _playerTransform.localPosition = _initPosition;
-        _playerTransform.rotation = _initRotation;
     }
 
     private void ResetPlayerTransform()
     {
-        _playerTransform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+        _playerTransform.localPosition = _initPosition;
+        _playerTransform.rotation = _initRotation;
+
         _originRotate = _playerTransform.rotation;
 
         _hairIndex = 0;
         _skinIndex = 0;
+
+        _nameInputField.text = string.Empty;
     }
 
     private void InitMeshDictionary()
@@ -246,12 +245,13 @@ public class UICustomizePanel : UIPanelBase
 
     private void SetLeftPanel()
     {
-        if (_playerTransform != null)
-        {
-            _originRotate = _playerTransform.rotation;
+        if (_playerTransform == null)
+            return;
 
+        ResetPlayerTransform();
 
-        }
+        SetMesh(MeshCategory.Hair, _hairIndex, out _currHairMesh);
+        SetMesh(MeshCategory.Skin, _skinIndex, out _currSkinMesh);
     }
 
     private void SetRightPanel()
@@ -259,13 +259,9 @@ public class UICustomizePanel : UIPanelBase
         // skinnedmeshrenderer 의 mesh 가 교체되는 구조
 
         // Hair
-        // 처음 초기화는 0
-        _hairIndex = 0;
         SetText(_hairInfoText, "Hair", _hairIndex);
 
         // Skin
-        // 처음 초기화는 0
-        _skinIndex = 0;
         SetText(_skinInfoText, "Skin", _skinIndex);
 
         // nickname 캐릭터 생성이 아닐 땐 보일 필요 없음
@@ -312,8 +308,10 @@ public class UICustomizePanel : UIPanelBase
     {
         SetIndex(next, ref _hairIndex, MeshCategory.Hair);
 
-        _currHairMesh = _meshDictionary[MeshCategory.Hair][_hairIndex];
-        _socketDictionary[MeshCategory.Hair].sharedMesh = _currHairMesh;
+        // _currHairMesh = _meshDictionary[MeshCategory.Hair][_hairIndex];
+        // _socketDictionary[MeshCategory.Hair].sharedMesh = _currHairMesh;
+
+        SetMesh(MeshCategory.Hair, _hairIndex, out _currHairMesh);
 
         SetText(_hairInfoText, "Hair", _hairIndex);
     }
@@ -322,10 +320,18 @@ public class UICustomizePanel : UIPanelBase
     {
         SetIndex(next, ref _skinIndex, MeshCategory.Skin);
 
-        _currSkinMesh = _meshDictionary[MeshCategory.Skin][_skinIndex];
-        _socketDictionary[MeshCategory.Skin].sharedMesh = _currSkinMesh;
+        // _currSkinMesh = _meshDictionary[MeshCategory.Skin][_skinIndex];
+        // _socketDictionary[MeshCategory.Skin].sharedMesh = _currSkinMesh;
+
+        SetMesh(MeshCategory.Skin, _skinIndex, out _currSkinMesh);
 
         SetText(_skinInfoText, "Skin", _skinIndex);
+    }
+
+    private void SetMesh(MeshCategory cate, int index, out Mesh currMesh)
+    {
+        currMesh = _meshDictionary[cate][index];
+        _socketDictionary[cate].sharedMesh = currMesh;
     }
 
     private void SetIndex(bool next, ref int index, MeshCategory cate)
