@@ -13,6 +13,8 @@ public class ResourceManager : SingletonObject<ResourceManager>
     private const string FOOD_PREFAB_PATH = "Prefabs/Item/Food/";
     private const string DEFAULT_PREFAB_PATH = "Prefabs/Item/Default/";
 
+    public const string SELECT_CHARACTER_PATH = "UI/RenderTexture/SelectCharacterHUD/";
+
     protected override void Awake()
     {
         base.Awake();
@@ -87,5 +89,18 @@ public class ResourceManager : SingletonObject<ResourceManager>
     public T GetWeaponPrefab<T>(string prefabName) where T : Object
     {
         return GetPrefab<T>($"{WEAPON_PREFAB_PATH}{prefabName}");
+    }
+
+    public RenderTexture GetRenderTexture(string path, string fileName)
+    {
+        RenderTexture render = Resources.Load<RenderTexture>($"{path}{fileName}");
+
+        if (render == null)
+        {
+            Debug.LogWarning("There is no texture! Please check the path!");
+            return null;
+        }
+        else
+            return render;
     }
 }

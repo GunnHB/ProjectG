@@ -648,7 +648,7 @@ MonoBehaviour:
   _deleteButton: {fileID: 3622498435126142377}
   _playButton: {fileID: 9057698820496903229}
   _prefab: {fileID: 5969814911113478584, guid: 542ee8d562bef7a4aa0983e54d8d6619, type: 3}
-  _camera: {fileID: 1123511839062342857}
+  _camera: {fileID: 428256352389774177}
   _playerRawImage: {fileID: 2721243502635041418}
 --- !u!1 &2982741555905482516
 GameObject:

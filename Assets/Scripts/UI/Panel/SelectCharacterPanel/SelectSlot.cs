@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 using Sirenix.OdinInspector;
 using UnityEngine.Events;
-using Unity.Mathematics;
 using UnityEngine.InputSystem;
 
 public class SelectSlot : MonoBehaviour
@@ -16,6 +15,8 @@ public class SelectSlot : MonoBehaviour
         Center,
         Right,
     }
+
+    private const string BASE_FILE_NAME = "SelectPlayerRenderTexture_";
 
     [Title("[Text]")]
     [SerializeField] private TextMeshProUGUI _playerName;
@@ -31,7 +32,7 @@ public class SelectSlot : MonoBehaviour
 
     [Title("[Player]")]
     [SerializeField] private GameObject _prefab;
-    [SerializeField] private GameObject _camera;
+    [SerializeField] private Camera _camera;
     [SerializeField] private RawImage _playerRawImage;
 
     private SeparateType _currentType;
@@ -83,7 +84,8 @@ public class SelectSlot : MonoBehaviour
         if (_emptyState)
             return;
 
-        _playerPrefab = Instantiate(_prefab, _playerPosition, Quaternion.Euler(_playerRotation), this.transform);
+        if (_playerPrefab == null)
+            _playerPrefab = Instantiate(_prefab, _playerPosition, Quaternion.Euler(_playerRotation), this.transform);
 
         if (_playerPrefab != null)
         {
@@ -103,12 +105,26 @@ public class SelectSlot : MonoBehaviour
                 skinnedMeshData.SetPlayerSkinnedMesh(PlayerSkinnedMesh.SKINNED_MESH_HAIR, _hairMesh);
                 skinnedMeshData.SetPlayerSkinnedMesh(PlayerSkinnedMesh.SKINNED_MESH_SKIN, _skinMesh);
             }
+
+            if (_playerRawImage != null)
+            {
+                string path = ResourceManager.SELECT_CHARACTER_PATH;
+                string fileName = $"{BASE_FILE_NAME}{_currentType}";
+
+                var texture = ResourceManager.Instance.GetRenderTexture(path, fileName);
+
+                if (texture != null)
+                {
+                    _playerRawImage.texture = texture;
+                    _camera.targetTexture = texture;
+                }
+            }
         }
     }
 
     private void SetCamera()
     {
-        _camera.SetActive(!_emptyState);
+        _camera.gameObject.SetActive(!_emptyState);
     }
 
     private void SetButtonListener()
@@ -172,11 +188,8 @@ public class SelectSlot : MonoBehaviour
     {
         _closePanelAction = null;
 
-        if (_playerPrefab != null)
-        {
-            Destroy(_playerPrefab);
-            _playerPrefab = null;
-        }
+        // if (_playerPrefab != null)
+        //     DestroyImmediate(_playerPrefab);
     }
 
     private void RefreshSlot()

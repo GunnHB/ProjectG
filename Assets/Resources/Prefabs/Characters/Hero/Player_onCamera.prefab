@@ -148,7 +148,7 @@ MonoBehaviour:
   _camera: {fileID: 0}
   _animator: {fileID: 6020624301045614321}
   _checker: {fileID: 8734603448110733026}
-  _meshData: {fileID: 8581678394954755474}
+  _skinnedMeshData: {fileID: 8581678394954755474}
   _leftHandTransform: {fileID: 5442401052202353990}
   _rightHandTransform: {fileID: 4282355221015943804}
   _targetTransform: {fileID: 5969814910860098805}
