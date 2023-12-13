@@ -30,6 +30,9 @@ public static class GameValue
 
     // 인벤토리 한 행에 들어가는 슬롯 수
     public static int INVENTORY_ROW_AMOUNT = 5;
+
+    // 기본적인 플레이어 프리팹명
+    public static string PLAYER_PREFAB = "Player_onCamera";
 }
 
 public enum SlotIndex

@@ -13,6 +13,8 @@ public class ResourceManager : SingletonObject<ResourceManager>
     private const string FOOD_PREFAB_PATH = "Prefabs/Item/Food/";
     private const string DEFAULT_PREFAB_PATH = "Prefabs/Item/Default/";
 
+    public const string PLAYER_PREFAB_PATH = "Prefabs/Characters/Hero/";
+
     public const string SELECT_CHARACTER_PATH = "UI/RenderTexture/SelectCharacterHUD/";
 
     protected override void Awake()
@@ -89,6 +91,11 @@ public class ResourceManager : SingletonObject<ResourceManager>
     public T GetWeaponPrefab<T>(string prefabName) where T : Object
     {
         return GetPrefab<T>($"{WEAPON_PREFAB_PATH}{prefabName}");
+    }
+
+    public T GetPlayerPrefab<T>(string prefabName) where T : Object
+    {
+        return GetPrefab<T>($"{PLAYER_PREFAB_PATH}{prefabName}");
     }
 
     public RenderTexture GetRenderTexture(string path, string fileName)

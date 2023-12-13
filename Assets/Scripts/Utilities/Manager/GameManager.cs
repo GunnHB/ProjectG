@@ -31,6 +31,11 @@ public class GameManager : SingletonObject<GameManager>
         }
     }
 
+    #region 캐싱
+    private Mesh _hairMesh { get => JsonManager.Instance.MeshData._hairHesh[_selectedSlotIndex]; }
+    private Mesh _skinMesh { get => JsonManager.Instance.MeshData._skinMesh[_selectedSlotIndex]; }
+    #endregion
+
     protected override void Awake()
     {
         base.Awake();
@@ -44,5 +49,32 @@ public class GameManager : SingletonObject<GameManager>
     public void SetSelectedSlotIndex(int index)
     {
         _selectedSlotIndex = index;
+    }
+
+    public void LoadPlayerCharacter()
+    {
+        if (LoadSceneManager.Instance.CurrentSceneType != LoadSceneManager.SceneType.InGame)
+            return;
+
+        ChangeCurrentMode(GameMode.InGame);
+
+        var playerPrefab = ResourceManager.Instance.GetPlayerPrefab<GameObject>(GameValue.PLAYER_PREFAB);
+
+        if (playerPrefab == null)
+        {
+            Debug.LogWarning("there is no player!");
+            return;
+        }
+
+        var player = Instantiate(playerPrefab);
+
+        if (player == null)
+            return;
+
+        if (player.TryGetComponent(out PlayerSkinnedMesh skinnedMeshInfo))
+        {
+            skinnedMeshInfo.SetPlayerSkinnedMesh(PlayerSkinnedMesh.SKINNED_MESH_HAIR, _hairMesh);
+            skinnedMeshInfo.SetPlayerSkinnedMesh(PlayerSkinnedMesh.SKINNED_MESH_SKIN, _skinMesh);
+        }
     }
 }

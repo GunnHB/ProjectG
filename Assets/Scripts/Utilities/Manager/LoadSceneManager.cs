@@ -32,6 +32,12 @@ public class LoadSceneManager : SingletonObject<LoadSceneManager>
 
     private float _fadingRate = .05f;
 
+    public SceneType CurrentSceneType => _sceneType;
+
+    private Coroutine _loadSceneCoroutine = null;
+
+    private bool _isDoneChangeScene = true;
+
     protected override void Awake()
     {
         base.Awake();
@@ -53,7 +59,30 @@ public class LoadSceneManager : SingletonObject<LoadSceneManager>
 
     public void LoadScene(SceneType type)
     {
-        SceneManager.LoadScene(SetLoadScene(type));
+        if (_loadSceneCoroutine != null)
+        {
+            StopCoroutine(_loadSceneCoroutine);
+            _loadSceneCoroutine = null;
+        }
+
+        _loadSceneCoroutine = StartCoroutine(nameof(Cor_LoadScene), type);
+    }
+
+    private IEnumerator Cor_LoadScene(SceneType type)
+    {
+        var asyncOperation = SceneManager.LoadSceneAsync(SetLoadScene(type));
+
+        while (!asyncOperation.isDone)
+        {
+            _isDoneChangeScene = false;
+            yield return null;
+        }
+
+        // 씬이 전환되면 패널이 null 임
+        if (_scenePanel == null)
+            LoadPanel();
+
+        _isDoneChangeScene = true;
     }
 
     private string SetLoadScene(SceneType type)
@@ -133,6 +162,8 @@ public class LoadSceneManager : SingletonObject<LoadSceneManager>
             {
                 if (_sceneType != SceneType.None)
                     LoadScene(_sceneType);
+
+                yield return new WaitUntil(() => _isDoneChangeScene);
 
                 _callback?.Invoke();
 

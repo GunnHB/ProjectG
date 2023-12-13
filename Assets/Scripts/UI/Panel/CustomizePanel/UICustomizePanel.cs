@@ -307,24 +307,14 @@ public class UICustomizePanel : UIPanelBase
     private void OnClickHairButton(bool next)
     {
         SetIndex(next, ref _hairIndex, MeshCategory.Hair);
-
-        // _currHairMesh = _meshDictionary[MeshCategory.Hair][_hairIndex];
-        // _socketDictionary[MeshCategory.Hair].sharedMesh = _currHairMesh;
-
         SetMesh(MeshCategory.Hair, _hairIndex, out _currHairMesh);
-
         SetText(_hairInfoText, "Hair", _hairIndex);
     }
 
     private void OnClickSkinButton(bool next)
     {
         SetIndex(next, ref _skinIndex, MeshCategory.Skin);
-
-        // _currSkinMesh = _meshDictionary[MeshCategory.Skin][_skinIndex];
-        // _socketDictionary[MeshCategory.Skin].sharedMesh = _currSkinMesh;
-
         SetMesh(MeshCategory.Skin, _skinIndex, out _currSkinMesh);
-
         SetText(_skinInfoText, "Skin", _skinIndex);
     }
 
@@ -408,7 +398,7 @@ public class UICustomizePanel : UIPanelBase
         JsonManager.Instance.SlotBaseData._isEmpty[_slotIndex] = false;
         JsonManager.Instance.SaveData(_slotDataPath, _slotDataFileName, JsonManager.Instance.SlotBaseData);
 
-        LoadSceneManager.Instance.FadeInOut(null, LoadSceneManager.SceneType.InGame);
+        LoadSceneManager.Instance.FadeInOut(GameManager.Instance.LoadPlayerCharacter, LoadSceneManager.SceneType.InGame);
     }
 
     private void SavePlayerMeshData()
