@@ -32,6 +32,7 @@ public class SelectSlot : MonoBehaviour
     [Title("[Player]")]
     [SerializeField] private GameObject _prefab;
     [SerializeField] private GameObject _camera;
+    [SerializeField] private RawImage _playerRawImage;
 
     private SeparateType _currentType;
     private UnityAction _closePanelAction;
