@@ -142,8 +142,9 @@ public class LoadSceneManager : SingletonObject<LoadSceneManager>
 
             if (_scenePanel == null)
             {
-                ResetData();
-                yield break;
+                // ResetData();
+                // yield break;
+                LoadPanel();
             }
 
             alpha -= _fadingRate;
@@ -161,9 +162,6 @@ public class LoadSceneManager : SingletonObject<LoadSceneManager>
         _invokedCallback = false;
         _callback = null;
         _sceneType = SceneType.None;
-
-        if (_scenePanel == null)
-            LoadPanel();
 
         // 페이드 종료 후 ui 클릭 허용
         _scenePanel.FadeImage.raycastTarget = false;
