@@ -41,7 +41,7 @@ public class SelectSlot : MonoBehaviour
     private bool _emptyState = false;
 
     private Vector3 _playerPosition = new Vector3(0, -1000, 0);
-    private Vector3 _playerRotation = new Vector3(0, -180, 0);
+    private Quaternion _playerRotation = Quaternion.Euler(new Vector3(0, 180, 0));
 
     private GameObject _playerPrefab = null;
 
@@ -82,25 +82,25 @@ public class SelectSlot : MonoBehaviour
     {
         // 빈 슬롯은 할 필요가 없음다.
         if (_emptyState)
+        {
+            if (_playerPrefab != null)
+                _playerPrefab.SetActive(false);
             return;
+        }
 
         if (_playerPrefab == null)
-            _playerPrefab = Instantiate(_prefab, _playerPosition, Quaternion.Euler(_playerRotation), this.transform);
+            _playerPrefab = Instantiate(_prefab, _playerPosition, _playerRotation, this.transform);
 
         if (_playerPrefab != null)
         {
             // 불필요한 컴포넌트는 끄기
-            var controller = _playerPrefab.GetComponent<PlayerController>();
-            var input = _playerPrefab.GetComponent<PlayerInput>();
-            var skinnedMeshData = _playerPrefab.GetComponent<PlayerSkinnedMesh>();
-
-            if (controller != null)
+            if (_playerPrefab.TryGetComponent(out PlayerController controller))
                 controller.enabled = false;
 
-            if (input != null)
+            if (_playerPrefab.TryGetComponent(out PlayerInput input))
                 input.enabled = false;
 
-            if (skinnedMeshData != null)
+            if (_playerPrefab.TryGetComponent(out PlayerSkinnedMesh skinnedMeshData))
             {
                 skinnedMeshData.SetPlayerSkinnedMesh(PlayerSkinnedMesh.SKINNED_MESH_HAIR, _hairMesh);
                 skinnedMeshData.SetPlayerSkinnedMesh(PlayerSkinnedMesh.SKINNED_MESH_SKIN, _skinMesh);
@@ -119,6 +119,8 @@ public class SelectSlot : MonoBehaviour
                     _camera.targetTexture = texture;
                 }
             }
+
+            _playerPrefab.SetActive(true);
         }
     }
 
@@ -187,9 +189,6 @@ public class SelectSlot : MonoBehaviour
     private void ResetData()
     {
         _closePanelAction = null;
-
-        // if (_playerPrefab != null)
-        //     DestroyImmediate(_playerPrefab);
     }
 
     private void RefreshSlot()
