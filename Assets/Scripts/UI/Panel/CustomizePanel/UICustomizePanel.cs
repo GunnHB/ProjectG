@@ -93,6 +93,9 @@ public class UICustomizePanel : UIPanelBase
     private Mesh _currHairMesh = null;
     private Mesh _currSkinMesh = null;
 
+    private Vector3 _initPosition = new Vector3(0, -1000, 0);
+    private Quaternion _initRotation = Quaternion.Euler(new Vector3(0, 180, 0));
+
     #region 캐싱
     private int _slotIndex = GameManager.Instance.SelectedSlotIndex;
 
@@ -107,7 +110,51 @@ public class UICustomizePanel : UIPanelBase
     protected override void Awake()
     {
         base.Awake();
+
+        SetButtons();
     }
+
+    private void SetButtons()
+    {
+        // left panel
+        {
+            Util.AddButtonListenerV2(_resetRotateButton, OnClickResetRotateButton);
+
+            Util.AddPressButtonListener(_leftRotateButton, () =>
+            {
+                _curRotateButton = _leftRotateButton;
+                _reverse = true;
+
+                OnClickRotateButton();
+            });
+
+            Util.AddPressButtonListener(_rightRotateButton, () =>
+            {
+                _curRotateButton = _rightRotateButton;
+                _reverse = false;
+
+                OnClickRotateButton();
+            });
+        }
+
+        // right panel
+        {
+            // skinnedmeshrenderer 의 mesh 가 교체되는 구조
+
+            // Hair
+            Util.AddButtonListener(_hairLeftButton, () => OnClickHairButton(false));
+            Util.AddButtonListener(_hairRightButton, () => OnClickHairButton(true));
+
+            // Skin
+            Util.AddButtonListener(_skinLeftButton, () => OnClickSkinButton(false));
+            Util.AddButtonListener(_skinRightButton, () => OnClickSkinButton(true));
+
+            // Button
+            Util.AddButtonListener(_backButton, OnClickBackButton);
+            Util.AddButtonListener(_confirmButton, OnClickConfirmButton);
+        }
+    }
+
 
     public void Init()
     {
@@ -115,16 +162,17 @@ public class UICustomizePanel : UIPanelBase
 
         InitMeshDictionary();
 
-        SetLeftPanel();
+        // 우측의 메시 선택 버튼이 먼저 초기화되어야 
+        // 플레이어 프리팹의 메시도 정상적으로 초기화됩니다용
         SetRightPanel();
+        SetLeftPanel();
     }
 
     private void GetPlayerTransform()
     {
-        var initPosition = new Vector3(0, -1000, 0);
-        var initRotation = Quaternion.Euler(new Vector3(0, 180, 0));
-
-        _playerTransform = Instantiate(_playerPrefab.transform, this.transform);
+        // 이미 생성됐으면 굳이 생성하지 않음
+        if (_playerTransform == null)
+            _playerTransform = Instantiate(_playerPrefab.transform, this.transform);
 
         if (_playerTransform == null)
             return;
@@ -137,8 +185,8 @@ public class UICustomizePanel : UIPanelBase
 
         _playerMeshTransform = Util.GetComponent<Transform>(_playerTransform, "NoWeapon01");
 
-        _playerTransform.localPosition = initPosition;
-        _playerTransform.rotation = initRotation;
+        _playerTransform.localPosition = _initPosition;
+        _playerTransform.rotation = _initRotation;
     }
 
     private void ResetPlayerTransform()
@@ -199,25 +247,11 @@ public class UICustomizePanel : UIPanelBase
     private void SetLeftPanel()
     {
         if (_playerTransform != null)
+        {
             _originRotate = _playerTransform.rotation;
 
-        Util.AddButtonListener(_leftRotateButton, () =>
-        {
-            _curRotateButton = _leftRotateButton;
-            _reverse = true;
 
-            OnClickRotateButton();
-        });
-
-        Util.AddButtonListener(_rightRotateButton, () =>
-        {
-            _curRotateButton = _rightRotateButton;
-            _reverse = false;
-
-            OnClickRotateButton();
-        });
-
-        Util.AddButtonListener(_resetRotateButton, OnClickResetRotateButton);
+        }
     }
 
     private void SetRightPanel()
@@ -225,21 +259,17 @@ public class UICustomizePanel : UIPanelBase
         // skinnedmeshrenderer 의 mesh 가 교체되는 구조
 
         // Hair
-        Util.AddButtonListener(_hairLeftButton, () => OnClickHairButton(false));
-        Util.AddButtonListener(_hairRightButton, () => OnClickHairButton(true));
+        // 처음 초기화는 0
+        _hairIndex = 0;
         SetText(_hairInfoText, "Hair", _hairIndex);
 
         // Skin
-        Util.AddButtonListener(_skinLeftButton, () => OnClickSkinButton(false));
-        Util.AddButtonListener(_skinRightButton, () => OnClickSkinButton(true));
+        // 처음 초기화는 0
+        _skinIndex = 0;
         SetText(_skinInfoText, "Skin", _skinIndex);
 
         // nickname 캐릭터 생성이 아닐 땐 보일 필요 없음
         ActiveInputField();
-
-        // Button
-        Util.AddButtonListener(_backButton, OnClickBackButton);
-        Util.AddButtonListener(_confirmButton, OnClickConfirmButton);
     }
 
     private void OnClickRotateButton()
@@ -286,8 +316,6 @@ public class UICustomizePanel : UIPanelBase
         _socketDictionary[MeshCategory.Hair].sharedMesh = _currHairMesh;
 
         SetText(_hairInfoText, "Hair", _hairIndex);
-
-
     }
 
     private void OnClickSkinButton(bool next)
