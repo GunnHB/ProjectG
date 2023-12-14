@@ -37,19 +37,37 @@ public class UIPlayerStatusHUD : UIHUDBase
     private void CalcPlayerHP()
     {
         int wholeHeartAmount = _currPlayerHP / (GameValue.QUATER_OF_HERAT_VLAUE * 4);
-        int resultHeart = (_currPlayerHP % (GameValue.QUATER_OF_HERAT_VLAUE * 4));
+        int remainHeart = _currPlayerHP % (GameValue.QUATER_OF_HERAT_VLAUE * 4);
         int quaterCount = 0;
 
+        bool remain = false;
+
         // 완전한 하트를 채울 정도가 아닌 체력이 있는 경우
-        if (resultHeart != 0)
+        if (remainHeart != 0)
         {
-            quaterCount = resultHeart / GameValue.QUATER_OF_HERAT_VLAUE;
+            quaterCount = remainHeart / GameValue.QUATER_OF_HERAT_VLAUE;
             wholeHeartAmount += 1;  // 나머지도 표시해야하기 때문에 1 추가
+
+            remain = true;
         }
 
         for (int index = 0; index < wholeHeartAmount; index++)
         {
-            var heartObj = _heartPool.GetObject();
+            var heart = _heartPool.GetObject();
+            var heartObj = heart.GetComponent<HeartObject>();
+
+            if (heartObj == null)
+                return;
+
+            // 나머지가 있는 경우 마지막은 나머지의 값 만큼만 표기 
+            if (index == wholeHeartAmount - 1 && remain)
+            {
+                float heartAmount = 1f / 4f * quaterCount;
+
+                heartObj.SetHeart(heartAmount);
+            }
+            else
+                heartObj.SetHeart(1f);
         }
     }
 }
