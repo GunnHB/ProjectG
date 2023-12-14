@@ -5,9 +5,8 @@ public static class GameValue
     // *** 해당 스크립트에 등록된 값들은 이변이 없는 한 변하지 않습니다. ***
 
     // 캐릭터 생성 시 초기값
-    public static int INIT_HP = 250;
-    public static int INIT_STAMINA = 250;
-    public static int INIT_LEVEL = 1;
+    public static int INIT_HP = 100;
+    public static int INIT_STAMINA = 100;
 
     // 게임에서 사용되는 기본적인 값
     public static float GRAVITY = -9.81f;

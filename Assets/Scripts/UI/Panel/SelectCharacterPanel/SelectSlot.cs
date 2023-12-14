@@ -177,11 +177,12 @@ public class SelectSlot : MonoBehaviour
 
         UIManager.Instance.OpenSimpleDialogue(titleString, msgString,
                                               confirmString, StartPlay,
-                                              cancelString, null);
+                                              cancelString, () => GameManager.Instance.SetSelectedSlotIndex((int)_currentType));
     }
 
     private void StartPlay()
     {
+        GameManager.Instance.SetSelectedSlotIndex((int)_currentType);
         // 게임 씬으로 전환
         LoadSceneManager.Instance.FadeInOut(GameManager.Instance.LoadPlayerCharacter, LoadSceneManager.SceneType.InGame);
     }
