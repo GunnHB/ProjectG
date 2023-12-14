@@ -82,10 +82,8 @@ public partial class PlayerController : MonoBehaviour
         _camera = Camera.main.transform;
         _input.camera = Camera.main;
 
-        // 현재 데이터 처리는 간이로
         _playerHP = GameValue.INIT_HP;
         _playerStamina = GameValue.INIT_STAMINA;
-        _playerLevel = GameValue.INIT_LEVEL;
 
         SetPlayerInputActions();        // 입력 감지
         SetPlayerActions();             // 콜백 세팅

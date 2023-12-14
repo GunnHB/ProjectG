@@ -32,6 +32,9 @@ public static class GameValue
 
     // 기본적인 플레이어 프리팹명
     public static string PLAYER_PREFAB = "Player_onCamera";
+
+    // 하트의 1/4
+    public static int QUATER_OF_HERAT_VLAUE = 5;
 }
 
 public enum SlotIndex

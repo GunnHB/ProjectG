@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5413721077253267026}
   - component: {fileID: 3985343832451458714}
   - component: {fileID: 8161739051821123928}
+  - component: {fileID: 2255343214626453411}
   m_Layer: 5
   m_Name: UIPlayerStatusHUD
   m_TagString: Untagged
@@ -77,6 +78,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2255343214626453411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669500852501670235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6deb591057a7d864abe50ce6993578d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _backgroundDim: 0
+  _backgroundClose: 0
+  _heartPool:
+    _poolPrefab: {fileID: 6999713420938888607, guid: 2e861e9ba9051874aabfc9c4369ce7a8, type: 3}
+    _parentObj: {fileID: 9093588080244495155}
 --- !u!1 &7997444664377731944
 GameObject:
   m_ObjectHideFlags: 0
