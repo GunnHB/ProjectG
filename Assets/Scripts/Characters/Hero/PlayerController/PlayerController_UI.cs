@@ -31,7 +31,7 @@ public partial class PlayerController : MonoBehaviour
             return;
 
         _input.SwitchCurrentActionMap("UI");
-        GameManager.Instance.ChangeCurrentMode(GameManager.GameMode.Pause);
+        // GameManager.Instance.ChangeCurrentMode(GameManager.GameMode.Pause);
     }
 
     private void EscapeActionStarted(InputAction.CallbackContext context)
