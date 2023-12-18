@@ -47,6 +47,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0616f1f965646084f8b4eeedd440f22a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _patrolNodeState: 0
+  _idleNodeState: 0
+  _setRandom: 1
+  _wayPointList: []
+  _circleRadius: 10
+  _fieldOfView: {fileID: 6988450777119453044}
+  _noticePlayer: 0
+  _noticePlayerGage: 0
 --- !u!114 &6988450777119453044
 MonoBehaviour:
   m_ObjectHideFlags: 0
