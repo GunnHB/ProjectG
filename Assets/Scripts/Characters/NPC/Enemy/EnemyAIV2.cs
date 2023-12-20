@@ -6,18 +6,25 @@ using UnityEngine;
 using BehaviorTree;
 
 using Sirenix.OdinInspector;
+using Unity.Mathematics;
 
 public class EnemyAIV2 : MonoBehaviour
 {
+    private const string IS_WALK = "IsWalk";
+    private const string IS_CHASE = "IsChase";
+
     [Title("[WayPoints]")]
     [SerializeField] private bool _setRandom = true;
     [SerializeField, HideIf(nameof(_setRandom))]
     private List<GameObject> _wayPointList = new();
     [SerializeField, ShowIf(nameof(_setRandom))]
-    private float _circleRadius = 1f;
+    private float _radius = 1f;
 
     [Title("[Field of view]")]
     [SerializeField] private FieldOfView _fieldOfView;
+
+    [Title("[Animation]")]
+    [SerializeField] private Animator _animator;
 
     [Title("[Notice player field]")]
     [SerializeField] private bool _noticePlayer = false;
@@ -32,8 +39,8 @@ public class EnemyAIV2 : MonoBehaviour
     private float _currWaitTime = 0f;
 
     private bool _idleState = false;
-    private bool _moveState = false;
-    private bool _attackState = false;
+    private bool _patrolState = false;
+    private bool _chaseState = false;
 
     private float _patrolMovementSpeed = 2f;
     private float _chaseMovementSpeed = 4f;
@@ -43,17 +50,25 @@ public class EnemyAIV2 : MonoBehaviour
     private Vector3 _currWayPoint = Vector3.zero;
     private int _currListIndex;     // waypoint 리스트의 인덱스 정보
 
+    // 캐릭터 회전 관련
+    private float _turnSmoothTime = .2f;
+    private float _turnSmoothVelocity;
+
+    private Vector3 _originPosition = Vector3.zero;
+
     private void Awake()
     {
         _btRunner = new BahaviorTreeRunner(SettingBT());
 
         // 순찰 경로가 세팅된 경우가 아니라면 내부에서 세팅
-        // 핸덤 순찰의 경우 지점에 도착하면 잠시 대기 후 다시 랜덤한 지점을 지정한다.
+        // 랜덤 순찰의 경우 지점에 도착하면 잠시 대기 후 다시 랜덤한 지점을 지정한다.
         if (_setRandom)
             SetWayPointByRandom();
 
         _currListIndex = -1;
         _applyMovementSpeed = _patrolMovementSpeed;
+
+        _originPosition = transform.position;
     }
 
     private void Update()
@@ -96,14 +111,7 @@ public class EnemyAIV2 : MonoBehaviour
         if (_idleState)
             return INode.ENodeState.SuccessState;
 
-        // 순찰 속도로 지정
-        _applyMovementSpeed = _patrolMovementSpeed;
-
-        Debug.Log(_currWayPoint);
-
         // 두 점간의 거리의 제곱에 루트를 한 값
-        // 두 점간의 거리의 차이를 2차원 함수값으로 계산
-        // Vector3.Distance 보다 연산이 빠름
         var distance = Vector3.SqrMagnitude(_currWayPoint - transform.position);
 
         // 어느 정도 목표 지점에 가까워지면
@@ -116,7 +124,22 @@ public class EnemyAIV2 : MonoBehaviour
             return INode.ENodeState.SuccessState;
         }
 
+        // 이동 및 회전
         transform.position = Vector3.MoveTowards(transform.position, _currWayPoint, _applyMovementSpeed * Time.deltaTime);
+        RotateToTarget(_currWayPoint);
+
+        // 순찰 속도로 지정
+        _applyMovementSpeed = _patrolMovementSpeed;
+
+        if (!_patrolState)
+        {
+            _patrolState = true;
+
+            _idleState = false;
+            _chaseState = false;
+
+            SetAnimBoolParam(IS_WALK, true);
+        }
 
         return INode.ENodeState.FailureState;
     }
@@ -126,10 +149,8 @@ public class EnemyAIV2 : MonoBehaviour
         if (_currWayPoint == Vector3.zero)
         {
             // 현재 위치에서 랜덤한 지점을 반환
-            var randomSite = (UnityEngine.Random.insideUnitSphere * _circleRadius) + transform.position;
+            var randomSite = (UnityEngine.Random.insideUnitSphere * _radius) + transform.position;
 
-            // 둘째자리까지 반올림
-            // _currWayPoint = new Vector3((float)Math.Round(randomSite.x, 2), 0f, (float)Math.Round(randomSite.z, 2));
             _currWayPoint = new Vector3(randomSite.x, 0f, randomSite.z);
         }
 
@@ -148,11 +169,26 @@ public class EnemyAIV2 : MonoBehaviour
         return _currWayPoint;
     }
 
+    private void RotateToTarget(Vector3 target)
+    {
+        var directionToTarget = (target - transform.position).normalized;
+
+        float targetAngle = Mathf.Atan2(directionToTarget.x, directionToTarget.z) * Mathf.Rad2Deg;
+        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, _turnSmoothTime);
+
+        transform.rotation = Quaternion.Euler(new Vector3(0f, angle, 0f));
+    }
+
     private INode.ENodeState DoIdle()
     {
         if (!_idleState)
         {
             _idleState = true;
+
+            _patrolState = false;
+            _chaseState = false;
+
+            SetAnimBoolParam(IS_WALK, false);
 
             if (_waitTime == 0f)
                 _waitTime = UnityEngine.Random.Range(5f, 10f);
@@ -166,11 +202,20 @@ public class EnemyAIV2 : MonoBehaviour
         else
         {
             _idleState = false;
+
             _currWaitTime = 0f;
             _waitTime = 0f;
 
             return INode.ENodeState.SuccessState;
         }
+    }
+
+    private void SetAnimBoolParam(string anim, bool state)
+    {
+        if (_animator == null)
+            return;
+
+        _animator.SetBool(anim, state);
     }
 
     // 확인용 기즈모
@@ -181,6 +226,9 @@ public class EnemyAIV2 : MonoBehaviour
 
         if (_currWayPoint != Vector3.zero)
         {
+            Gizmos.color = Color.white;
+            Gizmos.DrawWireSphere(transform.position, _radius);
+
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(_currWayPoint, .3f);
 

@@ -47,14 +47,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0616f1f965646084f8b4eeedd440f22a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _patrolNodeState: 0
-  _idleNodeState: 0
   _setRandom: 1
   _wayPointList: []
-  _circleRadius: 10
+  _radius: 10
   _fieldOfView: {fileID: 6988450777119453044}
+  _animator: {fileID: 8551118153802821903}
   _noticePlayer: 0
   _noticePlayerGage: 0
+  _drawGizmos: 1
 --- !u!114 &6988450777119453044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,8 +148,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95218917574125552, guid: 088f4e1cc85df8b4497a1a291d108317, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: a92b3eae4aea0f7488708f6f70608baf, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 088f4e1cc85df8b4497a1a291d108317, type: 3}
+--- !u!95 &8551118153802821903 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 95218917574125552, guid: 088f4e1cc85df8b4497a1a291d108317, type: 3}
+  m_PrefabInstance: {fileID: 8645193565668415231}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8640538849537050247 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4708055953887352, guid: 088f4e1cc85df8b4497a1a291d108317, type: 3}
