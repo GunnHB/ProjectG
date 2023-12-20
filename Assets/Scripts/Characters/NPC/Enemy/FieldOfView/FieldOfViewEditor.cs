@@ -16,6 +16,11 @@ public class FieldOfViewEditor : OdinEditor
 
         Handles.color = Color.white;
         Handles.DrawWireArc(fov.transform.position, Vector3.up, Vector3.forward, 360, fov.ViewRadius);
+
+        Handles.color = Color.magenta;
+        Handles.DrawWireArc(fov.transform.position, Vector3.up, Vector3.forward, 360, fov.RangeAttackRange);
+
+        Handles.color = Color.yellow;
         Handles.DrawWireArc(fov.transform.position, Vector3.up, Vector3.forward, 360, fov.MeleeAttackRange);
 
         Vector3 viewAngleA = fov.DirectionFromAngle(-fov.ViewAngle / 2, false);
@@ -25,6 +30,7 @@ public class FieldOfViewEditor : OdinEditor
         // float posX = Mathf.Sin(fov.ViewAngle / 2 * Mathf.Deg2Rad) * fov.ViewRadius;
         // float posZ = Mathf.Cos(fov.ViewAngle / 2 * Mathf.Deg2Rad) * fov.ViewRadius;
 
+        Handles.color = Color.white;
         Handles.DrawLine(fov.transform.position, fov.transform.position + viewAngleA * fov.ViewRadius);
         Handles.DrawLine(fov.transform.position, fov.transform.position + viewAngleB * fov.ViewRadius);
 

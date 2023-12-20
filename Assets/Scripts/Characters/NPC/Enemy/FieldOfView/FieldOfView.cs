@@ -15,7 +15,7 @@ public class FieldOfView : MonoBehaviour
     [SerializeField] private float _viewAngle = 90f;
     [TitleGroup(TITLE_RANGE), Range(0f, 3f)]
     [SerializeField] private float _meleeAttackRange;
-    [TitleGroup(TITLE_RANGE), Range(0f, 3f)]
+    [TitleGroup(TITLE_RANGE), Range(0f, 7f)]
     [SerializeField] private float _rangeAttackRange;
 
     [TitleGroup(TITLE_LAYER_MASK)]

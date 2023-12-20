@@ -43,7 +43,7 @@ public class EnemyAIV2 : MonoBehaviour
     private bool _chaseState = false;
 
     private float _patrolMovementSpeed = 1f;
-    private float _chaseMovementSpeed = 3f;
+    private float _chaseMovementSpeed = 2f;
     private float _applyMovementSpeed;
 
     // 현재 이동 중인 지점의 Vector
@@ -88,6 +88,13 @@ public class EnemyAIV2 : MonoBehaviour
         return new SelectorNode(
             new List<INode>()
             {
+                // 공격 시작
+                new SequenceNode(
+                    new List<INode>()
+                    {
+                        new ActionNode(DoAttack),
+                    }
+                ),
                 // 적을 발견
                 new SequenceNode(
                     new List<INode>()
@@ -112,6 +119,14 @@ public class EnemyAIV2 : MonoBehaviour
                     }
                 )
             });
+    }
+
+    private INode.ENodeState DoAttack()
+    {
+        // if (_targetPlayer != null)
+        //     return INode.ENodeState.SuccessState;
+        // else
+        return INode.ENodeState.FailureState;
     }
 
     private INode.ENodeState CheckDetectTarget()
@@ -289,7 +304,7 @@ public class EnemyAIV2 : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(_currWayPoint, .3f);
 
-            Gizmos.color = Color.red;
+            Gizmos.color = Color.blue;
             Gizmos.DrawLine(transform.position, _currWayPoint);
         }
     }
