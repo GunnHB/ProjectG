@@ -15,7 +15,8 @@ public class FieldOfView : MonoBehaviour
     [SerializeField] private float _viewAngle = 90f;
     [TitleGroup(TITLE_RANGE), Range(0f, 3f)]
     [SerializeField] private float _meleeAttackRange;
-    [TitleGroup(TITLE_RANGE), Range(0f, 7f)]
+    [SerializeField] private bool _canRangeAttack;
+    [TitleGroup(TITLE_RANGE), Range(0f, 7f), ShowIf(nameof(_canRangeAttack))]
     [SerializeField] private float _rangeAttackRange;
 
     [TitleGroup(TITLE_LAYER_MASK)]
@@ -32,6 +33,8 @@ public class FieldOfView : MonoBehaviour
     public float ViewRadius => _viewRadius;
     public float MeleeAttackRange => _meleeAttackRange;
     public float RangeAttackRange => _rangeAttackRange;
+
+    public bool CanAttackRange => _canRangeAttack;
 
     public List<Transform> VisibleTargetList => _visibleTargetList;
     public Transform NearestTarget => _nearestTarget;

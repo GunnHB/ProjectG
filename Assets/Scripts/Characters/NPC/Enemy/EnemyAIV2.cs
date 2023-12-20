@@ -10,8 +10,18 @@ using Unity.Mathematics;
 
 public class EnemyAIV2 : MonoBehaviour
 {
-    private const string IS_WALK = "IsWalk";
-    private const string IS_CHASE = "IsChase";
+    private const string ANIM_PARAM_WALK = "IsWalk";
+    private const string ANIM_PARAM_CHASE = "IsChase";
+    private const string ANIM_PARAM_ATTACK = "Attack";
+
+    public enum EnemyState
+    {
+        None = -1,
+        Idle,
+        Patrol,
+        Chase,
+        Attack,
+    }
 
     [Title("[WayPoints]")]
     [SerializeField] private bool _setRandom = true;
@@ -30,6 +40,9 @@ public class EnemyAIV2 : MonoBehaviour
     [SerializeField] private bool _noticePlayer = false;
     [SerializeField] private float _noticePlayerGage = 0f;
 
+    [Title("[State]")]
+    [SerializeField] private EnemyState _state;
+
     [Title("[Draw gizmos]")]
     [SerializeField] private bool _drawGizmos;
 
@@ -37,10 +50,6 @@ public class EnemyAIV2 : MonoBehaviour
 
     private float _waitTime = 0f;
     private float _currWaitTime = 0f;
-
-    private bool _idleState = false;
-    private bool _patrolState = false;
-    private bool _chaseState = false;
 
     private float _patrolMovementSpeed = 1f;
     private float _chaseMovementSpeed = 2f;
@@ -92,6 +101,8 @@ public class EnemyAIV2 : MonoBehaviour
                 new SequenceNode(
                     new List<INode>()
                     {
+                        new ActionNode(CheckAttacking),
+                        new ActionNode(CheckAttackRange),
                         new ActionNode(DoAttack),
                     }
                 ),
@@ -121,11 +132,18 @@ public class EnemyAIV2 : MonoBehaviour
             });
     }
 
+    private INode.ENodeState CheckAttacking()
+    {
+        return INode.ENodeState.FailureState;
+    }
+
+    private INode.ENodeState CheckAttackRange()
+    {
+        return INode.ENodeState.FailureState;
+    }
+
     private INode.ENodeState DoAttack()
     {
-        // if (_targetPlayer != null)
-        //     return INode.ENodeState.SuccessState;
-        // else
         return INode.ENodeState.FailureState;
     }
 
@@ -153,18 +171,21 @@ public class EnemyAIV2 : MonoBehaviour
                 return INode.ENodeState.SuccessState;
         }
 
+        // 추격 상태로 변경
+        SetEnemyState(EnemyState.Chase);
+
         // 추격 속도로 세팅
         _applyMovementSpeed = _chaseMovementSpeed;
         transform.position = Vector3.MoveTowards(transform.position, _targetPlayer.position, _applyMovementSpeed * Time.deltaTime);
 
         RotateToTarget(_targetPlayer.position);
 
-        return INode.ENodeState.FailureState;
+        // 타겟까지 도착해야하므로 running 반환
+        return INode.ENodeState.RunningState;
     }
 
     private INode.ENodeState DoAlert()
     {
-        // if (_targetPlayer != null)
         return INode.ENodeState.FailureState;
     }
 
@@ -180,7 +201,7 @@ public class EnemyAIV2 : MonoBehaviour
             return INode.ENodeState.FailureState;
 
         // 대기 상태일 때는 성공 반환
-        if (_idleState)
+        if (_state == EnemyState.Idle)
             return INode.ENodeState.SuccessState;
 
         // 두 점간의 거리의 제곱에 루트를 한 값
@@ -203,17 +224,11 @@ public class EnemyAIV2 : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, _currWayPoint, _applyMovementSpeed * Time.deltaTime);
         RotateToTarget(_currWayPoint);
 
-        if (!_patrolState)
-        {
-            _patrolState = true;
+        if (_state != EnemyState.Patrol)
+            SetEnemyState(EnemyState.Patrol);
 
-            _idleState = false;
-            _chaseState = false;
-
-            SetAnimBoolParam(IS_WALK, true);
-        }
-
-        return INode.ENodeState.FailureState;
+        // 도착 전까지 running 반환
+        return _currWayPoint != Vector3.zero ? INode.ENodeState.RunningState : INode.ENodeState.FailureState;
     }
 
     private Vector3 SetWayPointByRandom()
@@ -253,14 +268,9 @@ public class EnemyAIV2 : MonoBehaviour
 
     private INode.ENodeState DoIdle()
     {
-        if (!_idleState)
+        if (_state != EnemyState.Idle)
         {
-            _idleState = true;
-
-            _patrolState = false;
-            _chaseState = false;
-
-            SetAnimBoolParam(IS_WALK, false);
+            SetEnemyState(EnemyState.Idle);
 
             if (_waitTime == 0f)
                 _waitTime = UnityEngine.Random.Range(5f, 10f);
@@ -273,12 +283,41 @@ public class EnemyAIV2 : MonoBehaviour
         }
         else
         {
-            _idleState = false;
+            SetEnemyState(EnemyState.None);
 
             _currWaitTime = 0f;
             _waitTime = 0f;
 
             return INode.ENodeState.SuccessState;
+        }
+    }
+
+    // 상태가 바뀌면 애니가 바뀜요
+    private void SetEnemyState(EnemyState state)
+    {
+        _state = state;
+
+        switch (_state)
+        {
+            case EnemyState.Idle:
+                SetAnimBoolParam(ANIM_PARAM_WALK, false);
+                SetAnimBoolParam(ANIM_PARAM_CHASE, false);
+                break;
+            case EnemyState.Patrol:
+                SetAnimBoolParam(ANIM_PARAM_WALK, true);
+                SetAnimBoolParam(ANIM_PARAM_CHASE, false);
+                break;
+            case EnemyState.Chase:
+                SetAnimBoolParam(ANIM_PARAM_CHASE, true);
+                break;
+            case EnemyState.Attack:
+                SetAnimBoolParam(ANIM_PARAM_WALK, false);
+                SetAnimBoolParam(ANIM_PARAM_CHASE, false);
+
+                SetAnimTrigger(ANIM_PARAM_ATTACK);
+                break;
+            default:
+                break;
         }
     }
 
@@ -288,6 +327,14 @@ public class EnemyAIV2 : MonoBehaviour
             return;
 
         _animator.SetBool(anim, state);
+    }
+
+    private void SetAnimTrigger(string anim)
+    {
+        if (_animator == null)
+            return;
+
+        _animator.SetTrigger(anim);
     }
 
     // 확인용 기즈모
