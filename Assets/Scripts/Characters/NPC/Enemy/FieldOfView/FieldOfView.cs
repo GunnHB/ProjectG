@@ -34,7 +34,7 @@ public class FieldOfView : MonoBehaviour
     public float MeleeAttackRange => _meleeAttackRange;
     public float RangeAttackRange => _rangeAttackRange;
 
-    public bool CanAttackRange => _canRangeAttack;
+    public bool CanRangeAttack => _canRangeAttack;
 
     public List<Transform> VisibleTargetList => _visibleTargetList;
     public Transform NearestTarget => _nearestTarget;

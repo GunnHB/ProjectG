@@ -54,6 +54,8 @@ MonoBehaviour:
   _animator: {fileID: 8551118153802821903}
   _noticePlayer: 0
   _noticePlayerGage: 0
+  _state: 0
+  _checker: {fileID: 5372364635997486878}
   _drawGizmos: 1
 --- !u!114 &6988450777119453044
 MonoBehaviour:
@@ -70,6 +72,7 @@ MonoBehaviour:
   _viewRadius: 10
   _viewAngle: 150
   _meleeAttackRange: 1.5
+  _canRangeAttack: 0
   _rangeAttackRange: 0
   _targetMask:
     serializedVersion: 2
@@ -166,3 +169,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4708055953887352, guid: 088f4e1cc85df8b4497a1a291d108317, type: 3}
   m_PrefabInstance: {fileID: 8645193565668415231}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8645322002586784973 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1054638298448434, guid: 088f4e1cc85df8b4497a1a291d108317, type: 3}
+  m_PrefabInstance: {fileID: 8645193565668415231}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5372364635997486878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8645322002586784973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d61e88f1e3b1dff4383dfd73b494d7b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

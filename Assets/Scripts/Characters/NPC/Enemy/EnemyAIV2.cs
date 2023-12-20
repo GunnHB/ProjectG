@@ -43,6 +43,9 @@ public class EnemyAIV2 : MonoBehaviour
     [Title("[State]")]
     [SerializeField] private EnemyState _state;
 
+    [Title("[Event checker]")]
+    [SerializeField] private EnemyAnimEventChecker _checker;
+
     [Title("[Draw gizmos]")]
     [SerializeField] private bool _drawGizmos;
 
@@ -134,17 +137,45 @@ public class EnemyAIV2 : MonoBehaviour
 
     private INode.ENodeState CheckAttacking()
     {
-        return INode.ENodeState.FailureState;
+        // return _state == EnemyState.Attack ? INode.ENodeState.RunningState : INode.ENodeState.SuccessState;
+
+        if (_state == EnemyState.Attack)
+        {
+            // 공격 중이면 running 반환
+            if (_checker != null && _checker.ProcessingAttack)
+                return INode.ENodeState.RunningState;
+        }
+
+        return INode.ENodeState.SuccessState;
     }
 
     private INode.ENodeState CheckAttackRange()
     {
+        if (_targetPlayer == null || _fieldOfView == null)
+            return INode.ENodeState.FailureState;
+
+        // 원거리 공격이 가능한지 확인
+        if (_fieldOfView.CanRangeAttack)
+            return INode.ENodeState.FailureState;
+        else
+        {
+            var distance = Vector3.SqrMagnitude(_targetPlayer.position - transform.position);
+
+            if (distance < Mathf.Pow(_fieldOfView.MeleeAttackRange, 2))
+                return INode.ENodeState.SuccessState;
+        }
+
         return INode.ENodeState.FailureState;
     }
 
     private INode.ENodeState DoAttack()
     {
-        return INode.ENodeState.FailureState;
+        if (_targetPlayer == null)
+            return INode.ENodeState.FailureState;
+
+        // 공격 상태로 변경
+        SetEnemyState(EnemyState.Attack);
+        return INode.ENodeState.SuccessState;
     }
 
     private INode.ENodeState CheckDetectTarget()
