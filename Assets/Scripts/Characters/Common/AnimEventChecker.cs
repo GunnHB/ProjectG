@@ -11,6 +11,11 @@ public abstract class AnimEventChecker : MonoBehaviour
 
     protected Collider _collider;
 
+    protected virtual void Awake()
+    {
+        _processingAttack = false;
+    }
+
     protected virtual void StartAttack()
     {
         _processingAttack = true;

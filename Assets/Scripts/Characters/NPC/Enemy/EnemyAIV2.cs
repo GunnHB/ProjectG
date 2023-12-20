@@ -54,6 +54,9 @@ public class EnemyAIV2 : MonoBehaviour
     private float _waitTime = 0f;
     private float _currWaitTime = 0f;
 
+    private float _attackWaitTime = 0f;
+    private float _currAttackWaitTime = 0f;
+
     private float _patrolMovementSpeed = 1f;
     private float _chaseMovementSpeed = 2f;
     private float _applyMovementSpeed;
@@ -106,6 +109,7 @@ public class EnemyAIV2 : MonoBehaviour
                     {
                         new ActionNode(CheckAttacking),
                         new ActionNode(CheckAttackRange),
+                        new ActionNode(WaitAfterAttack),
                         new ActionNode(DoAttack),
                     }
                 ),
@@ -173,6 +177,22 @@ public class EnemyAIV2 : MonoBehaviour
 
         // 공격 상태로 변경
         SetEnemyState(EnemyState.Attack);
+
+        _attackWaitTime = UnityEngine.Random.Range(1f, 3f);
+        _currAttackWaitTime = 0f;
+
+        return INode.ENodeState.SuccessState;
+    }
+
+    private INode.ENodeState WaitAfterAttack()
+    {
+        if (_currAttackWaitTime <= _attackWaitTime)
+        {
+            _currAttackWaitTime += Time.deltaTime;
+            return INode.ENodeState.RunningState;
+        }
+
+        SetEnemyState(EnemyState.Idle);
         return INode.ENodeState.SuccessState;
     }
 

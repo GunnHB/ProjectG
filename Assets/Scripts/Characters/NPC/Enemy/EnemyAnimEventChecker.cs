@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class EnemyAnimEventChecker : AnimEventChecker
 {
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
     protected override void StartAttack()
     {
         base.StartAttack();
