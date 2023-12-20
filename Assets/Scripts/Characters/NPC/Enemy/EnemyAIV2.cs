@@ -1,5 +1,7 @@
-using UnityEngine;
+using System;
 using System.Collections.Generic;
+
+using UnityEngine;
 
 using BehaviorTree;
 
@@ -7,10 +9,6 @@ using Sirenix.OdinInspector;
 
 public class EnemyAIV2 : MonoBehaviour
 {
-    [Title("[Test State]")]
-    [SerializeField] private INode.ENodeState _patrolNodeState;
-    [SerializeField] private INode.ENodeState _idleNodeState;
-
     [Title("[WayPoints]")]
     [SerializeField] private bool _setRandom = true;
     [SerializeField, HideIf(nameof(_setRandom))]
@@ -25,14 +23,20 @@ public class EnemyAIV2 : MonoBehaviour
     [SerializeField] private bool _noticePlayer = false;
     [SerializeField] private float _noticePlayerGage = 0f;
 
+    [Title("[Draw gizmos]")]
+    [SerializeField] private bool _drawGizmos;
+
     private BahaviorTreeRunner _btRunner;
+
+    private float _waitTime = 0f;
+    private float _currWaitTime = 0f;
 
     private bool _idleState = false;
     private bool _moveState = false;
     private bool _attackState = false;
 
-    private float _patrolMovementSpeed = 3f;
-    private float _chaseMovementSpeed = 5f;
+    private float _patrolMovementSpeed = 2f;
+    private float _chaseMovementSpeed = 4f;
     private float _applyMovementSpeed;
 
     // 현재 이동 중인 지점의 Vector
@@ -57,6 +61,10 @@ public class EnemyAIV2 : MonoBehaviour
         _btRunner.Operate();
     }
 
+    // 시퀀스 : 노드의 평가를 진행하면서 하나라도 [실패]라면 [실패]를 반환
+    //          모든 노드의 평가가 [성공]이어야 [성공] 반환
+    // 셀렉트 : 노드의 평가를 진행하면서 [성공]을 반환받으면 [성공]을 반환
+    //          모든 노드의 평가가 [실패]였을 때 [실패]를 반환
     private INode SettingBT()
     {
         return new SelectorNode(
@@ -67,7 +75,7 @@ public class EnemyAIV2 : MonoBehaviour
                     new List<INode>()
                     {
                         new ActionNode(DoPatrol),
-                        // new ActionNode(DoIdle),
+                        new ActionNode(DoIdle),
                     }
                 )
             });
@@ -98,13 +106,17 @@ public class EnemyAIV2 : MonoBehaviour
         // Vector3.Distance 보다 연산이 빠름
         var distance = Vector3.SqrMagnitude(_currWayPoint - transform.position);
 
-        Debug.Log(distance);
+        // 어느 정도 목표 지점에 가까워지면
+        if (distance <= float.Epsilon)
+        {
+            // 목표 지점을 0으로 초기화
+            _currWayPoint = Vector3.zero;
 
-        // 근사치를 비교함
-        if (Mathf.Approximately(distance, 0.0f))
-            Debug.Log("Yahoo!");
-        else
-            Debug.Log("Na...");
+            // 성공을 반환
+            return INode.ENodeState.SuccessState;
+        }
+
+        transform.position = Vector3.MoveTowards(transform.position, _currWayPoint, _applyMovementSpeed * Time.deltaTime);
 
         return INode.ENodeState.FailureState;
     }
@@ -114,8 +126,10 @@ public class EnemyAIV2 : MonoBehaviour
         if (_currWayPoint == Vector3.zero)
         {
             // 현재 위치에서 랜덤한 지점을 반환
-            var randomSite = Random.insideUnitSphere * _circleRadius;
+            var randomSite = (UnityEngine.Random.insideUnitSphere * _circleRadius) + transform.position;
 
+            // 둘째자리까지 반올림
+            // _currWayPoint = new Vector3((float)Math.Round(randomSite.x, 2), 0f, (float)Math.Round(randomSite.z, 2));
             _currWayPoint = new Vector3(randomSite.x, 0f, randomSite.z);
         }
 
@@ -136,6 +150,42 @@ public class EnemyAIV2 : MonoBehaviour
 
     private INode.ENodeState DoIdle()
     {
-        return INode.ENodeState.FailureState;
+        if (!_idleState)
+        {
+            _idleState = true;
+
+            if (_waitTime == 0f)
+                _waitTime = UnityEngine.Random.Range(5f, 10f);
+        }
+
+        if (_currWaitTime <= _waitTime)
+        {
+            _currWaitTime += Time.deltaTime;
+            return INode.ENodeState.RunningState;
+        }
+        else
+        {
+            _idleState = false;
+            _currWaitTime = 0f;
+            _waitTime = 0f;
+
+            return INode.ENodeState.SuccessState;
+        }
+    }
+
+    // 확인용 기즈모
+    private void OnDrawGizmos()
+    {
+        if (!_drawGizmos)
+            return;
+
+        if (_currWayPoint != Vector3.zero)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(_currWayPoint, .3f);
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, _currWayPoint);
+        }
     }
 }
