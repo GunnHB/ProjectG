@@ -42,8 +42,8 @@ public class EnemyAIV2 : MonoBehaviour
     private bool _patrolState = false;
     private bool _chaseState = false;
 
-    private float _patrolMovementSpeed = 2f;
-    private float _chaseMovementSpeed = 4f;
+    private float _patrolMovementSpeed = 1f;
+    private float _chaseMovementSpeed = 3f;
     private float _applyMovementSpeed;
 
     // 현재 이동 중인 지점의 Vector
@@ -54,7 +54,10 @@ public class EnemyAIV2 : MonoBehaviour
     private float _turnSmoothTime = .2f;
     private float _turnSmoothVelocity;
 
+    // 프리팹 최초 생성 시의 위치값
     private Vector3 _originPosition = Vector3.zero;
+
+    private Transform _targetPlayer;
 
     private void Awake()
     {
@@ -85,6 +88,21 @@ public class EnemyAIV2 : MonoBehaviour
         return new SelectorNode(
             new List<INode>()
             {
+                // 적을 발견
+                new SequenceNode(
+                    new List<INode>()
+                    {
+                        new ActionNode(CheckDetectTarget),
+                        new ActionNode(MoveToTarget),
+                    }
+                ),
+                // 적이 시야에서 사라짐
+                new SequenceNode(
+                    new List<INode>()
+                    {
+                        new ActionNode(DoAlert),
+                    }
+                ),
                 // 적 미발견 시 순찰
                 new SequenceNode(
                     new List<INode>()
@@ -94,6 +112,45 @@ public class EnemyAIV2 : MonoBehaviour
                     }
                 )
             });
+    }
+
+    private INode.ENodeState CheckDetectTarget()
+    {
+        if (_fieldOfView == null)
+            return INode.ENodeState.FailureState;
+
+        _fieldOfView.FindVisibleTargets();
+        _targetPlayer = _fieldOfView.NearestTarget;
+
+        return _targetPlayer != null ? INode.ENodeState.SuccessState : INode.ENodeState.FailureState;
+    }
+
+    private INode.ENodeState MoveToTarget()
+    {
+        if (_targetPlayer == null)
+            return INode.ENodeState.FailureState;
+
+        var distance = Vector3.SqrMagnitude(_targetPlayer.position - transform.position);
+
+        if (_fieldOfView.MeleeAttackRange > 0)
+        {
+            if (distance <= Mathf.Pow(_fieldOfView.MeleeAttackRange, 2))
+                return INode.ENodeState.SuccessState;
+        }
+
+        // 추격 속도로 세팅
+        _applyMovementSpeed = _chaseMovementSpeed;
+        transform.position = Vector3.MoveTowards(transform.position, _targetPlayer.position, _applyMovementSpeed * Time.deltaTime);
+
+        RotateToTarget(_targetPlayer.position);
+
+        return INode.ENodeState.FailureState;
+    }
+
+    private INode.ENodeState DoAlert()
+    {
+        // if (_targetPlayer != null)
+        return INode.ENodeState.FailureState;
     }
 
     private INode.ENodeState DoPatrol()
@@ -124,12 +181,12 @@ public class EnemyAIV2 : MonoBehaviour
             return INode.ENodeState.SuccessState;
         }
 
+        // 순찰 속도로 지정
+        _applyMovementSpeed = _patrolMovementSpeed;
+
         // 이동 및 회전
         transform.position = Vector3.MoveTowards(transform.position, _currWayPoint, _applyMovementSpeed * Time.deltaTime);
         RotateToTarget(_currWayPoint);
-
-        // 순찰 속도로 지정
-        _applyMovementSpeed = _patrolMovementSpeed;
 
         if (!_patrolState)
         {

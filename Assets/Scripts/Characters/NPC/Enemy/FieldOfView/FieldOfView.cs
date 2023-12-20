@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -7,14 +6,21 @@ using Sirenix.OdinInspector;
 
 public class FieldOfView : MonoBehaviour
 {
-    [TitleGroup("[Common]")]
-    [SerializeField] private float _viewRadius = 5f;
-    [TitleGroup("[Common]"), Range(0, 360)]
-    [SerializeField] private float _viewAngle = 90f;
+    private const string TITLE_RANGE = "[Range]";
+    private const string TITLE_LAYER_MASK = "[LayerMask]";
 
-    [TitleGroup("[LayerMask]")]
+    [TitleGroup(TITLE_RANGE), Range(0, 15)]
+    [SerializeField] private float _viewRadius = 5f;
+    [TitleGroup(TITLE_RANGE), Range(0, 360)]
+    [SerializeField] private float _viewAngle = 90f;
+    [TitleGroup(TITLE_RANGE), Range(0f, 3f)]
+    [SerializeField] private float _meleeAttackRange;
+    [TitleGroup(TITLE_RANGE), Range(0f, 3f)]
+    [SerializeField] private float _rangeAttackRange;
+
+    [TitleGroup(TITLE_LAYER_MASK)]
     [SerializeField] private LayerMask _targetMask;
-    [TitleGroup("[LayerMask]")]
+    [TitleGroup(TITLE_LAYER_MASK)]
     [SerializeField] private LayerMask _obstacleMask;
 
     private List<Transform> _visibleTargetList = new List<Transform>();
@@ -24,6 +30,8 @@ public class FieldOfView : MonoBehaviour
 
     public float ViewAngle => _viewAngle;
     public float ViewRadius => _viewRadius;
+    public float MeleeAttackRange => _meleeAttackRange;
+    public float RangeAttackRange => _rangeAttackRange;
 
     public List<Transform> VisibleTargetList => _visibleTargetList;
     public Transform NearestTarget => _nearestTarget;
@@ -67,11 +75,6 @@ public class FieldOfView : MonoBehaviour
                             }
                         }
                     }
-                }
-                // 시야 외에 타겟이 있는 경우
-                else
-                {
-
                 }
             }
         }

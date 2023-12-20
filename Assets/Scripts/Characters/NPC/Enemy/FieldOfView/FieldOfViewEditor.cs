@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor;
+
 [CustomEditor(typeof(FieldOfView))]
-public class FieldOfViewEditor : Editor
+public class FieldOfViewEditor : OdinEditor
 {
     private void OnSceneGUI()
     {
@@ -13,6 +16,7 @@ public class FieldOfViewEditor : Editor
 
         Handles.color = Color.white;
         Handles.DrawWireArc(fov.transform.position, Vector3.up, Vector3.forward, 360, fov.ViewRadius);
+        Handles.DrawWireArc(fov.transform.position, Vector3.up, Vector3.forward, 360, fov.MeleeAttackRange);
 
         Vector3 viewAngleA = fov.DirectionFromAngle(-fov.ViewAngle / 2, false);
         Vector3 viewAngleB = fov.DirectionFromAngle(fov.ViewAngle / 2, false);
