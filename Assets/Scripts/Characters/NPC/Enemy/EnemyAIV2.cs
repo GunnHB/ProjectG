@@ -137,8 +137,6 @@ public class EnemyAIV2 : MonoBehaviour
 
     private INode.ENodeState CheckAttacking()
     {
-        // return _state == EnemyState.Attack ? INode.ENodeState.RunningState : INode.ENodeState.SuccessState;
-
         if (_state == EnemyState.Attack)
         {
             // 공격 중이면 running 반환
