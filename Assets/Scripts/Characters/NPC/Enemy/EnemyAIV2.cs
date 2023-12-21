@@ -13,6 +13,7 @@ public class EnemyAIV2 : MonoBehaviour
     private const string ANIM_PARAM_WALK = "IsWalk";
     private const string ANIM_PARAM_CHASE = "IsChase";
     private const string ANIM_PARAM_ATTACK = "Attack";
+    private const string ANIM_PARAM_ALERT = "IsAlert";
 
     public enum EnemyState
     {
@@ -21,6 +22,7 @@ public class EnemyAIV2 : MonoBehaviour
         Patrol,
         Chase,
         Attack,
+        Alert,
     }
 
     [Title("[WayPoints]")]
@@ -51,11 +53,17 @@ public class EnemyAIV2 : MonoBehaviour
 
     private BahaviorTreeRunner _btRunner;
 
-    private float _waitTime = 0f;
-    private float _currWaitTime = 0f;
+    // 일반 대기 시간
+    private float _idleWaitTime = 0f;
+    private float _currIdleWaitTime = 0f;
 
+    // 공격 대기 시간
     private float _attackWaitTime = 0f;
     private float _currAttackWaitTime = 0f;
+
+    // 경계 대기 시간
+    private float _alertWaitTime = 0f;
+    private float _currAlertWaitTime = 0f;
 
     private float _patrolMovementSpeed = 1f;
     private float _chaseMovementSpeed = 2f;
@@ -71,8 +79,12 @@ public class EnemyAIV2 : MonoBehaviour
 
     // 프리팹 최초 생성 시의 위치값
     private Vector3 _originPosition = Vector3.zero;
+    // 추격 후 목표뮬이 사라지면 처음 생성됐던 위치로 돌아가기
+    private bool _backToOriginPosition = false;
 
     private Transform _targetPlayer;
+    private bool _findTarget;
+    private bool _missTarget;
 
     private void Awake()
     {
@@ -147,6 +159,12 @@ public class EnemyAIV2 : MonoBehaviour
             if (_checker != null && _checker.ProcessingAttack)
                 return INode.ENodeState.RunningState;
         }
+        else
+        {
+            // 공격 이외의 상태에서는 대기 시간을 초기화
+            _currAttackWaitTime = 0f;
+            _attackWaitTime = 0f;
+        }
 
         return INode.ENodeState.SuccessState;
     }
@@ -186,7 +204,7 @@ public class EnemyAIV2 : MonoBehaviour
 
     private INode.ENodeState WaitAfterAttack()
     {
-        if (_currAttackWaitTime <= _attackWaitTime)
+        if (_currAttackWaitTime < _attackWaitTime)
         {
             _currAttackWaitTime += Time.deltaTime;
             return INode.ENodeState.RunningState;
@@ -198,13 +216,26 @@ public class EnemyAIV2 : MonoBehaviour
 
     private INode.ENodeState CheckDetectTarget()
     {
-        if (_fieldOfView == null)
-            return INode.ENodeState.FailureState;
-
         _fieldOfView.FindVisibleTargets();
         _targetPlayer = _fieldOfView.NearestTarget;
 
-        return _targetPlayer != null ? INode.ENodeState.SuccessState : INode.ENodeState.FailureState;
+        // return _targetPlayer != null ? INode.ENodeState.SuccessState : INode.ENodeState.FailureState;
+
+        if (_targetPlayer != null)
+        {
+            _findTarget = true;
+            return INode.ENodeState.SuccessState;
+        }
+        else
+        {
+            if (_findTarget)
+            {
+                _findTarget = false;
+                _missTarget = true;
+            }
+
+            return INode.ENodeState.FailureState;
+        }
     }
 
     private INode.ENodeState MoveToTarget()
@@ -233,13 +264,42 @@ public class EnemyAIV2 : MonoBehaviour
         return INode.ENodeState.RunningState;
     }
 
+    // 적이 시야에서 사라지면 그 자리에서 잠시 동안 경계
     private INode.ENodeState DoAlert()
     {
-        return INode.ENodeState.FailureState;
+        if (!_missTarget)
+            return INode.ENodeState.FailureState;
+
+        if (_state != EnemyState.Alert)
+        {
+            // 경계 상태로 전환
+            SetEnemyState(EnemyState.Alert);
+
+            if (_alertWaitTime == 0f)
+                _alertWaitTime = UnityEngine.Random.Range(10f, 25f);
+        }
+
+        if (_currAlertWaitTime < _alertWaitTime)
+        {
+            _currAlertWaitTime += Time.deltaTime;
+            return INode.ENodeState.RunningState;
+        }
+        else
+        {
+            SetEnemyState(EnemyState.None);
+
+            _currAlertWaitTime = 0f;
+            _alertWaitTime = 0f;
+
+            return INode.ENodeState.FailureState;
+        }
     }
 
     private INode.ENodeState DoPatrol()
     {
+        if (_missTarget)
+            _missTarget = false;
+
         if (_setRandom)
             SetWayPointByRandom();
         else
@@ -321,21 +381,21 @@ public class EnemyAIV2 : MonoBehaviour
         {
             SetEnemyState(EnemyState.Idle);
 
-            if (_waitTime == 0f)
-                _waitTime = UnityEngine.Random.Range(5f, 10f);
+            if (_idleWaitTime == 0f)
+                _idleWaitTime = UnityEngine.Random.Range(5f, 10f);
         }
 
-        if (_currWaitTime <= _waitTime)
+        if (_currIdleWaitTime <= _idleWaitTime)
         {
-            _currWaitTime += Time.deltaTime;
+            _currIdleWaitTime += Time.deltaTime;
             return INode.ENodeState.RunningState;
         }
         else
         {
             SetEnemyState(EnemyState.None);
 
-            _currWaitTime = 0f;
-            _waitTime = 0f;
+            _currIdleWaitTime = 0f;
+            _idleWaitTime = 0f;
 
             return INode.ENodeState.SuccessState;
         }
@@ -351,19 +411,28 @@ public class EnemyAIV2 : MonoBehaviour
             case EnemyState.Idle:
                 SetAnimBoolParam(ANIM_PARAM_WALK, false);
                 SetAnimBoolParam(ANIM_PARAM_CHASE, false);
+                SetAnimBoolParam(ANIM_PARAM_ALERT, false);
                 break;
             case EnemyState.Patrol:
                 SetAnimBoolParam(ANIM_PARAM_WALK, true);
                 SetAnimBoolParam(ANIM_PARAM_CHASE, false);
+                SetAnimBoolParam(ANIM_PARAM_ALERT, false);
                 break;
             case EnemyState.Chase:
                 SetAnimBoolParam(ANIM_PARAM_CHASE, true);
+                SetAnimBoolParam(ANIM_PARAM_ALERT, false);
                 break;
             case EnemyState.Attack:
                 SetAnimBoolParam(ANIM_PARAM_WALK, false);
                 SetAnimBoolParam(ANIM_PARAM_CHASE, false);
+                SetAnimBoolParam(ANIM_PARAM_ALERT, false);
 
                 SetAnimTrigger(ANIM_PARAM_ATTACK);
+                break;
+            case EnemyState.Alert:
+                SetAnimBoolParam(ANIM_PARAM_WALK, false);
+                SetAnimBoolParam(ANIM_PARAM_CHASE, false);
+                SetAnimBoolParam(ANIM_PARAM_ALERT, true);
                 break;
             default:
                 break;
