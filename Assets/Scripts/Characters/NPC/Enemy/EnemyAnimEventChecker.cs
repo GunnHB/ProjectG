@@ -18,4 +18,17 @@ public class EnemyAnimEventChecker : AnimEventChecker
     {
         base.EndAttack();
     }
+
+    protected override void StartCheckColliders()
+    {
+        base.StartCheckColliders();
+
+        if (_collider.TryGetComponent(out PlayerController pController))
+            pController.PlayGetHit();
+    }
+
+    protected override void EndCheckColliders()
+    {
+        base.EndCheckColliders();
+    }
 }

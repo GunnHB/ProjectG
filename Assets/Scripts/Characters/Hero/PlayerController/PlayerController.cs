@@ -16,6 +16,7 @@ public partial class PlayerController : MonoBehaviour
     private const string ANIM_ISSPRINT = "IsSprint";
     private const string ANIM_ATTACK = "Attack";
     private const string ANIM_COMBOCOUNT = "ComboCount";
+    private const string ANIM_GET_HIT = "GetHit";
 
     [Title("[Components]")]
     [SerializeField] private CharacterController _controller;
@@ -53,6 +54,7 @@ public partial class PlayerController : MonoBehaviour
     private bool _isWalk = false;
     private bool _isSprint = false;
     private bool _isJump = false;
+    private bool _isGetHit => _checker.ProcessingGetHit;
 
     // 플레이어 스탯 데이터
     // 스테미나는 정확하게 값을 매기도록 float 처리 (나중에 수정필요하면 수정하자)
@@ -123,11 +125,11 @@ public partial class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (!_checker.ProcessingAttack)
+        // 공격 중이거나 피격 중일 땐 이동할 수 없음
+        if (!_checker.ProcessingAttack && !_isGetHit)
             MovePlayer();
         else
         {
-            // fsm으로 수정해야될지도...
             if (_isWalk)
             {
                 _isWalk = false;
@@ -293,5 +295,11 @@ public partial class PlayerController : MonoBehaviour
     private void InteractionActionStarted(InputAction.CallbackContext context)
     {
 
+    }
+
+    public void PlayGetHit()
+    {
+        // 피격 애니 실행
+        _animator.SetTrigger(ANIM_GET_HIT);
     }
 }

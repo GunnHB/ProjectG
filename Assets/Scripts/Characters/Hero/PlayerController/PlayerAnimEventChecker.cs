@@ -19,13 +19,27 @@ public class PlayerAnimEventChecker : AnimEventChecker
         base.EndAttack();
     }
 
-    protected override void StartCheckCollders()
+    protected override void StartCheckColliders()
     {
-        base.StartCheckCollders();
+        base.StartCheckColliders();
     }
 
     protected override void EndCheckColliders()
     {
         base.EndCheckColliders();
+    }
+
+    protected override void ActiveGetHit()
+    {
+        base.ActiveGetHit();
+
+        Debug.Log(_processingGetHit);
+    }
+
+    protected override void DeactiveGetHit()
+    {
+        base.DeactiveGetHit();
+
+        Debug.Log(_processingGetHit);
     }
 }

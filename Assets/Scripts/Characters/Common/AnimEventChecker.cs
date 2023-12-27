@@ -9,6 +9,9 @@ public abstract class AnimEventChecker : MonoBehaviour
     protected bool _processingAttack = false;
     public bool ProcessingAttack => _processingAttack;
 
+    protected bool _processingGetHit = false;
+    public bool ProcessingGetHit => _processingGetHit;
+
     protected Collider _collider;
 
     protected virtual void Awake()
@@ -26,22 +29,31 @@ public abstract class AnimEventChecker : MonoBehaviour
         _processingAttack = false;
     }
 
-    protected virtual void StartCheckCollders()
+    protected virtual void StartCheckColliders()
     {
         if (_collider == null)
             return;
-
-        // 공격 시 트리거 감지를 위함
-        _collider.isTrigger = true;
     }
 
     protected virtual void EndCheckColliders()
     {
         if (_collider == null)
             return;
+    }
 
-        // 공격이 끝난 후 트리거를 끔
-        _collider.isTrigger = false;
+    protected virtual void ActiveGetHit()
+    {
+        _processingGetHit = true;
+    }
+
+    protected virtual void DeactiveGetHit()
+    {
+        _processingGetHit = false;
+    }
+
+    public void SetOppnentCollider(Collider collider)
+    {
+        this._collider = collider;
     }
 
     public void ChangeProcessingAttack(bool active)

@@ -193,6 +193,9 @@ public class EnemyAIV2 : MonoBehaviour
         if (_targetPlayer == null)
             return INode.ENodeState.FailureState;
 
+        if (_targetPlayer.TryGetComponent(out Collider targetCollider))
+            _checker.SetOppnentCollider(targetCollider);
+
         // 공격 상태로 변경
         SetEnemyState(EnemyState.Attack);
 
