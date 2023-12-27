@@ -24,7 +24,9 @@ public class EnemyAnimEventChecker : AnimEventChecker
         base.StartCheckColliders();
 
         if (_collider.TryGetComponent(out PlayerController pController))
-            pController.PlayGetHit();
+        {
+            pController.GetHit();
+        }
     }
 
     protected override void EndCheckColliders()

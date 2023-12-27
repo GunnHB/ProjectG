@@ -297,9 +297,11 @@ public partial class PlayerController : MonoBehaviour
 
     }
 
-    public void PlayGetHit()
+    public void GetHit()
     {
-        // 피격 애니 실행
-        _animator.SetTrigger(ANIM_GET_HIT);
+        // 피격 애니가 실행 중이 아닐 때 실행
+        // 중첩되어 실행되지 않도록 막기
+        if (!_isGetHit)
+            _animator.SetTrigger(ANIM_GET_HIT);
     }
 }
