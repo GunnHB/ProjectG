@@ -9,7 +9,7 @@ using UnityEngine.InputSystem.Interactions;
 using Sirenix.OdinInspector;
 
 // UI 와 관련된 것들을 조작합니다.
-public partial class PlayerController : MonoBehaviour
+public partial class PlayerController : CharacterBase
 {
     private InputAction _inventoryAction;
     private InputAction _mainMenuAction;

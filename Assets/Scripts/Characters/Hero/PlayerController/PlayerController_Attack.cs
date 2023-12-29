@@ -5,7 +5,7 @@ using UnityEngine.InputSystem.Interactions;
 using Sirenix.OdinInspector;
 using System.Collections;
 
-public partial class PlayerController : MonoBehaviour
+public partial class PlayerController : CharacterBase
 {
     private InputAction _attackAction;
     private InputAction _focusAction;

@@ -9,14 +9,14 @@ using UnityEngine.InputSystem.Interactions;
 
 using Sirenix.OdinInspector;
 
-public partial class PlayerController : MonoBehaviour
+public partial class PlayerController : CharacterBase
 {
     // 애니 트랜지션 파라미터
-    private const string ANIM_ISWALK = "IsWalk";
-    private const string ANIM_ISSPRINT = "IsSprint";
-    private const string ANIM_ATTACK = "Attack";
+    // private const string ANIM_ISWALK = "IsWalk";
+    // private const string ANIM_ISSPRINT = "IsSprint";
+    // private const string ANIM_ATTACK = "Attack";
     private const string ANIM_COMBOCOUNT = "ComboCount";
-    private const string ANIM_GET_HIT = "GetHit";
+    // private const string ANIM_GET_HIT = "GetHit";
 
     [Title("[Components]")]
     [SerializeField] private CharacterController _controller;
@@ -117,10 +117,16 @@ public partial class PlayerController : MonoBehaviour
         UnRegistActions(_focusAction, FocusActionStarted, FocusActionPerformed, FocusActionCanceled);
     }
 
-    // 중력 적용
-    private void FixedUpdate()
+    // // 중력 적용
+    // private void FixedUpdate()
+    // {
+    //     ApplyGravity();
+    // }
+
+    protected override void FixedUpdate()
     {
-        ApplyGravity();
+        base.FixedUpdate();
+        _controller.Move(_gravityVelocity * Time.deltaTime);
     }
 
     private void Update()

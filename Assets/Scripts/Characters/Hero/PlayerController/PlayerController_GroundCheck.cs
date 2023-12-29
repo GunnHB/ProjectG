@@ -4,7 +4,7 @@ using UnityEngine;
 
 using Sirenix.OdinInspector;
 
-public partial class PlayerController : MonoBehaviour
+public partial class PlayerController : CharacterBase
 {
     [Title("[Boxcast properties]")]
     [SerializeField] private Transform _targetTransform;
