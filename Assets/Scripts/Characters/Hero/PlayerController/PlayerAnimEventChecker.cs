@@ -32,14 +32,10 @@ public class PlayerAnimEventChecker : AnimEventChecker
     protected override void ActiveGetHit()
     {
         base.ActiveGetHit();
-
-        Debug.Log(_processingGetHit);
     }
 
     protected override void DeactiveGetHit()
     {
         base.DeactiveGetHit();
-
-        Debug.Log(_processingGetHit);
     }
 }

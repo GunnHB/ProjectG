@@ -10,7 +10,7 @@ public class EnemyManager : SingletonObject<EnemyManager>
     {
         base.Awake();
 
-        // Init();
+        Init();
     }
 
     private void Init()
@@ -29,7 +29,6 @@ public class EnemyManager : SingletonObject<EnemyManager>
         {
             var tempPool = new ObjectPool()
             {
-                // _amount = 1,
                 _poolPrefab = obj,
             };
 
