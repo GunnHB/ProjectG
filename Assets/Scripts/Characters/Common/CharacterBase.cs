@@ -17,11 +17,9 @@ public class CharacterBase : MonoBehaviour
     [SerializeField] protected CharacterDataBase _dataBase;
     [SerializeField] protected Collider _controller;
 
-    // 상태 변수
+    // 캐릭터의 기본 상태 변수
     protected bool _isWalk;
     protected bool _isSprint;
-    protected bool _isAttack;
-    protected bool _isGetHit;
     
     // 중력
     protected Vector3 _gravityVelocity;
@@ -38,4 +36,14 @@ public class CharacterBase : MonoBehaviour
     {
         _gravityVelocity.y += GameValue.GRAVITY * Time.deltaTime;
     }
+}
+
+interface IDamageable
+{
+    void GetHit();
+}
+
+interface IAttackable
+{
+    void DoAttack();
 }

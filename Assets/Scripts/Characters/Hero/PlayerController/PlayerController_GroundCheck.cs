@@ -33,7 +33,10 @@ public partial class PlayerController : CharacterBase
     // 중력 적용
     public void ApplyGravity()
     {
-        _velocity.y += GameValue.GRAVITY * Time.deltaTime;
-        _controller.Move(_velocity * Time.deltaTime);
+        // _velocity.y += GameValue.GRAVITY * Time.deltaTime;
+        // _cController.Move(_velocity * Time.deltaTime);
+
+        _gravityVelocity.y += GameValue.GRAVITY * Time.deltaTime;
+        _cController.Move(_gravityVelocity * Time.deltaTime);
     }
 }

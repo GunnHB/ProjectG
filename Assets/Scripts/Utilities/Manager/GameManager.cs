@@ -34,6 +34,11 @@ public class GameManager : SingletonObject<GameManager>
     #region 캐싱
     private Mesh _hairMesh { get => JsonManager.Instance.MeshData._hairHesh[_selectedSlotIndex]; }
     private Mesh _skinMesh { get => JsonManager.Instance.MeshData._skinMesh[_selectedSlotIndex]; }
+
+    public string PlayerName => JsonManager.Instance.BaseData._playerName[_selectedSlotIndex];
+    
+    public int PlayerHP => JsonManager.Instance.BaseData._playerHP[_selectedSlotIndex];
+    public float PlayerStamina => JsonManager.Instance.BaseData._playerStamina[_selectedSlotIndex];
     #endregion
 
     protected override void Awake()

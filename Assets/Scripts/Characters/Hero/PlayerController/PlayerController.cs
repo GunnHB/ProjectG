@@ -9,7 +9,7 @@ using UnityEngine.InputSystem.Interactions;
 
 using Sirenix.OdinInspector;
 
-public partial class PlayerController : CharacterBase
+public partial class PlayerController : CharacterBase, IAttackable, IDamageable
 {
     // 애니 트랜지션 파라미터
     // private const string ANIM_ISWALK = "IsWalk";
@@ -19,7 +19,6 @@ public partial class PlayerController : CharacterBase
     // private const string ANIM_GET_HIT = "GetHit";
 
     [Title("[Components]")]
-    [SerializeField] private CharacterController _controller;
     [SerializeField] private PlayerInput _input;
     [SerializeField] private Transform _camera;
     [SerializeField] private Animator _animator;
@@ -32,13 +31,14 @@ public partial class PlayerController : CharacterBase
     [SerializeField] private Transform _leftHandTransform;
     [SerializeField] private Transform _rightHandTransform;
 
+    // 플레이어의 이동 관련 컨트롤러
+    private CharacterController _cController;
+
     // 플레이어 액션
     private PlayerAction _playerAction;
 
     // 이동 방향 변수
     private Vector3 _direction;
-    // 중력 적용
-    private Vector3 _velocity;
 
     // 이동 속도 변수
     private float _applySpeed;
@@ -50,17 +50,10 @@ public partial class PlayerController : CharacterBase
     private float _turnSmoothTime = .1f;
     private float _turnSmoothVelocity;
 
-    // 상태 변수
-    private bool _isWalk = false;
-    private bool _isSprint = false;
+    // 플레이어만의 상태 변수
     private bool _isJump = false;
+    private bool _isAttack = false;
     private bool _isGetHit => _checker.ProcessingGetHit;
-
-    // 플레이어 스탯 데이터
-    // 스테미나는 정확하게 값을 매기도록 float 처리 (나중에 수정필요하면 수정하자)
-    private int _playerHP;
-    private float _playerStamina;
-    private int _playerLevel;
 
     // 스태미나 충전에 걸리는 시간
     private float _currentStaminaChargeTime = 0f;
@@ -80,12 +73,19 @@ public partial class PlayerController : CharacterBase
 
     private void Awake()
     {
+        _controller = this.GetComponent<CharacterController>();
+        
+        if(_controller != null)
+            _cController = _controller as CharacterController;
+
         _applySpeed = _walkSpeed;
         _camera = Camera.main.transform;
         _input.camera = Camera.main;
 
-        _playerHP = GameValue.INIT_HP;
-        _playerStamina = GameValue.INIT_STAMINA;
+        // 스탯 세팅
+        _dataBase.SetCharacterName(GameManager.Instance.PlayerName);
+        _dataBase.SetCharacterHP(GameManager.Instance.PlayerHP);
+        _dataBase.SetCharacterStamina(GameManager.Instance.PlayerStamina);
 
         SetPlayerInputActions();        // 입력 감지
         SetPlayerActions();             // 콜백 세팅
@@ -93,13 +93,17 @@ public partial class PlayerController : CharacterBase
 
     private void OnEnable()
     {
+        // ui 단축키
         RegistActions(_inventoryAction, InventoryActionStarted);
         RegistActions(_mainMenuAction, MainMenuActionStarted);
 
+        // ui 끄기
         RegistActions(_escapeAction, EscapeActionStarted);
 
+        // 상호작용
         RegistActions(_InteractionAction, InteractionActionStarted);
 
+        // 전투 관련
         RegistActions(_attackAction, null, AttackActionPerformed, null);
         RegistActions(_focusAction, FocusActionStarted, FocusActionPerformed, FocusActionCanceled);
     }
@@ -117,16 +121,10 @@ public partial class PlayerController : CharacterBase
         UnRegistActions(_focusAction, FocusActionStarted, FocusActionPerformed, FocusActionCanceled);
     }
 
-    // // 중력 적용
-    // private void FixedUpdate()
-    // {
-    //     ApplyGravity();
-    // }
-
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        _controller.Move(_gravityVelocity * Time.deltaTime);
+        _cController.Move(_gravityVelocity * Time.deltaTime);
     }
 
     private void Update()
@@ -202,6 +200,8 @@ public partial class PlayerController : CharacterBase
         _interactItemList.Clear();
     }
 
+    
+
     // Actual move
     private void MovePlayer()
     {
@@ -214,7 +214,7 @@ public partial class PlayerController : CharacterBase
             this.transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            _controller.Move(moveDirection.normalized * _applySpeed * Time.deltaTime);
+            _cController.Move(moveDirection.normalized * _applySpeed * Time.deltaTime);
         }
 
         _applySpeed = _isSprint ? _sprintSpeed : _walkSpeed;
@@ -254,53 +254,59 @@ public partial class PlayerController : CharacterBase
         if (context.performed && IsGrounded)
         {
             _isJump = true;
-            _velocity.y = Mathf.Sqrt(_jumpForce * -2f * GameValue.GRAVITY);
+            // _velocity.y = Mathf.Sqrt(_jumpForce * -2f * GameValue.GRAVITY);
+            _gravityVelocity.y = Mathf.Sqrt(_jumpForce * -2f * GameValue.GRAVITY);
         }
     }
 
     // Stamina setting
     private void SetPlayerStamina(bool isWalk, ref bool isSprint)
     {
-        // 달리는 중이면 스태미나 감소
-        if (isWalk && isSprint)
-        {
-            if (_playerStamina > 0)
-                _playerStamina -= GameValue.DECREASE_STAMINA_VALUE;
-            else
-            {
-                _playerStamina = 0;
-                isSprint = false;
-            }
-        }
-        // 아니면 스태미나 충전
-        else
-        {
-            if (!_isSprint)
-            {
-                // 스태미나 충전이 시간이 안됐으면
-                if (_currentStaminaChargeTime < GameValue.CHARGE_STAMINA_TIME)
-                {
-                    _currentStaminaChargeTime += Time.deltaTime;
+        // // 달리는 중이면 스태미나 감소
+        // if (isWalk && isSprint)
+        // {
+        //     if (_playerStamina > 0)
+        //         _playerStamina -= GameValue.DECREASE_STAMINA_VALUE;
+        //     else
+        //     {
+        //         _playerStamina = 0;
+        //         isSprint = false;
+        //     }
+        // }
+        // // 아니면 스태미나 충전
+        // else
+        // {
+        //     if (!_isSprint)
+        //     {
+        //         // 스태미나 충전이 시간이 안됐으면
+        //         if (_currentStaminaChargeTime < GameValue.CHARGE_STAMINA_TIME)
+        //         {
+        //             _currentStaminaChargeTime += Time.deltaTime;
 
-                    if (_currentStaminaChargeTime >= GameValue.CHARGE_STAMINA_TIME)
-                        _currentStaminaChargeTime = GameValue.CHARGE_STAMINA_TIME;
-                }
-                // 스태미나 충전이 가능하면
-                else
-                {
-                    if (_playerStamina < GameValue.INIT_STAMINA)
-                        _playerStamina += GameValue.INCREASE_STAMINA_VALUE;
-                    else
-                        _playerStamina = GameValue.INIT_STAMINA;
-                }
-            }
-        }
+        //             if (_currentStaminaChargeTime >= GameValue.CHARGE_STAMINA_TIME)
+        //                 _currentStaminaChargeTime = GameValue.CHARGE_STAMINA_TIME;
+        //         }
+        //         // 스태미나 충전이 가능하면
+        //         else
+        //         {
+        //             if (_playerStamina < GameValue.INIT_STAMINA)
+        //                 _playerStamina += GameValue.INCREASE_STAMINA_VALUE;
+        //             else
+        //                 _playerStamina = GameValue.INIT_STAMINA;
+        //         }
+        //     }
+        // }
     }
 
     // 줍기, 대화, ...
     private void InteractionActionStarted(InputAction.CallbackContext context)
     {
 
+    }
+
+    public void DoAttack()
+    {
+        throw new NotImplementedException();
     }
 
     public void GetHit()
