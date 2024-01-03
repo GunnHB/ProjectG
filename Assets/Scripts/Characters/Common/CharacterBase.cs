@@ -12,17 +12,23 @@ public class CharacterBase : MonoBehaviour
     protected const string ANIM_ISWALK = "IsWalk";
     protected const string ANIM_ISSPRINT = "IsSprint";
     protected const string ANIM_ATTACK = "Attack";
-    protected const string ANIM_GET_HIT = "GetHit";
+    protected const string ANIM_GET_DAMAGED = "GetHit";
 
     [SerializeField] protected CharacterDataBase _dataBase;
+    [SerializeField] protected AnimEventChecker _checker;
     [SerializeField] protected Collider _controller;
 
     // 캐릭터의 기본 상태 변수
     protected bool _isWalk;
     protected bool _isSprint;
-    
+    protected bool _isAttack => _checker.ProcessingAttack;
+    protected bool _isGetDamaged => _checker.ProcessingGetHit;
+
     // 중력
     protected Vector3 _gravityVelocity;
+
+    // 캐릭터 이동 속도
+    protected float _applySpeed;
 
     protected virtual void FixedUpdate()
     {
@@ -40,7 +46,7 @@ public class CharacterBase : MonoBehaviour
 
 interface IDamageable
 {
-    void GetHit();
+    void GetDamaged();
 }
 
 interface IAttackable

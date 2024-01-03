@@ -7,6 +7,9 @@ public static class GameValue
     // 캐릭터 생성 시 초기값
     public static int INIT_HP = 100;
     public static int INIT_STAMINA = 100;
+    
+    public static float PLAYER_WALK_SPEED = 4f;
+    public static float PLAYER_SPRINT_SPEED = 4f;
 
     // 게임에서 사용되는 기본적인 값
     public static float GRAVITY = -9.81f;
@@ -33,8 +36,8 @@ public static class GameValue
     // 기본적인 플레이어 프리팹명
     public static string PLAYER_PREFAB = "Player_onCamera";
 
-    // 하트의 1/4
-    public static int QUATER_OF_HERAT_VLAUE = 5;
+    public static int QUATER_OF_HERAT_VLAUE = 5;            // 하트의 1/4 값
+    public static float QUATER_OF_FILL_AMOUNT_VALUE = .25f; // 하트의 1/4 채우기 값
 }
 
 public enum SlotIndex

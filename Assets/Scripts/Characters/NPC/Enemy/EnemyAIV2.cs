@@ -6,7 +6,6 @@ using UnityEngine;
 using BehaviorTree;
 
 using Sirenix.OdinInspector;
-using Unity.Mathematics;
 
 public class EnemyAIV2 : MonoBehaviour
 {

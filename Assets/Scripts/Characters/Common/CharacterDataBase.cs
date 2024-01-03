@@ -6,20 +6,19 @@ using UnityEngine;
 public class CharacterDataBase
 {
     // 캐릭터 이름
-    private string _charName;
+    [SerializeField] private string _charName;
 
     // 캐릭터 체력 / 스테미나
-    private int _charHP;
-    private float _charStamina;
+    [SerializeField] private int _charHP;
+    [SerializeField] private float _charStamina;
 
     // 캐릭터 공격력 / 방어력
-    private int _offensivePower;
-    private int _defensivePower;
+    [SerializeField] private int _offensivePower;
+    [SerializeField] private int _defensivePower;
 
     // 캐릭터 이동 속도
-    private float _applySpeed;
-    private float _walkSpeed;
-    private float _sprintSpeed;
+    [SerializeField] private float _walkSpeed;
+    [SerializeField] private float _sprintSpeed;
 
     // 프로퍼티
     public string ThisName => _charName;
@@ -56,5 +55,15 @@ public class CharacterDataBase
     public void SetCharacterDefensivePower(int defensivePower)
     {
         _defensivePower = defensivePower;
+    }
+
+    public void SetCharacterWalkSpeed(float walkSpeed)
+    {
+        _walkSpeed = walkSpeed;
+    }
+
+    public void SetCharacterSprintSpeed(float sprintSpeed)
+    {
+        _sprintSpeed = sprintSpeed;
     }
 }

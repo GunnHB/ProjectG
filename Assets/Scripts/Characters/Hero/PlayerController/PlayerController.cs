@@ -12,17 +12,13 @@ using Sirenix.OdinInspector;
 public partial class PlayerController : CharacterBase, IAttackable, IDamageable
 {
     // 애니 트랜지션 파라미터
-    // private const string ANIM_ISWALK = "IsWalk";
-    // private const string ANIM_ISSPRINT = "IsSprint";
-    // private const string ANIM_ATTACK = "Attack";
     private const string ANIM_COMBOCOUNT = "ComboCount";
-    // private const string ANIM_GET_HIT = "GetHit";
 
     [Title("[Components]")]
     [SerializeField] private PlayerInput _input;
     [SerializeField] private Transform _camera;
     [SerializeField] private Animator _animator;
-    [SerializeField] private AnimEventChecker _checker;
+    // [SerializeField] private AnimEventChecker _checker;
 
     [Title("[PlayerMeshData]")]
     [SerializeField] private PlayerSkinnedMesh _skinnedMeshData;
@@ -41,9 +37,6 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
     private Vector3 _direction;
 
     // 이동 속도 변수
-    private float _applySpeed;
-    private float _walkSpeed = 4f;
-    private float _sprintSpeed = 6f;
     private float _jumpForce = 1f;
 
     // 캐릭터 회전 관련
@@ -52,8 +45,6 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
 
     // 플레이어만의 상태 변수
     private bool _isJump = false;
-    private bool _isAttack = false;
-    private bool _isGetHit => _checker.ProcessingGetHit;
 
     // 스태미나 충전에 걸리는 시간
     private float _currentStaminaChargeTime = 0f;
@@ -71,14 +62,20 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
     private List<ItemBase> _interactItemList = new();
     #endregion
 
+    #region 캐싱
+    // 플레이어 허드
+    private UIPlayerStatusHUD _statusHud => UIManager.Instance.FindOpendUI<UIPlayerStatusHUD>();
+    #endregion
+
     private void Awake()
     {
+        // 공통 콜라이더 세팅
         _controller = this.GetComponent<CharacterController>();
         
         if(_controller != null)
             _cController = _controller as CharacterController;
 
-        _applySpeed = _walkSpeed;
+        _applySpeed = _dataBase.ThisWalkSpeed;
         _camera = Camera.main.transform;
         _input.camera = Camera.main;
 
@@ -86,6 +83,10 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
         _dataBase.SetCharacterName(GameManager.Instance.PlayerName);
         _dataBase.SetCharacterHP(GameManager.Instance.PlayerHP);
         _dataBase.SetCharacterStamina(GameManager.Instance.PlayerStamina);
+
+        // 이동 속도 세팅
+        _dataBase.SetCharacterWalkSpeed(GameValue.PLAYER_WALK_SPEED);
+        _dataBase.SetCharacterSprintSpeed(GameValue.PLAYER_SPRINT_SPEED);
 
         SetPlayerInputActions();        // 입력 감지
         SetPlayerActions();             // 콜백 세팅
@@ -130,7 +131,7 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
     private void Update()
     {
         // 공격 중이거나 피격 중일 땐 이동할 수 없음
-        if (!_checker.ProcessingAttack && !_isGetHit)
+        if (!_isAttack && !_isGetDamaged)
             MovePlayer();
         else
         {
@@ -217,7 +218,7 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
             _cController.Move(moveDirection.normalized * _applySpeed * Time.deltaTime);
         }
 
-        _applySpeed = _isSprint ? _sprintSpeed : _walkSpeed;
+        _applySpeed = _isSprint ? _dataBase.ThisSprintSpeed : _dataBase.ThisWalkSpeed;
 
         _animator.SetBool(ANIM_ISWALK, _isWalk);
         _animator.SetBool(ANIM_ISSPRINT, _isSprint && _isWalk);
@@ -298,6 +299,11 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
         // }
     }
 
+    private void SetStaminaUI()
+    {
+        Debug.Log($"show stamina : {_isWalk && _isSprint}");
+    }
+
     // 줍기, 대화, ...
     private void InteractionActionStarted(InputAction.CallbackContext context)
     {
@@ -309,11 +315,14 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
         throw new NotImplementedException();
     }
 
-    public void GetHit()
+    public void GetDamaged()
     {
         // 피격 애니가 실행 중이 아닐 때 실행
         // 중첩되어 실행되지 않도록 막기
-        if (!_isGetHit)
-            _animator.SetTrigger(ANIM_GET_HIT);
+        if (!_isGetDamaged)
+            _animator.SetTrigger(ANIM_GET_DAMAGED);
+
+        if(_statusHud == null)
+            return;        
     }
 }
