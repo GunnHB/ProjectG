@@ -34,6 +34,11 @@ public class UIPlayerStatusHUD : UIHUDBase
         CalcPlayerHP();
     }
 
+    public void RefreshHeart()
+    {
+        Debug.Log("decresse heart");
+    }
+
     private void CalcPlayerHP()
     {
         int wholeHeartAmount = _currPlayerHP / (GameValue.QUATER_OF_HERAT_VLAUE * 4);

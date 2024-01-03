@@ -37,7 +37,6 @@ public static class GameValue
     public static string PLAYER_PREFAB = "Player_onCamera";
 
     public static int QUATER_OF_HERAT_VLAUE = 5;            // 하트의 1/4 값
-    public static float QUATER_OF_FILL_AMOUNT_VALUE = .25f; // 하트의 1/4 채우기 값
 }
 
 public enum SlotIndex

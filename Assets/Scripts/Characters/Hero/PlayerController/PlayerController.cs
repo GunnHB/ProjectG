@@ -323,6 +323,13 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
             _animator.SetTrigger(ANIM_GET_DAMAGED);
 
         if(_statusHud == null)
-            return;        
+            return;
+
+        _statusHud.RefreshHeart();
+    }
+
+    public void Dead()
+    {
+        // if(_dataBase.)
     }
 }
