@@ -412,7 +412,8 @@ public class UICustomizePanel : UIPanelBase
     private void SavePlayerBaseData()
     {
         JsonManager.Instance.BaseData._playerName[_slotIndex] = _nameInputField.text;
-        JsonManager.Instance.BaseData._playerHP[_slotIndex] = GameValue.INIT_HP;
+        JsonManager.Instance.BaseData._playerMaxHP[_slotIndex] = GameValue.INIT_HP;
+        JsonManager.Instance.BaseData._playerCurrentHP[_slotIndex] = GameValue.INIT_HP;
         JsonManager.Instance.BaseData._playerStamina[_slotIndex] = GameValue.INIT_STAMINA;
 
         JsonManager.Instance.SaveData(_playerBaseDataPath, _playerBaseDataFileName, JsonManager.Instance.BaseData);

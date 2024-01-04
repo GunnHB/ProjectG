@@ -1,69 +1,81 @@
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 [System.Serializable]
 public class CharacterDataBase
 {
+    private const string GROUP_NAME = "[Name]";
+    private const string GROUP_STATUS = "[Status]";
+    private const string GROUP_SPEED = "[Speed]";
+
     // 캐릭터 이름
-    [SerializeField] private string _charName;
+    [BoxGroup(GROUP_NAME), SerializeField]
+    private string _charName;
 
     // 캐릭터 체력 / 스테미나
-    [SerializeField] private int _charHP;
-    [SerializeField] private float _charStamina;
+    [BoxGroup(GROUP_STATUS), SerializeField]
+    private int _charMaxHP;
+    [BoxGroup(GROUP_STATUS), SerializeField]
+    private int _charCurrHP;
+    [BoxGroup(GROUP_STATUS), SerializeField]
+    private float _charStamina;
 
     // 캐릭터 공격력 / 방어력
-    [SerializeField] private int _offensivePower;
-    [SerializeField] private int _defensivePower;
+    [BoxGroup(GROUP_STATUS), SerializeField]
+    private int _offensivePower;
+    [BoxGroup(GROUP_STATUS), SerializeField]
+    private int _defensivePower;
 
     // 캐릭터 이동 속도
-    [SerializeField] private float _walkSpeed;
-    [SerializeField] private float _sprintSpeed;
+    [BoxGroup(GROUP_SPEED), SerializeField]
+    private float _walkSpeed;
+    [BoxGroup(GROUP_SPEED), SerializeField]
+    private float _sprintSpeed;
 
     // 프로퍼티
-    public string ThisName => _charName;
-
-    public int ThisHP => _charHP;
-    public float ThisStamina => _charStamina;
-
-    public int ThisOffensivePower => _offensivePower;
-    public int ThisDefensivePower => _defensivePower;
-
-    public float ThisWalkSpeed => _walkSpeed;
-    public float ThisSprintSpeed => _sprintSpeed;
-
-    public void SetCharacterName(string name)
+    public string ThisName
     {
-        _charName = name;
+        get { return _charName; }
+        set { _charName = value; }
     }
 
-    public void SetCharacterHP(int hp)
+    public int ThisMaxHP
     {
-        _charHP = hp;
+        get { return _charMaxHP; }
+        set { _charMaxHP = value; }
+    }
+    public int ThisCurrHP
+    {
+        get { return _charCurrHP; }
+        set { _charCurrHP = value; }
+    }
+    public float ThisStamina
+    {
+        get { return _charStamina; }
+        set { _charStamina = value; }
     }
 
-    public void SetCharacterStamina(float stamina)
+    public int ThisOffensivePower
     {
-        _charStamina = stamina;
+        get { return _offensivePower; }
+        set { _offensivePower = value; }
+    }
+    public int ThisDefensivePower
+    {
+        get { return _defensivePower; }
+        set { _defensivePower = value; }
     }
 
-    public void SetCharacterOppensivePower(int offensivePower)
+    public float ThisWalkSpeed
     {
-        _offensivePower = offensivePower;
+        get { return _walkSpeed; }
+        set { _walkSpeed = value; }
     }
-
-    public void SetCharacterDefensivePower(int defensivePower)
+    public float ThisSprintSpeed
     {
-        _defensivePower = defensivePower;
-    }
-
-    public void SetCharacterWalkSpeed(float walkSpeed)
-    {
-        _walkSpeed = walkSpeed;
-    }
-
-    public void SetCharacterSprintSpeed(float sprintSpeed)
-    {
-        _sprintSpeed = sprintSpeed;
+        get { return _sprintSpeed; }
+        set { _sprintSpeed = value; }
     }
 }

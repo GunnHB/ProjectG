@@ -36,8 +36,10 @@ public class GameManager : SingletonObject<GameManager>
     private Mesh _skinMesh { get => JsonManager.Instance.MeshData._skinMesh[_selectedSlotIndex]; }
 
     public string PlayerName => JsonManager.Instance.BaseData._playerName[_selectedSlotIndex];
-    
-    public int PlayerHP => JsonManager.Instance.BaseData._playerHP[_selectedSlotIndex];
+
+    public int PlayerMaxHP => JsonManager.Instance.BaseData._playerMaxHP[_selectedSlotIndex];
+    public int PlayerCurrentHP = 35;//=> JsonManager.Instance.BaseData._playerCurrentHP[_selectedSlotIndex];
+
     public float PlayerStamina => JsonManager.Instance.BaseData._playerStamina[_selectedSlotIndex];
     #endregion
 

@@ -7,28 +7,27 @@ public class UIPlayerStatusHUD : UIHUDBase
     [Title("[Heart]")]
     [SerializeField] private ObjectPool _heartPool;
 
+    private CharacterDataBase _playerDatabase;
+
     #region 캐싱
     private int _currPlayerIndex => GameManager.Instance.SelectedSlotIndex;
-
-    private int _currPlayerHP => JsonManager.Instance.BaseData._playerHP[_currPlayerIndex];
-    private int _currPlayerStamina => JsonManager.Instance.BaseData._playerStamina[_currPlayerIndex];
     #endregion
 
     protected override void Awake()
     {
         base.Awake();
-
-        InitHeart();
     }
 
     // 하트의 1/4 은 5입니다.
     // 따라서 하트 하나 당 20임다.
-    private void InitHeart()
+    public void InitHeart(CharacterDataBase database)
     {
         _heartPool.Initialize();
         _heartPool.ReturnAllObject();
 
-        if (_currPlayerHP == 0)
+        _playerDatabase = database;
+
+        if (_playerDatabase == null)
             return;
 
         CalcPlayerHP();
@@ -41,8 +40,11 @@ public class UIPlayerStatusHUD : UIHUDBase
 
     private void CalcPlayerHP()
     {
-        int wholeHeartAmount = _currPlayerHP / (GameValue.QUATER_OF_HERAT_VLAUE * 4);
-        int remainHeart = _currPlayerHP % (GameValue.QUATER_OF_HERAT_VLAUE * 4);
+        // 완전한 하트 개수
+        int wholeHeartAmount = _playerDatabase.ThisMaxHP / (GameValue.QUATER_OF_HERAT_VLAUE * 4);
+        // 불완전한 하트 개수
+        int remainHeart = _playerDatabase.ThisMaxHP % (GameValue.QUATER_OF_HERAT_VLAUE * 4);
+        // 쿼터 개수
         int quaterCount = 0;
 
         bool remain = false;

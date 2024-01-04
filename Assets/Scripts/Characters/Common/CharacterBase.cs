@@ -14,7 +14,7 @@ public class CharacterBase : MonoBehaviour
     protected const string ANIM_ATTACK = "Attack";
     protected const string ANIM_GET_DAMAGED = "GetHit";
 
-    [SerializeField] protected CharacterDataBase _dataBase;
+    [SerializeField] protected CharacterDataBase _database;
     [SerializeField] protected AnimEventChecker _checker;
     [SerializeField] protected Collider _controller;
 

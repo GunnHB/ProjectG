@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7027346961762203390
 RectTransform:
   m_ObjectHideFlags: 0
@@ -424,10 +424,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8bfd30cbcdf1774b9837175d55d7c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _oneQuatersImage: {fileID: 528396673271050530}
-  _twoQuatersImage: {fileID: 8628682995035700348}
-  _threeQuatersImage: {fileID: 1930649645859455518}
-  _fourQuatersImage: {fileID: 3787771848509062403}
+  _quaterImageArray:
+  - {fileID: 528396673271050530}
+  - {fileID: 8628682995035700348}
+  - {fileID: 1930649645859455518}
+  - {fileID: 3787771848509062403}
+  _quaterImage: {fileID: 528396673271050530}
 --- !u!1 &7931822388469659902
 GameObject:
   m_ObjectHideFlags: 0

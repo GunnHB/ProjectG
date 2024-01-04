@@ -7,9 +7,9 @@ public static class GameValue
     // 캐릭터 생성 시 초기값
     public static int INIT_HP = 100;
     public static int INIT_STAMINA = 100;
-    
+
     public static float PLAYER_WALK_SPEED = 4f;
-    public static float PLAYER_SPRINT_SPEED = 4f;
+    public static float PLAYER_SPRINT_SPEED = 7f;
 
     // 게임에서 사용되는 기본적인 값
     public static float GRAVITY = -9.81f;

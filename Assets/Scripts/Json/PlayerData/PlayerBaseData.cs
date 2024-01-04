@@ -8,7 +8,9 @@ public class PlayerBaseData
 {
     public string[] _playerName;
 
-    public int[] _playerHP;
+    public int[] _playerMaxHP;
+    public int[] _playerCurrentHP;
+
     public int[] _playerStamina;
 
     public Dictionary<SlotIndex, Dictionary<HandPosition, ItemData>> _playerWeapon = new();
@@ -17,7 +19,9 @@ public class PlayerBaseData
     {
         this._playerName = new string[GameValue.SAVE_SLOT_COUNT];
 
-        this._playerHP = new int[GameValue.SAVE_SLOT_COUNT];
+        this._playerMaxHP = new int[GameValue.SAVE_SLOT_COUNT];
+        this._playerCurrentHP = new int[GameValue.SAVE_SLOT_COUNT];
+
         this._playerStamina = new int[GameValue.SAVE_SLOT_COUNT];
 
         var tempData = new Dictionary<HandPosition, ItemData>();

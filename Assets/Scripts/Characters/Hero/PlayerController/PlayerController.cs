@@ -63,7 +63,7 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
     #endregion
 
     #region 캐싱
-    // 플레이어 허드
+    // 플레이어 상태 허드
     private UIPlayerStatusHUD _statusHud => UIManager.Instance.FindOpendUI<UIPlayerStatusHUD>();
     #endregion
 
@@ -71,25 +71,33 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
     {
         // 공통 콜라이더 세팅
         _controller = this.GetComponent<CharacterController>();
-        
-        if(_controller != null)
+
+        if (_controller != null)
             _cController = _controller as CharacterController;
 
-        _applySpeed = _dataBase.ThisWalkSpeed;
+        _applySpeed = _database.ThisWalkSpeed;
         _camera = Camera.main.transform;
         _input.camera = Camera.main;
 
-        // 스탯 세팅
-        _dataBase.SetCharacterName(GameManager.Instance.PlayerName);
-        _dataBase.SetCharacterHP(GameManager.Instance.PlayerHP);
-        _dataBase.SetCharacterStamina(GameManager.Instance.PlayerStamina);
-
-        // 이동 속도 세팅
-        _dataBase.SetCharacterWalkSpeed(GameValue.PLAYER_WALK_SPEED);
-        _dataBase.SetCharacterSprintSpeed(GameValue.PLAYER_SPRINT_SPEED);
-
         SetPlayerInputActions();        // 입력 감지
         SetPlayerActions();             // 콜백 세팅
+    }
+
+    private void Start()
+    {
+        // 이름 세팅
+        _database.ThisName = GameManager.Instance.PlayerName;
+
+        // 스탯 세팅
+        _database.ThisMaxHP = GameManager.Instance.PlayerMaxHP;
+        _database.ThisCurrHP = GameManager.Instance.PlayerCurrentHP;
+        _database.ThisStamina = GameManager.Instance.PlayerStamina;
+
+        // 이동 속도 세팅
+        _database.ThisWalkSpeed = GameValue.PLAYER_WALK_SPEED;
+        _database.ThisSprintSpeed = GameValue.PLAYER_SPRINT_SPEED;
+
+        _statusHud?.InitHeart(_database);
     }
 
     private void OnEnable()
@@ -201,7 +209,7 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
         _interactItemList.Clear();
     }
 
-    
+
 
     // Actual move
     private void MovePlayer()
@@ -218,7 +226,7 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
             _cController.Move(moveDirection.normalized * _applySpeed * Time.deltaTime);
         }
 
-        _applySpeed = _isSprint ? _dataBase.ThisSprintSpeed : _dataBase.ThisWalkSpeed;
+        _applySpeed = _isSprint ? _database.ThisSprintSpeed : _database.ThisWalkSpeed;
 
         _animator.SetBool(ANIM_ISWALK, _isWalk);
         _animator.SetBool(ANIM_ISSPRINT, _isSprint && _isWalk);
@@ -322,7 +330,7 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
         if (!_isGetDamaged)
             _animator.SetTrigger(ANIM_GET_DAMAGED);
 
-        if(_statusHud == null)
+        if (_statusHud == null)
             return;
 
         _statusHud.RefreshHeart();
