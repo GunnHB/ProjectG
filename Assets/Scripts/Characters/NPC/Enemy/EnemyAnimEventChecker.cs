@@ -25,7 +25,7 @@ public class EnemyAnimEventChecker : AnimEventChecker
 
         if (_collider.TryGetComponent(out PlayerController pController))
         {
-            pController.GetDamaged();
+            pController.GetDamaged(5);
         }
     }
 

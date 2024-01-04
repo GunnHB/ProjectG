@@ -1,3 +1,7 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
 using UnityEngine;
 
 using Sirenix.OdinInspector;
@@ -8,6 +12,9 @@ public class UIPlayerStatusHUD : UIHUDBase
     [SerializeField] private ObjectPool _heartPool;
 
     private CharacterDataBase _playerDatabase;
+    private List<HeartObject> _activedHeartList;    // 활성화된 하트 리스트
+
+    private Coroutine _refreshHeartCoroutine;
 
     #region 캐싱
     private int _currPlayerIndex => GameManager.Instance.SelectedSlotIndex;
@@ -30,51 +37,72 @@ public class UIPlayerStatusHUD : UIHUDBase
         if (_playerDatabase == null)
             return;
 
-        CalcPlayerHP();
+        SetPlayerHeart();
     }
 
-    public void RefreshHeart()
+    public void RefreshHeart(int damage)
     {
-        Debug.Log("decresse heart");
-    }
+        if (_playerDatabase == null)
+            return;
 
-    private void CalcPlayerHP()
-    {
-        // 완전한 하트 개수
-        int wholeHeartAmount = _playerDatabase.ThisMaxHP / (GameValue.QUATER_OF_HERAT_VLAUE * 4);
-        // 불완전한 하트 개수
-        int remainHeart = _playerDatabase.ThisMaxHP % (GameValue.QUATER_OF_HERAT_VLAUE * 4);
-        // 쿼터 개수
-        int quaterCount = 0;
+        // 데미지가 0 이하면 5로 고정시킴
+        int actualDamage = damage <= 0 ? 5 : damage;
 
-        bool remain = false;
-
-        // 완전한 하트를 채울 정도가 아닌 체력이 있는 경우
-        if (remainHeart != 0)
+        if (_refreshHeartCoroutine != null)
         {
-            quaterCount = remainHeart / GameValue.QUATER_OF_HERAT_VLAUE;
-            wholeHeartAmount += 1;  // 나머지도 표시해야하기 때문에 1 추가
-
-            remain = true;
+            StopCoroutine(_refreshHeartCoroutine);
+            _refreshHeartCoroutine = null;
         }
 
-        for (int index = 0; index < wholeHeartAmount; index++)
+        _refreshHeartCoroutine = StartCoroutine(nameof(Cor_RefreshHeart));
+    }
+
+    private IEnumerator Cor_RefreshHeart()
+    {
+        if (_activedHeartList.Count == 0)
+            yield break;
+
+        yield return null;
+    }
+
+    private void SetPlayerHeart()
+    {
+        // 최대 하트
+        int maxHeartAmount = _playerDatabase.ThisMaxHP / (GameValue.QUATER_OF_HERAT_VLAUE * 4);
+
+        // 현재 하트
+        int currentHeartAmount = _playerDatabase.ThisCurrHP / (GameValue.QUATER_OF_HERAT_VLAUE * 4);
+        // 현재 하트의 나머지
+        int remainHeartAmount = _playerDatabase.ThisCurrHP % (GameValue.QUATER_OF_HERAT_VLAUE * 4);
+
+        // 나머지가 있는지 없는지
+        bool isRemain = remainHeartAmount != 0 ? true : false;
+        // 나머지 중 켤 오브젝트의 개수
+        int quaterCount = isRemain ? remainHeartAmount / GameValue.QUATER_OF_HERAT_VLAUE : 0;
+
+        for (int index = 0; index < maxHeartAmount; index++)
         {
             var heart = _heartPool.GetObject();
             var heartObj = heart.GetComponent<HeartObject>();
 
             if (heartObj == null)
-                return;
-
-            // 나머지가 있는 경우 마지막은 나머지의 값 만큼만 표기 
-            if (index == wholeHeartAmount - 1 && remain)
             {
-                float heartAmount = 1f / 4f * quaterCount;
-
-                heartObj.SetHeart(heartAmount);
+                Debug.Log("there is no heart object! please check script.");
+                break;
             }
-            else
-                heartObj.SetHeart(1f);
+
+            if (index < currentHeartAmount)
+            {
+                heartObj.SetHeart(4);
+                _activedHeartList.Add(heartObj);
+            }
+            else if (isRemain)
+            {
+                heartObj.SetHeart(quaterCount);
+                _activedHeartList.Add(heartObj);
+
+                isRemain = false;
+            }
         }
     }
 }

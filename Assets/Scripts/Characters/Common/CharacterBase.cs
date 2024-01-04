@@ -46,7 +46,7 @@ public class CharacterBase : MonoBehaviour
 
 interface IDamageable
 {
-    void GetDamaged();
+    void GetDamaged(int damage);
     void Dead();
 }
 

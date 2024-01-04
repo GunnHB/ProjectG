@@ -323,7 +323,7 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
         throw new NotImplementedException();
     }
 
-    public void GetDamaged()
+    public void GetDamaged(int damage)
     {
         // 피격 애니가 실행 중이 아닐 때 실행
         // 중첩되어 실행되지 않도록 막기
@@ -333,7 +333,7 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
         if (_statusHud == null)
             return;
 
-        _statusHud.RefreshHeart();
+        _statusHud.RefreshHeart(damage);
     }
 
     public void Dead()
