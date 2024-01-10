@@ -50,7 +50,6 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
     private float _currentStaminaChargeTime = 0f;
 
     // Properties
-    public Animator PlayerAnimator => _animator;
     public Transform LeftHand => _leftHandTransform;
     public Transform RightHand => _rightHandTransform;
     public PlayerSkinnedMesh SkinnedMeshData => _skinnedMeshData;

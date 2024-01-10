@@ -151,22 +151,22 @@ public class WeaponManager : SingletonObject<WeaponManager>
         {
             case WeaponType.None:
             case WeaponType.NoWeapon:
-                pController.PlayerAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.NoWeapon];
+                pController.ThisAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.NoWeapon];
                 break;
             case WeaponType.OneHand:
-                pController.PlayerAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.OneHand];
+                pController.ThisAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.OneHand];
                 break;
             case WeaponType.TwoHand:
-                pController.PlayerAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.TwoHand];
+                pController.ThisAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.TwoHand];
                 break;
             case WeaponType.Shield:
-                pController.PlayerAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.OneHand];
+                pController.ThisAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.OneHand];
                 break;
             case WeaponType.Bow:
-                pController.PlayerAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.Bow];
+                pController.ThisAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.Bow];
                 break;
             case WeaponType.Arrow:
-                pController.PlayerAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.Bow];
+                pController.ThisAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.Bow];
                 break;
         }
     }
@@ -176,7 +176,7 @@ public class WeaponManager : SingletonObject<WeaponManager>
         if (GameManager.Instance.PController == null)
             return;
 
-        GameManager.Instance.PController.PlayerAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.NoWeapon];
+        GameManager.Instance.PController.ThisAnimator.runtimeAnimatorController = _animSO._playerAnimCtrlDic[WeaponType.NoWeapon];
     }
 
     // 오른쪽이 아닐 땐 놀랍게도 왼쪽입니다.
