@@ -9,11 +9,6 @@ using Sirenix.OdinInspector;
 
 public class EnemyAIV2 : MonoBehaviour
 {
-    // private const string ANIM_PARAM_WALK = "IsWalk";
-    // private const string ANIM_PARAM_CHASE = "IsChase";
-    // private const string ANIM_PARAM_ATTACK = "Attack";
-    // private const string ANIM_PARAM_ALERT = "IsAlert";
-
     public enum EnemyState
     {
         None = -1,
@@ -240,8 +235,6 @@ public class EnemyAIV2 : MonoBehaviour
 
         // 추격 속도로 세팅
         _enemyBase.ApplySpeed = _enemyBase.Database.ThisSprintSpeed;
-        // transform.position = Vector3.MoveTowards(transform.position, _targetPlayer.position, _applyMovementSpeed * Time.deltaTime);
-
         MoveToTarget(_targetPlayer.position);
 
         // 타겟까지 도착해야하므로 running 반환
@@ -259,8 +252,6 @@ public class EnemyAIV2 : MonoBehaviour
             // 경계 상태로 전환
             SetEnemyState(EnemyState.Alert);
 
-            // if (_alertWaitTime == 0f)
-            //     _alertWaitTime = UnityEngine.Random.Range(10f, 25f);
             if (_enemyBase.Database.AlertWaitTime == 0f)
                 _enemyBase.Database.AlertWaitTime = UnityEngine.Random.Range(10f, 20f);
         }
@@ -317,8 +308,6 @@ public class EnemyAIV2 : MonoBehaviour
         _enemyBase.ApplySpeed = _enemyBase.Database.ThisWalkSpeed;
 
         // 이동 및 회전
-        // transform.position = Vector3.MoveTowards(transform.position, _currWayPoint, _applyMovementSpeed * Time.deltaTime);
-
         MoveToTarget(_currWayPoint);
 
         if (_state != EnemyState.Patrol)
@@ -371,9 +360,6 @@ public class EnemyAIV2 : MonoBehaviour
         if (_state != EnemyState.Idle)
         {
             SetEnemyState(EnemyState.Idle);
-
-            // if (_idleWaitTime == 0f)
-            //     _idleWaitTime = UnityEngine.Random.Range(5f, 10f);
 
             if (_enemyBase.Database.IdleWaitTime == 0f)
                 _enemyBase.Database.IdleWaitTime = UnityEngine.Random.Range(5f, 10f);
