@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _checker: {fileID: 5071362153856462967}
-  _controller: {fileID: 0}
+  _controller: {fileID: 7952399942430586673}
   _animator: {fileID: 4071466643629465012}
   _enemyDatabase:
     _charName: Skeleton
@@ -76,9 +76,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _setRandom: 1
   _wayPointList: []
-  _radius: 1
+  _radius: 10
   _fieldOfView: {fileID: 6988450777119453044}
-  _animator: {fileID: 4071466643629465012}
   _state: 0
   _drawGizmos: 1
 --- !u!114 &6988450777119453044
@@ -95,7 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _viewRadius: 10
   _viewAngle: 150
-  _meleeAttackRange: 0
+  _meleeAttackRange: 1.5
   _canRangeAttack: 0
   _rangeAttackRange: 0
   _targetMask:

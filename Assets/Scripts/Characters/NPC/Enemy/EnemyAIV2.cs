@@ -44,22 +44,6 @@ public class EnemyAIV2 : MonoBehaviour
 
     private BahaviorTreeRunner _btRunner;
 
-    // 일반 대기 시간
-    private float _idleWaitTime = 0f;
-    private float _currIdleWaitTime = 0f;
-
-    // 공격 대기 시간
-    private float _attackWaitTime = 0f;
-    private float _currAttackWaitTime = 0f;
-
-    // 경계 대기 시간
-    private float _alertWaitTime = 0f;
-    private float _currAlertWaitTime = 0f;
-
-    private float _patrolMovementSpeed = 1f;
-    private float _chaseMovementSpeed = 2f;
-    private float _applyMovementSpeed;
-
     // 현재 이동 중인 지점의 Vector
     private Vector3 _currWayPoint = Vector3.zero;
     private int _currListIndex;     // waypoint 리스트의 인덱스 정보
@@ -79,6 +63,11 @@ public class EnemyAIV2 : MonoBehaviour
 
     private void Awake()
     {
+        _enemyBase = this.GetComponent<EnemyBase>();
+
+        if (_enemyBase == null)
+            return;
+
         _btRunner = new BahaviorTreeRunner(SettingBT());
 
         // 순찰 경로가 세팅된 경우가 아니라면 내부에서 세팅
@@ -87,7 +76,8 @@ public class EnemyAIV2 : MonoBehaviour
             SetWayPointByRandom();
 
         _currListIndex = -1;
-        _applyMovementSpeed = _patrolMovementSpeed;
+        // _applyMovementSpeed = _patrolMovementSpeed;
+        _enemyBase.ApplySpeed = _enemyBase.Database.ThisWalkSpeed;
 
         _originPosition = transform.position;
     }
@@ -153,8 +143,8 @@ public class EnemyAIV2 : MonoBehaviour
         else
         {
             // 공격 이외의 상태에서는 대기 시간을 초기화
-            _currAttackWaitTime = 0f;
-            _attackWaitTime = 0f;
+            _enemyBase.Database.CurrAttackWaitTime = 0f;
+            _enemyBase.Database.AttackWaitTime = 0f;
         }
 
         return INode.ENodeState.SuccessState;
@@ -190,17 +180,17 @@ public class EnemyAIV2 : MonoBehaviour
         // 공격 상태로 변경
         SetEnemyState(EnemyState.Attack);
 
-        _attackWaitTime = UnityEngine.Random.Range(1f, 3f);
-        _currAttackWaitTime = 0f;
+        _enemyBase.Database.AttackWaitTime = UnityEngine.Random.Range(1f, 3f);
+        _enemyBase.Database.CurrAttackWaitTime = 0f;
 
         return INode.ENodeState.SuccessState;
     }
 
     private INode.ENodeState WaitAfterAttack()
     {
-        if (_currAttackWaitTime < _attackWaitTime)
+        if (_enemyBase.Database.CurrAttackWaitTime < _enemyBase.Database.AttackWaitTime)
         {
-            _currAttackWaitTime += Time.deltaTime;
+            _enemyBase.Database.CurrAttackWaitTime += Time.deltaTime;
             return INode.ENodeState.RunningState;
         }
 
@@ -249,8 +239,8 @@ public class EnemyAIV2 : MonoBehaviour
         SetEnemyState(EnemyState.Chase);
 
         // 추격 속도로 세팅
-        _applyMovementSpeed = _chaseMovementSpeed;
-        transform.position = Vector3.MoveTowards(transform.position, _targetPlayer.position, _applyMovementSpeed * Time.deltaTime);
+        _enemyBase.ApplySpeed = _enemyBase.Database.ThisSprintSpeed;
+        // transform.position = Vector3.MoveTowards(transform.position, _targetPlayer.position, _applyMovementSpeed * Time.deltaTime);
 
         MoveToTarget(_targetPlayer.position);
 
@@ -269,21 +259,23 @@ public class EnemyAIV2 : MonoBehaviour
             // 경계 상태로 전환
             SetEnemyState(EnemyState.Alert);
 
-            if (_alertWaitTime == 0f)
-                _alertWaitTime = UnityEngine.Random.Range(10f, 25f);
+            // if (_alertWaitTime == 0f)
+            //     _alertWaitTime = UnityEngine.Random.Range(10f, 25f);
+            if (_enemyBase.Database.AlertWaitTime == 0f)
+                _enemyBase.Database.AlertWaitTime = UnityEngine.Random.Range(10f, 20f);
         }
 
-        if (_currAlertWaitTime < _alertWaitTime)
+        if (_enemyBase.Database.CurrAlertWaitTime < _enemyBase.Database.AlertWaitTime)
         {
-            _currAlertWaitTime += Time.deltaTime;
+            _enemyBase.Database.CurrAlertWaitTime += Time.deltaTime;
             return INode.ENodeState.RunningState;
         }
         else
         {
             SetEnemyState(EnemyState.None);
 
-            _currAlertWaitTime = 0f;
-            _alertWaitTime = 0f;
+            _enemyBase.Database.CurrAlertWaitTime = 0f;
+            _enemyBase.Database.AlertWaitTime = 0f;
 
             return INode.ENodeState.FailureState;
         }
@@ -311,7 +303,8 @@ public class EnemyAIV2 : MonoBehaviour
         var distance = Vector3.SqrMagnitude(_currWayPoint - transform.position);
 
         // 어느 정도 목표 지점에 가까워지면
-        if (distance <= float.Epsilon)
+        // if (distance <= float.Epsilon)
+        if (distance <= .1f)
         {
             // 목표 지점을 0으로 초기화
             _currWayPoint = Vector3.zero;
@@ -321,7 +314,7 @@ public class EnemyAIV2 : MonoBehaviour
         }
 
         // 순찰 속도로 지정
-        _applyMovementSpeed = _patrolMovementSpeed;
+        _enemyBase.ApplySpeed = _enemyBase.Database.ThisWalkSpeed;
 
         // 이동 및 회전
         // transform.position = Vector3.MoveTowards(transform.position, _currWayPoint, _applyMovementSpeed * Time.deltaTime);
@@ -379,21 +372,24 @@ public class EnemyAIV2 : MonoBehaviour
         {
             SetEnemyState(EnemyState.Idle);
 
-            if (_idleWaitTime == 0f)
-                _idleWaitTime = UnityEngine.Random.Range(5f, 10f);
+            // if (_idleWaitTime == 0f)
+            //     _idleWaitTime = UnityEngine.Random.Range(5f, 10f);
+
+            if (_enemyBase.Database.IdleWaitTime == 0f)
+                _enemyBase.Database.IdleWaitTime = UnityEngine.Random.Range(5f, 10f);
         }
 
-        if (_currIdleWaitTime <= _idleWaitTime)
+        if (_enemyBase.Database.CurrIdelWaitTime <= _enemyBase.Database.IdleWaitTime)
         {
-            _currIdleWaitTime += Time.deltaTime;
+            _enemyBase.Database.CurrIdelWaitTime += Time.deltaTime;
             return INode.ENodeState.RunningState;
         }
         else
         {
             SetEnemyState(EnemyState.None);
 
-            _currIdleWaitTime = 0f;
-            _idleWaitTime = 0f;
+            _enemyBase.Database.CurrIdelWaitTime = 0f;
+            _enemyBase.Database.IdleWaitTime = 0f;
 
             return INode.ENodeState.SuccessState;
         }

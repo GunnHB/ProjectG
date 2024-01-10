@@ -18,6 +18,9 @@ public class EnemyBase : CharacterBase
     [Title(TITLE_AI), SerializeField]
     private EnemyAIV2 _enemyAI;
 
+    // 프로퍼티
+    public EnemyDataBase Database => _enemyDatabase;
+
     protected override void FixedUpdate()
     {
         base.FixedUpdate();

@@ -19,4 +19,13 @@ public class EnemyDataBase : CharacterDataBase
         get { return _dropItemList; }
         set { _dropItemList = value; }
     }
+
+    public float IdleWaitTime { get; set; }
+    public float CurrIdelWaitTime { get; set; }
+
+    public float AttackWaitTime { get; set; }
+    public float CurrAttackWaitTime { get; set; }
+
+    public float AlertWaitTime { get; set; }
+    public float CurrAlertWaitTime { get; set; }
 }
