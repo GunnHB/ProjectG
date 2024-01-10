@@ -12,6 +12,8 @@ public abstract class AnimEventChecker : MonoBehaviour
     protected bool _processingGetHit = false;
     public bool ProcessingGetHit => _processingGetHit;
 
+    // 해당 콜라이더는 무기입니다.
+    // 무기와 상대방이 닿는 것을 확인하기 위함입니다.
     protected Collider _collider;
 
     protected virtual void Awake()

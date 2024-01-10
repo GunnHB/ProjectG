@@ -38,7 +38,7 @@ public class GameManager : SingletonObject<GameManager>
     public string PlayerName => JsonManager.Instance.BaseData._playerName[_selectedSlotIndex];
 
     public int PlayerMaxHP => JsonManager.Instance.BaseData._playerMaxHP[_selectedSlotIndex];
-    public int PlayerCurrentHP = 35;//=> JsonManager.Instance.BaseData._playerCurrentHP[_selectedSlotIndex];
+    public int PlayerCurrentHP => JsonManager.Instance.BaseData._playerCurrentHP[_selectedSlotIndex];
 
     public float PlayerStamina => JsonManager.Instance.BaseData._playerStamina[_selectedSlotIndex];
     #endregion

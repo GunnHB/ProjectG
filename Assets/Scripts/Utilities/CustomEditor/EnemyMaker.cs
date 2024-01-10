@@ -7,14 +7,10 @@ using UnityEngine;
 
 using Sirenix.OdinInspector.Editor;
 
-public class EnemyData
-{
-    public long _id;
-    public string _name;
-}
-
 public class EnemyMaker : OdinMenuEditorWindow
 {
+    private const string PATH = "Assets/Resources/Prefabs/Characters/Enemies";
+
     [MenuItem("Tools/CustomEditors/EnemyMaker")]
     private static void Open()
     {
@@ -23,7 +19,11 @@ public class EnemyMaker : OdinMenuEditorWindow
 
     protected override OdinMenuTree BuildMenuTree()
     {
-        throw new System.NotImplementedException();
+        // throw new System.NotImplementedException();
         var tree = new OdinMenuTree();
+
+        tree.AddAllAssetsAtPath("EnemyDataBase", PATH, typeof(EnemyBase));
+
+        return tree;
     }
 }
