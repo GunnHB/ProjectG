@@ -25,7 +25,5 @@ public class EnemyMaker : OdinMenuEditorWindow
     {
         throw new System.NotImplementedException();
         var tree = new OdinMenuTree();
-
-        // tree.AddAllAssetsAtPath("Enemy Data", "")
     }
 }

@@ -12,7 +12,7 @@ public class UIPlayerStatusHUD : UIHUDBase
     [SerializeField] private ObjectPool _heartPool;
 
     private CharacterDataBase _playerDatabase;
-    private List<HeartObject> _activedHeartList;    // 활성화된 하트 리스트
+    private List<HeartObject> _activedHeartList = new();    // 활성화된 하트 리스트
 
     private Coroutine _refreshHeartCoroutine;
 

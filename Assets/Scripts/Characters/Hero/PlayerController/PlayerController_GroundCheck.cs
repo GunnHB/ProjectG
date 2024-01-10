@@ -29,11 +29,4 @@ public partial class PlayerController : CharacterBase
         Gizmos.color = IsGrounded ? Color.red : Color.blue;
         Gizmos.DrawCube(_targetTransform.position - transform.up * _maxDistance, _boxSize);
     }
-
-    // 중력 적용
-    public void ApplyGravity()
-    {
-        _gravityVelocity.y += GameValue.GRAVITY * Time.deltaTime;
-        _cController.Move(_gravityVelocity * Time.deltaTime);
-    }
 }

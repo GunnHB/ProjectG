@@ -14,10 +14,13 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
     // 애니 트랜지션 파라미터
     private const string ANIM_COMBOCOUNT = "ComboCount";
 
+    [Title("[Database]")]
+    [SerializeField] private CharacterDataBase _database;
+
     [Title("[Components]")]
     [SerializeField] private PlayerInput _input;
     [SerializeField] private Transform _camera;
-    [SerializeField] private Animator _animator;
+    // [SerializeField] private Animator _animator;
     // [SerializeField] private AnimEventChecker _checker;
 
     [Title("[PlayerMeshData]")]
@@ -26,9 +29,6 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
     [Title("[PlayerTransform]")]
     [SerializeField] private Transform _leftHandTransform;
     [SerializeField] private Transform _rightHandTransform;
-
-    // 플레이어의 이동 관련 컨트롤러
-    private CharacterController _cController;
 
     // 플레이어 액션
     private PlayerAction _playerAction;
@@ -72,10 +72,7 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
         // 공통 콜라이더 세팅
         _controller = this.GetComponent<CharacterController>();
 
-        if (_controller != null)
-            _cController = _controller as CharacterController;
-
-        _applySpeed = _database.ThisWalkSpeed;
+        ApplySpeed = _database.ThisWalkSpeed;
         _camera = Camera.main.transform;
         _input.camera = Camera.main;
 
@@ -133,7 +130,6 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        _cController.Move(_gravityVelocity * Time.deltaTime);
     }
 
     private void Update()
@@ -146,7 +142,7 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
             if (_isWalk)
             {
                 _isWalk = false;
-                _animator.SetBool(ANIM_ISWALK, _isWalk);
+                _animator.SetBool(ANIM_IS_WALK, _isWalk);
             }
         }
 
@@ -223,13 +219,13 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
             this.transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            _cController.Move(moveDirection.normalized * _applySpeed * Time.deltaTime);
+            _controller.Move(moveDirection.normalized * ApplySpeed * Time.deltaTime);
         }
 
-        _applySpeed = _isSprint ? _database.ThisSprintSpeed : _database.ThisWalkSpeed;
+        ApplySpeed = _isSprint ? _database.ThisSprintSpeed : _database.ThisWalkSpeed;
 
-        _animator.SetBool(ANIM_ISWALK, _isWalk);
-        _animator.SetBool(ANIM_ISSPRINT, _isSprint && _isWalk);
+        _animator.SetBool(ANIM_IS_WALK, _isWalk);
+        _animator.SetBool(ANIM_IS_SPRINT, _isSprint && _isWalk);
 
         // 스태미나 세팅
         SetPlayerStamina(_isWalk, ref _isSprint);

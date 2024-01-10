@@ -9,10 +9,10 @@ using Sirenix.OdinInspector;
 
 public class EnemyAIV2 : MonoBehaviour
 {
-    private const string ANIM_PARAM_WALK = "IsWalk";
-    private const string ANIM_PARAM_CHASE = "IsChase";
-    private const string ANIM_PARAM_ATTACK = "Attack";
-    private const string ANIM_PARAM_ALERT = "IsAlert";
+    // private const string ANIM_PARAM_WALK = "IsWalk";
+    // private const string ANIM_PARAM_CHASE = "IsChase";
+    // private const string ANIM_PARAM_ATTACK = "Attack";
+    // private const string ANIM_PARAM_ALERT = "IsAlert";
 
     public enum EnemyState
     {
@@ -37,18 +37,13 @@ public class EnemyAIV2 : MonoBehaviour
     [Title("[Animation]")]
     [SerializeField] private Animator _animator;
 
-    [Title("[Notice player field]")]
-    [SerializeField] private bool _noticePlayer = false;
-    [SerializeField] private float _noticePlayerGage = 0f;
-
     [Title("[State]")]
     [SerializeField] private EnemyState _state;
 
-    [Title("[Event checker]")]
-    [SerializeField] private EnemyAnimEventChecker _checker;
-
     [Title("[Draw gizmos]")]
     [SerializeField] private bool _drawGizmos;
+
+    private EnemyBase _enemyBase;
 
     private BahaviorTreeRunner _btRunner;
 
@@ -155,7 +150,7 @@ public class EnemyAIV2 : MonoBehaviour
         if (_state == EnemyState.Attack)
         {
             // 공격 중이면 running 반환
-            if (_checker != null && _checker.ProcessingAttack)
+            if (_enemyBase.AnimChecker != null && _enemyBase.AnimChecker.ProcessingAttack)
                 return INode.ENodeState.RunningState;
         }
         else
@@ -193,7 +188,7 @@ public class EnemyAIV2 : MonoBehaviour
             return INode.ENodeState.FailureState;
 
         if (_targetPlayer.TryGetComponent(out Collider targetCollider))
-            _checker.SetOppnentCollider(targetCollider);
+            _enemyBase.AnimChecker.SetOppnentCollider(targetCollider);
 
         // 공격 상태로 변경
         SetEnemyState(EnemyState.Attack);
@@ -260,7 +255,7 @@ public class EnemyAIV2 : MonoBehaviour
         _applyMovementSpeed = _chaseMovementSpeed;
         transform.position = Vector3.MoveTowards(transform.position, _targetPlayer.position, _applyMovementSpeed * Time.deltaTime);
 
-        RotateToTarget(_targetPlayer.position);
+        MoveToTarget(_targetPlayer.position);
 
         // 타겟까지 도착해야하므로 running 반환
         return INode.ENodeState.RunningState;
@@ -332,8 +327,9 @@ public class EnemyAIV2 : MonoBehaviour
         _applyMovementSpeed = _patrolMovementSpeed;
 
         // 이동 및 회전
-        transform.position = Vector3.MoveTowards(transform.position, _currWayPoint, _applyMovementSpeed * Time.deltaTime);
-        RotateToTarget(_currWayPoint);
+        // transform.position = Vector3.MoveTowards(transform.position, _currWayPoint, _applyMovementSpeed * Time.deltaTime);
+
+        MoveToTarget(_currWayPoint);
 
         if (_state != EnemyState.Patrol)
             SetEnemyState(EnemyState.Patrol);
@@ -367,14 +363,17 @@ public class EnemyAIV2 : MonoBehaviour
         return _currWayPoint;
     }
 
-    private void RotateToTarget(Vector3 target)
+    private void MoveToTarget(Vector3 target)
     {
         var directionToTarget = (target - transform.position).normalized;
 
         float targetAngle = Mathf.Atan2(directionToTarget.x, directionToTarget.z) * Mathf.Rad2Deg;
         float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, _turnSmoothTime);
 
+        // 회전
         transform.rotation = Quaternion.Euler(new Vector3(0f, angle, 0f));
+        // 이동
+        _enemyBase.Controller.Move(directionToTarget * _enemyBase.ApplySpeed * Time.deltaTime);
     }
 
     private INode.ENodeState DoIdle()
@@ -411,30 +410,30 @@ public class EnemyAIV2 : MonoBehaviour
         switch (_state)
         {
             case EnemyState.Idle:
-                SetAnimBoolParam(ANIM_PARAM_WALK, false);
-                SetAnimBoolParam(ANIM_PARAM_CHASE, false);
-                SetAnimBoolParam(ANIM_PARAM_ALERT, false);
+                SetAnimBoolParam(EnemyBase.ANIM_IS_WALK, false);
+                SetAnimBoolParam(EnemyBase.ANIM_IS_SPRINT, false);
+                SetAnimBoolParam(EnemyBase.ANIM_PARAM_ALERT, false);
                 break;
             case EnemyState.Patrol:
-                SetAnimBoolParam(ANIM_PARAM_WALK, true);
-                SetAnimBoolParam(ANIM_PARAM_CHASE, false);
-                SetAnimBoolParam(ANIM_PARAM_ALERT, false);
+                SetAnimBoolParam(EnemyBase.ANIM_IS_WALK, true);
+                SetAnimBoolParam(EnemyBase.ANIM_IS_SPRINT, false);
+                SetAnimBoolParam(EnemyBase.ANIM_PARAM_ALERT, false);
                 break;
             case EnemyState.Chase:
-                SetAnimBoolParam(ANIM_PARAM_CHASE, true);
-                SetAnimBoolParam(ANIM_PARAM_ALERT, false);
+                SetAnimBoolParam(EnemyBase.ANIM_IS_SPRINT, true);
+                SetAnimBoolParam(EnemyBase.ANIM_PARAM_ALERT, false);
                 break;
             case EnemyState.Attack:
-                SetAnimBoolParam(ANIM_PARAM_WALK, false);
-                SetAnimBoolParam(ANIM_PARAM_CHASE, false);
-                SetAnimBoolParam(ANIM_PARAM_ALERT, false);
+                SetAnimBoolParam(EnemyBase.ANIM_IS_WALK, false);
+                SetAnimBoolParam(EnemyBase.ANIM_IS_SPRINT, false);
+                SetAnimBoolParam(EnemyBase.ANIM_PARAM_ALERT, false);
 
-                SetAnimTrigger(ANIM_PARAM_ATTACK);
+                SetAnimTrigger(EnemyBase.ANIM_ATTACK);
                 break;
             case EnemyState.Alert:
-                SetAnimBoolParam(ANIM_PARAM_WALK, false);
-                SetAnimBoolParam(ANIM_PARAM_CHASE, false);
-                SetAnimBoolParam(ANIM_PARAM_ALERT, true);
+                SetAnimBoolParam(EnemyBase.ANIM_IS_WALK, false);
+                SetAnimBoolParam(EnemyBase.ANIM_IS_SPRINT, false);
+                SetAnimBoolParam(EnemyBase.ANIM_PARAM_ALERT, true);
                 break;
             default:
                 break;
