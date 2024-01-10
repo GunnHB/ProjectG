@@ -34,9 +34,6 @@ public class EnemyAIV2 : MonoBehaviour
     [Title("[Field of view]")]
     [SerializeField] private FieldOfView _fieldOfView;
 
-    [Title("[Animation]")]
-    [SerializeField] private Animator _animator;
-
     [Title("[State]")]
     [SerializeField] private EnemyState _state;
 
@@ -442,18 +439,18 @@ public class EnemyAIV2 : MonoBehaviour
 
     private void SetAnimBoolParam(string anim, bool state)
     {
-        if (_animator == null)
+        if (_enemyBase.ThisAnimator == null)
             return;
 
-        _animator.SetBool(anim, state);
+        _enemyBase.ThisAnimator.SetBool(anim, state);
     }
 
     private void SetAnimTrigger(string anim)
     {
-        if (_animator == null)
+        if (_enemyBase.ThisAnimator == null)
             return;
 
-        _animator.SetTrigger(anim);
+        _enemyBase.ThisAnimator.SetTrigger(anim);
     }
 
     // 확인용 기즈모
