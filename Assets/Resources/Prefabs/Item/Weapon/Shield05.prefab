@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4823623797577238}
   - component: {fileID: 33375401417785840}
   - component: {fileID: 23674664648154578}
-  - component: {fileID: 3737823843466057771}
   - component: {fileID: -9046836517799479259}
   m_Layer: 0
   m_Name: Shield05
@@ -85,31 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3737823843466057771
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1405933879022670}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3af29fd1fb133c943b39d5f974d83888, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: _itemData
-      Entry: 6
-      Data: 
-  _collider: {fileID: 0}
 --- !u!136 &-9046836517799479259
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4355401568261736}
   - component: {fileID: 33274728346879956}
   - component: {fileID: 23333208276555500}
-  - component: {fileID: 5634324640248219253}
   - component: {fileID: 2684199474138497602}
   m_Layer: 0
   m_Name: Sword04
@@ -85,31 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5634324640248219253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1733665775871714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3af29fd1fb133c943b39d5f974d83888, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: _itemData
-      Entry: 6
-      Data: 
-  _collider: {fileID: 0}
 --- !u!136 &2684199474138497602
 CapsuleCollider:
   m_ObjectHideFlags: 0
