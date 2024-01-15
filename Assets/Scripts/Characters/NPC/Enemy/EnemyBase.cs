@@ -78,7 +78,7 @@ public class EnemyBase : CharacterBase
         _enemyDatabase.ThisWalkSpeed = data.walk_speed;
         _enemyDatabase.ThisSprintSpeed = data.sprint_speed;
 
-        // // drop item
+        // // drop item 아이템 쪽 리팩토링 이후 추가 예정
         // _enemyDatabase.DropItemList.Add(new ItemData() {});
     }
 }
