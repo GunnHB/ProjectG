@@ -51,16 +51,17 @@ MonoBehaviour:
   _checker: {fileID: 5071362153856462967}
   _controller: {fileID: 7952399942430586673}
   _animator: {fileID: 4071466643629465012}
+  _enemy: Enemy_Skeleton
   _enemyDatabase:
-    _charName: 
-    _charMaxHP: 0
-    _charCurrHP: 0
+    _charName: Enemy_Skeleton_001
+    _charMaxHP: 150
+    _charCurrHP: 150
     _charStamina: 0
-    _offensivePower: 0
-    _defensivePower: 0
-    _walkSpeed: 0
-    _sprintSpeed: 0
-    _model: {fileID: 7347134488518943421}
+    _offensivePower: 15
+    _defensivePower: 15
+    _walkSpeed: 1
+    _sprintSpeed: 4
+    _charDescription: Enemy_Skeleton_Desc_001
     _dropItemList: []
   _enemyAI: {fileID: 3527570953745606850}
 --- !u!114 &3527570953745606850

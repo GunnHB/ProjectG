@@ -6,12 +6,12 @@ using UnityEngine;
 [System.Serializable]
 public class CharacterDataBase
 {
-    private const string GROUP_NAME = "[Name]";
-    private const string GROUP_STATUS = "[Status]";
-    private const string GROUP_SPEED = "[Speed]";
+    protected const string GROUP_INFO = "[Info]";
+    protected const string GROUP_STATUS = "[Status]";
+    protected const string GROUP_SPEED = "[Speed]";
 
     // 캐릭터 이름
-    [BoxGroup(GROUP_NAME), SerializeField]
+    [BoxGroup(GROUP_INFO), SerializeField]
     private string _charName;
 
     // 캐릭터 체력 / 스테미나

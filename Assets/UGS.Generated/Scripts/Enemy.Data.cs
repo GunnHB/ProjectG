@@ -61,6 +61,12 @@ namespace Enemy
 		public System.String desc;
 		public System.Int32 hp;
 		public System.Int32 offensive_power;
+		public System.Int32 defensive_power;
+		public System.Single walk_speed;
+		public System.Single sprint_speed;
+		public System.Int64 ref_id_001;
+		public System.Int64 ref_id_002;
+		public System.Int64 ref_id_003;
 		public System.String prefab_name;
   
 
