@@ -22,7 +22,7 @@ public class EnemyBase : CharacterBase
     private EnemyDataBase _enemyDatabase;
 
     [Title(TITLE_AI), SerializeField]
-    private EnemyAIV2 _enemyAI;
+    private EnemyBehaviorBase _enemyAI;
 
     // <프리팹명, 아이디>
     private Dictionary<string, long> _enemyDic = new();

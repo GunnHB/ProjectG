@@ -7,54 +7,63 @@ using BehaviorTree;
 
 using Sirenix.OdinInspector;
 
-public class EnemyAIV2 : MonoBehaviour
+public class EnemyBehaviorBase : MonoBehaviour
 {
     public enum EnemyState
     {
         None = -1,
-        Idle,
-        Patrol,
-        Chase,
-        Attack,
-        Alert,
+        Idle,               // 대기
+        Patrol,             // 순찰
+        Chase,              // 추격
+        Attack,             // 공격
+        Alert,              // 경계
+        RunAway,            // 도망
     }
 
     [Title("[WayPoints]")]
     [SerializeField] private bool _setRandom = true;
     [SerializeField, HideIf(nameof(_setRandom))]
-    private List<GameObject> _wayPointList = new();
+    protected List<GameObject> _wayPointList = new();
     [SerializeField, ShowIf(nameof(_setRandom))]
-    private float _radius = 1f;
+    protected float _radius = 1f;
 
-    [Title("[Field of view]")]
-    [SerializeField] private FieldOfView _fieldOfView;
+    [Title("[Field of view]"), SerializeField]
+    protected FieldOfView _fieldOfView;
 
-    [Title("[State]")]
-    [SerializeField] private EnemyState _state;
+    [Title("[State]"), SerializeField]
+    protected EnemyState _state;
 
-    [Title("[Draw gizmos]")]
-    [SerializeField] private bool _drawGizmos;
+    [Title("[Draw gizmos]"), SerializeField]
+    protected bool _drawGizmos;
 
-    private EnemyBase _enemyBase;
+    protected EnemyBase _enemyBase;
 
     private BahaviorTreeRunner _btRunner;
 
     // 현재 이동 중인 지점의 Vector
-    private Vector3 _currWayPoint = Vector3.zero;
-    private int _currListIndex;     // waypoint 리스트의 인덱스 정보
+    protected Vector3 _currWayPoint = Vector3.zero;
+    protected int _currListIndex;     // waypoint 리스트의 인덱스 정보
 
     // 캐릭터 회전 관련
-    private float _turnSmoothTime = .2f;
-    private float _turnSmoothVelocity;
+    protected float _turnSmoothTime = .2f;
+    protected float _turnSmoothVelocity;
 
     // 프리팹 최초 생성 시의 위치값
-    private Vector3 _originPosition = Vector3.zero;
+    protected Vector3 _originPosition = Vector3.zero;
     // 추격 후 목표뮬이 사라지면 처음 생성됐던 위치로 돌아가기
-    private bool _backToOriginPosition = false;
+    protected bool _backToOriginPosition = false;
 
-    private Transform _targetPlayer;
-    private bool _findTarget;
-    private bool _missTarget;
+    protected Transform _targetPlayer;
+    protected bool _findTarget;
+    protected bool _missTarget;
+
+    // ** 공통 행동트리 **
+    // protected SequenceNode _attackNode;
+    // protected SequenceNode _chaseNode;
+    protected List<INode> _entireNodeList = new List<INode>();
+
+    protected List<INode> _alertNodeList = new List<INode>();
+    protected List<INode> _patrolNodeList = new List<INode>();
 
     private void Awake()
     {
@@ -71,7 +80,6 @@ public class EnemyAIV2 : MonoBehaviour
             SetWayPointByRandom();
 
         _currListIndex = -1;
-        // _applyMovementSpeed = _patrolMovementSpeed;
         _enemyBase.ApplySpeed = _enemyBase.Database.ThisWalkSpeed;
 
         _originPosition = transform.position;
@@ -86,159 +94,72 @@ public class EnemyAIV2 : MonoBehaviour
     //          모든 노드의 평가가 [성공]이어야 [성공] 반환
     // 셀렉트 : 노드의 평가를 진행하면서 [성공]을 반환받으면 [성공]을 반환
     //          모든 노드의 평가가 [실패]였을 때 [실패]를 반환
-    private INode SettingBT()
+    protected INode SettingBT()
     {
-        return new SelectorNode(
-            new List<INode>()
-            {
-                // 공격 시작
-                new SequenceNode(
-                    new List<INode>()
-                    {
-                        new ActionNode(CheckAttacking),
-                        new ActionNode(CheckAttackRange),
-                        new ActionNode(WaitAfterAttack),
-                        new ActionNode(DoAttack),
-                    }
-                ),
-                // 적을 발견
-                new SequenceNode(
-                    new List<INode>()
-                    {
-                        new ActionNode(CheckDetectTarget),
-                        new ActionNode(MoveToTarget),
-                    }
-                ),
-                // 적이 시야에서 사라짐
-                new SequenceNode(
-                    new List<INode>()
-                    {
-                        new ActionNode(DoAlert),
-                    }
-                ),
-                // 적 미발견 시 순찰
-                new SequenceNode(
-                    new List<INode>()
-                    {
-                        new ActionNode(DoPatrol),
-                        new ActionNode(DoIdle),
-                    }
-                )
-            });
+        return EntireBehaviorNode();
+        // return new SelectorNode(
+        //     new List<INode>()
+        //     {
+        //         // // 공격 시작
+        //         // new SequenceNode(
+        //         //     new List<INode>()
+        //         //     {
+        //         //         new ActionNode(CheckAttacking),
+        //         //         new ActionNode(CheckAttackRange),
+        //         //         new ActionNode(WaitAfterAttack),
+        //         //         new ActionNode(DoAttack),
+        //         //     }
+        //         // ),
+        //         // // 적을 발견
+        //         // new SequenceNode(
+        //         //     new List<INode>()
+        //         //     {
+        //         //         new ActionNode(CheckDetectTarget),
+        //         //         new ActionNode(MoveToTarget),
+        //         //     }
+        //         // ),
+        //         // // 적이 시야에서 사라짐
+        //         // new SequenceNode(
+        //         //     new List<INode>()
+        //         //     {
+        //         //         new ActionNode(DoAlert),
+        //         //     }
+        //         // ),
+        //         // // 적 미발견 시 순찰
+        //         // new SequenceNode(
+        //         //     new List<INode>()
+        //         //     {
+        //         //         new ActionNode(DoPatrol),
+        //         //         new ActionNode(DoIdle),
+        //         //     }
+        //         // )
+
+        //         AlertNode(),
+        //         PatrolNode(),
+        //     });
     }
 
-    private INode.ENodeState CheckAttacking()
+    protected virtual SelectorNode EntireBehaviorNode()
     {
-        if (_state == EnemyState.Attack)
-        {
-            // 공격 중이면 running 반환
-            if (_enemyBase.AnimChecker != null && _enemyBase.AnimChecker.ProcessingAttack)
-                return INode.ENodeState.RunningState;
-        }
-        else
-        {
-            // 공격 이외의 상태에서는 대기 시간을 초기화
-            _enemyBase.Database.CurrAttackWaitTime = 0f;
-            _enemyBase.Database.AttackWaitTime = 0f;
-        }
+        _entireNodeList.Add(AlertNode());
+        _entireNodeList.Add(PatrolNode());
 
-        return INode.ENodeState.SuccessState;
+        return new SelectorNode(_entireNodeList);
     }
 
-    private INode.ENodeState CheckAttackRange()
+    protected virtual SequenceNode AlertNode()
     {
-        if (_targetPlayer == null || _fieldOfView == null)
-            return INode.ENodeState.FailureState;
+        _alertNodeList.Add(new ActionNode(DoAlert));
 
-        // 원거리 공격이 가능한지 확인
-        if (_fieldOfView.CanRangeAttack)
-            return INode.ENodeState.FailureState;
-        else
-        {
-            var distance = Vector3.SqrMagnitude(_targetPlayer.position - transform.position);
-
-            if (distance < Mathf.Pow(_fieldOfView.MeleeAttackRange, 2))
-                return INode.ENodeState.SuccessState;
-        }
-
-        return INode.ENodeState.FailureState;
+        return new SequenceNode(_alertNodeList);
     }
 
-    private INode.ENodeState DoAttack()
+    protected virtual SequenceNode PatrolNode()
     {
-        if (_targetPlayer == null)
-            return INode.ENodeState.FailureState;
+        _patrolNodeList.Add(new ActionNode(DoPatrol));
+        _patrolNodeList.Add(new ActionNode(DoIdle));
 
-        if (_targetPlayer.TryGetComponent(out Collider targetCollider))
-            _enemyBase.AnimChecker.SetOppnentCollider(targetCollider);
-
-        // 공격 상태로 변경
-        SetEnemyState(EnemyState.Attack);
-
-        _enemyBase.Database.AttackWaitTime = UnityEngine.Random.Range(1f, 3f);
-        _enemyBase.Database.CurrAttackWaitTime = 0f;
-
-        return INode.ENodeState.SuccessState;
-    }
-
-    private INode.ENodeState WaitAfterAttack()
-    {
-        if (_enemyBase.Database.CurrAttackWaitTime < _enemyBase.Database.AttackWaitTime)
-        {
-            _enemyBase.Database.CurrAttackWaitTime += Time.deltaTime;
-            return INode.ENodeState.RunningState;
-        }
-
-        SetEnemyState(EnemyState.Idle);
-        return INode.ENodeState.SuccessState;
-    }
-
-    private INode.ENodeState CheckDetectTarget()
-    {
-        _fieldOfView.FindVisibleTargets();
-        _targetPlayer = _fieldOfView.NearestTarget;
-
-        // return _targetPlayer != null ? INode.ENodeState.SuccessState : INode.ENodeState.FailureState;
-
-        if (_targetPlayer != null)
-        {
-            _findTarget = true;
-            return INode.ENodeState.SuccessState;
-        }
-        else
-        {
-            if (_findTarget)
-            {
-                _findTarget = false;
-                _missTarget = true;
-            }
-
-            return INode.ENodeState.FailureState;
-        }
-    }
-
-    private INode.ENodeState MoveToTarget()
-    {
-        if (_targetPlayer == null)
-            return INode.ENodeState.FailureState;
-
-        var distance = Vector3.SqrMagnitude(_targetPlayer.position - transform.position);
-
-        if (_fieldOfView.MeleeAttackRange > 0)
-        {
-            if (distance <= Mathf.Pow(_fieldOfView.MeleeAttackRange, 2))
-                return INode.ENodeState.SuccessState;
-        }
-
-        // 추격 상태로 변경
-        SetEnemyState(EnemyState.Chase);
-
-        // 추격 속도로 세팅
-        _enemyBase.ApplySpeed = _enemyBase.Database.ThisSprintSpeed;
-        MoveToTarget(_targetPlayer.position);
-
-        // 타겟까지 도착해야하므로 running 반환
-        return INode.ENodeState.RunningState;
+        return new SequenceNode(_patrolNodeList);
     }
 
     // 적이 시야에서 사라지면 그 자리에서 잠시 동안 경계
@@ -342,7 +263,11 @@ public class EnemyAIV2 : MonoBehaviour
         return _currWayPoint;
     }
 
-    private void MoveToTarget(Vector3 target)
+    /// <summary>
+    /// 방향으로의 이동 및 회전 메소드
+    /// </summary>
+    /// <param name="target"></param>
+    protected void MoveToTarget(Vector3 target)
     {
         var directionToTarget = (target - transform.position).normalized;
 
@@ -382,7 +307,7 @@ public class EnemyAIV2 : MonoBehaviour
     }
 
     // 상태가 바뀌면 애니가 바뀜요
-    private void SetEnemyState(EnemyState state)
+    protected void SetEnemyState(EnemyState state)
     {
         _state = state;
 
