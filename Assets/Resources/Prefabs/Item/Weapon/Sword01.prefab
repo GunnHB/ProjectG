@@ -96,12 +96,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7f1f89c7270b4e4189ca7c80e6a0ae1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _item: TwoHandSword01
   _data:
-    id: 0
-    type: 0
-    name: 
-    desc: 
-    image: 
-    ref_id: 0
-    stackable: 0
-    prefab_name: 
+    _itemName: Item_Weapon_Two_Hand_0001
+    _itemDescription: Item_Weapon_Two_Hand_Desc_0001
+    _itemSprite: {fileID: 0}

@@ -110,4 +110,12 @@ public enum StatType
     Attack,
     Defend,
 }
+
+[UGS(typeof(EnemyType))]
+public enum EnemyType
+{
+    None = -1,
+    Offensive,
+    Defensive,
+}
 #endregion

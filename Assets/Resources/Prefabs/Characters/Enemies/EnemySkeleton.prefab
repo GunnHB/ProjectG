@@ -63,7 +63,7 @@ MonoBehaviour:
     _sprintSpeed: 4
     _charDescription: Enemy_Skeleton_Desc_001
     _dropItemList: []
-  _enemyAI: {fileID: 0}
+  _enemyAI: {fileID: 1152009813890713477}
 --- !u!114 &1152009813890713477
 MonoBehaviour:
   m_ObjectHideFlags: 0

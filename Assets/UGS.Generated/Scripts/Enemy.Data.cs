@@ -57,6 +57,7 @@ namespace Enemy
 /* Fields. */
 
 		public System.Int64 id;
+		public EnemyType type;
 		public System.String name;
 		public System.String desc;
 		public System.Int32 hp;
