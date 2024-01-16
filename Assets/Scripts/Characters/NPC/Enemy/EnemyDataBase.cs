@@ -10,6 +10,9 @@ public class EnemyDataBase : CharacterDataBase
 {
     private const string GROUP_DROP_ITEM = "[Drop Item]";
 
+    [BoxGroup(GROUP_INFO), SerializeField, PropertyOrder(-1)]
+    private long _enemyId;
+
     [BoxGroup(GROUP_INFO), SerializeField, TextArea(3, 10)]
     private string _charDescription;
 
@@ -17,6 +20,12 @@ public class EnemyDataBase : CharacterDataBase
     private List<ItemData> _dropItemList = new();
 
     // 프로퍼티
+    public long ThisId
+    {
+        get { return _enemyId; }
+        set { _enemyId = value; }
+    }
+
     public string ThisDescription
     {
         get { return _charDescription; }

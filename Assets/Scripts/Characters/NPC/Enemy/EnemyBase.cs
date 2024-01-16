@@ -63,6 +63,7 @@ public class EnemyBase : CharacterBase
         var data = Enemy.Data.DataMap[enemyId];
 
         // info
+        _enemyDatabase.ThisId = data.id;
         _enemyDatabase.ThisName = data.name;
         _enemyDatabase.ThisDescription = data.desc;
 
