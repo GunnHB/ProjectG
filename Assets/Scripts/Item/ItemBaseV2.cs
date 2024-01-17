@@ -45,9 +45,16 @@ public class ItemBaseV2 : MonoBehaviour
         {
             var itemData = Item.Data.DataMap[itemId];
 
+            _data.ThisItemId = itemData.id;
             _data.ThisItemName = itemData.name;
             _data.ThisItemDesc = itemData.desc;
-            _data.ThisItemSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SPRITE_PATH}/{itemData.type}/{itemData.image}.png");
+
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SPRITE_PATH}/{itemData.type}/{itemData.image}.png");
+
+            if (sprite == null)
+                Debug.Log("there is no sprite! please check path");
+
+            _data.ThisItemSprite = sprite;
         }
     }
 }
