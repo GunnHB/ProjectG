@@ -26,13 +26,15 @@ public class UIItemSlot : MonoBehaviour
     // 슬롯 선택 시의 콜백
     public UnityAction _slotCallback = null;
 
-    private ItemData _itemData = null;
-    public ItemData ItemData => _itemData;
+    // private ItemData _itemData = null;
+    // public ItemData ItemData => _itemData;
+    private PlayerItemData _itemData = null;
+    public PlayerItemData ItemData => _itemData;
 
     public bool IsNullData
     {
         // 아이디 값이 0이면 널로 판단
-        get => _itemData == null || _itemData._data == null || _itemData._data.id == 0;
+        get => _itemData == null || _itemData.Data == null || _itemData.Data.id == 0;
     }
 
     private void Awake()
@@ -41,7 +43,7 @@ public class UIItemSlot : MonoBehaviour
                                     ItemManager.Instance.InventoryPopup.InvenScrollRect);
     }
 
-    public void InitSlot(ItemData itemData = null)
+    public void InitSlot(PlayerItemData itemData = null)
     {
         ClearData();
 
@@ -66,7 +68,7 @@ public class UIItemSlot : MonoBehaviour
     private void SetData()
     {
         // 데이터가 비어있으면 리턴
-        if (_itemData._data.id == 0)
+        if (_itemData.Data.id == 0)
             return;
 
         SetImage();
@@ -82,7 +84,7 @@ public class UIItemSlot : MonoBehaviour
             return;
         }
 
-        _itmeImage.sprite = ResourceManager.Instance.GetSpriteByItem(_itemData._data.type, _itemData._data.image);
+        _itmeImage.sprite = ResourceManager.Instance.GetSpriteByItem(_itemData.Data.type, _itemData.Data.image);
         _itmeImage.gameObject.SetActive(true);
     }
 
@@ -94,19 +96,19 @@ public class UIItemSlot : MonoBehaviour
             return;
         }
 
-        if (!_itemData._data.stackable || _itemData._amount == 1)
+        if (!_itemData.Data.stackable || _itemData.Amount == 1)
             _itemAmountText.gameObject.SetActive(false);
         else
         {
-            _itemAmountText.text = $"{_itemData._amount}";
+            _itemAmountText.text = $"{_itemData.Amount}";
             _itemAmountText.gameObject.SetActive(true);
         }
     }
 
     private void SetItemEquipInfo()
     {
-        ItemManager.Instance.ChangeEquipedItemSlot(_itemData);
-        _equipObj.SetActive(_itemData._isEquip);
+        // ItemManager.Instance.ChangeEquipedItemSlot(_itemData);
+        // _equipObj.SetActive(_itemData._isEquip);
     }
 
     private void OnClickSlot()

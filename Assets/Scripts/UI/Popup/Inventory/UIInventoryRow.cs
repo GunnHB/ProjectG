@@ -29,7 +29,7 @@ public class UIInventoryRow : MonoBehaviour
                 var cate = ItemManager.Instance.CurrSelectTab.TabCategory;
                 int slotIndex = (rowIndex * GameValue.INVENTORY_ROW_AMOUNT) + index;
 
-                itemSlot.InitSlot(ItemManager.Instance.PlayerInventory[cate][slotIndex]);
+                // itemSlot.InitSlot(ItemManager.Instance.PlayerInventory[cate][slotIndex]);
                 itemSlot._slotCallback = slotCallback;
             }
         }

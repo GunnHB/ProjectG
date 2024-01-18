@@ -25,7 +25,7 @@ public class ItemManager : SingletonObject<ItemManager>
 
     private PlayerInventoryData _inventoryData;
 
-    public Dictionary<InventoryCategory, List<ItemData>> PlayerInventory
+    public Dictionary<InventoryCategory, List<PlayerItemData>> PlayerInventory
     {
         get => _inventoryData._playerInventory[(SlotIndex)GameManager.Instance.SelectedSlotIndex];
     }
@@ -136,23 +136,23 @@ public class ItemManager : SingletonObject<ItemManager>
         _currSelectTab = null;
     }
 
-    public void AddItemToInventory(ItemData item = null)
+    public void AddItemToInventory(PlayerItemData item)
     {
         if (item == null)
             return;
 
         // 해당 아이템의 카테고리 얻기
-        var cate = GetItemCateory(item._data);
+        var cate = GetItemCateory(item.Data);
 
         // 누적 가능한 아이템이라면
-        if (item._data.stackable)
+        if (item.Data.stackable)
         {
-            var hasItem = PlayerInventory[cate].Find(x => x._data.id == item._data.id);
+            var hasItem = PlayerInventory[cate].Find(x => x.Data.id == item.Data.id);
 
             // 해당 아이템이 인벤토리에 있음
             if (hasItem != null)
                 // InvenItemAmount[hasItem.Data.id]++;
-                hasItem.AddItemAmount();
+                hasItem.Amount++;
             // 해당 아이템이 인벤토리에 없음
             else
                 ActualAddItem(cate, item);
@@ -173,10 +173,10 @@ public class ItemManager : SingletonObject<ItemManager>
         //     item.PickUpItem();
     }
 
-    private void ActualAddItem(InventoryCategory cate, ItemData item)
+    private void ActualAddItem(InventoryCategory cate, PlayerItemData item)
     {
         // 빈 슬롯이 있는지 확인
-        var emptySlotIndex = PlayerInventory[cate].FindIndex(x => x._data.id == 0);
+        var emptySlotIndex = PlayerInventory[cate].FindIndex(x => x.Data.id == 0);
 
         if (emptySlotIndex == -1)
         {
@@ -236,13 +236,13 @@ public class ItemManager : SingletonObject<ItemManager>
         if (_currItemSlot.IsNullData || GameManager.Instance.PController == null)
             return;
 
-        switch (_currItemSlot.ItemData._data.type)
+        switch (_currItemSlot.ItemData.Data.type)
         {
             case ItemType.Weapon:
-                if (!_currItemSlot.ItemData._isEquip)
-                    WeaponManager.Instance.EquipWeapon(_currItemSlot.ItemData, true);
-                else
-                    WeaponManager.Instance.UnequipWeapon(_currItemSlot.ItemData);
+                // if (!_currItemSlot.ItemData.IsEquip)
+                //     WeaponManager.Instance.EquipWeapon(_currItemSlot.ItemData, true);
+                // else
+                //     WeaponManager.Instance.UnequipWeapon(_currItemSlot.ItemData);
                 break;
             case ItemType.Armor:
                 EquipArmor();
