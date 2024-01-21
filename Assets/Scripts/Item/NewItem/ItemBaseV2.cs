@@ -24,6 +24,10 @@ public class ItemBaseV2 : MonoBehaviour
 
     private Dictionary<string, long> _itemDic = new();
 
+    protected Item.Data _data;
+
+    public Item.Data Data => _data;
+
     public long ThisItemId => _itemId;
 
     private List<string> ItemList
@@ -39,6 +43,12 @@ public class ItemBaseV2 : MonoBehaviour
 
             return _itemDic.Keys.ToList();
         }
+    }
+
+    private void Awake()
+    {
+        if (_itemId != 0)
+            _data = Item.Data.DataMap[_itemId];
     }
 
     private void SetItemId()

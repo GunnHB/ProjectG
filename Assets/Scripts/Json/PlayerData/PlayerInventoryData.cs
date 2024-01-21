@@ -14,7 +14,7 @@ public class PlayerItemData
     // ** 생성자
     public PlayerItemData() { }
 
-    public PlayerItemData(Item.Data data, int amount, bool isEquip)
+    public PlayerItemData(Item.Data data, int amount = 1, bool isEquip = false)
     {
         this._data = data;
         this._amount = amount;

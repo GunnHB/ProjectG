@@ -20,8 +20,6 @@ public partial class PlayerController : CharacterBase, IAttackable, IDamageable
     [Title("[Components]")]
     [SerializeField] private PlayerInput _input;
     [SerializeField] private Transform _camera;
-    // [SerializeField] private Animator _animator;
-    // [SerializeField] private AnimEventChecker _checker;
 
     [Title("[PlayerMeshData]")]
     [SerializeField] private PlayerSkinnedMesh _skinnedMeshData;

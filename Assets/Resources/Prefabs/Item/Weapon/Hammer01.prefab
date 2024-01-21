@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 23268105199889136}
   - component: {fileID: -3171634559923812834}
   - component: {fileID: -4968659946942072888}
-  - component: {fileID: 8195652755449799920}
+  - component: {fileID: 6728790873888572150}
   m_Layer: 0
   m_Name: Hammer01
   m_TagString: Untagged
@@ -116,7 +116,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8195652755449799920
+--- !u!114 &6728790873888572150
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,9 +125,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1079219946744870}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7f1f89c7270b4e4189ca7c80e6a0ae1, type: 3}
+  m_Script: {fileID: 11500000, guid: 01f89c8a2e9ffed44bea1fd83ab6ed4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _item: Hammer01
   _itemId: 100020001
-  _collider: {fileID: -3171634559923812834}
+  _collider: {fileID: 0}

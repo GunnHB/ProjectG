@@ -48,9 +48,6 @@ public class CharacterBase : MonoBehaviour
         ApplyGravity();
     }
 
-    /// <summary>
-    /// 캐릭터에 중력을 적용하려면 각자마다 중력값을 추가해줍시다.
-    /// </summary>
     private void ApplyGravity()
     {
         _gravityVelocity.y += GameValue.GRAVITY * Time.deltaTime;
